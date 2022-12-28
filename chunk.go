@@ -30,3 +30,15 @@ func ChunkByPieces[T any](s []T, chunkCount int) [][]T {
 
 	return Chunk(s, chunkSize)
 }
+
+func ChunkByPieces2[T any](s []T, chunkCount int) [][]T {
+	if chunkCount <= 0 {
+		return [][]T{}
+	}
+	chunkSize := len(s) / chunkCount
+	if chunkSize*chunkCount < len(s) {
+		chunkSize++
+	}
+
+	return Chunk(s, chunkSize)
+}
