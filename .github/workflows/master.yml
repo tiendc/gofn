@@ -1,4 +1,4 @@
-name: Main
+name: build
 
 on:
   push:
@@ -16,6 +16,11 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.19
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.50.1
 
       - name: build
         run: make build
