@@ -1,3 +1,5 @@
+![build](https://github.com/tiendc/gofn/actions/workflows/build.yml/badge.svg)
+
 # gofn - Utility functions for Go 1.18+
 
 This is a collection of generics utility functions for Go 1.18+.
