@@ -68,6 +68,44 @@ func Test_EqualPred(t *testing.T) {
 		func(a, b interface{}) bool { return a.(St) == b.(St) }))
 }
 
+func Test_EqualPredPtr(t *testing.T) {
+	assert.True(t, EqualPredPtr([]int{}, []int{},
+		func(a, b *int) bool { return *a == *b }))
+	assert.True(t, EqualPredPtr([]int{}, nil,
+		func(a, b *int) bool { return *a == *b }))
+	assert.True(t, EqualPredPtr(nil, []int{},
+		func(a, b *int) bool { return *a == *b }))
+	assert.True(t, EqualPredPtr([]int{1, 2, 3}, []int{1, 2, 3},
+		func(a, b *int) bool { return *a == *b }))
+	assert.True(t, EqualPredPtr([]string{"3", "1", "2"}, []string{"3", "1", "2"},
+		func(a, b *string) bool { return *a == *b }))
+
+	type St struct {
+		Int int
+		Str string
+	}
+	assert.True(t, EqualPredPtr(
+		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{1, "1"}, {2, "2"}, {3, "3"}},
+		func(a, b *St) bool { return *a == *b }))
+
+	assert.False(t, EqualPredPtr([]int{}, []int{1},
+		func(a, b *int) bool { return *a == *b }))
+	assert.False(t, EqualPredPtr([]int{1}, nil,
+		func(a, b *int) bool { return *a == *b }))
+	assert.False(t, EqualPredPtr([]int{1, 2, 3}, []int{1, 2, 3, 4},
+		func(a, b *int) bool { return *a == *b }))
+	assert.False(t, EqualPredPtr([]int{1, 2, 3}, []int{3, 2, 1},
+		func(a, b *int) bool { return *a == *b }))
+	assert.False(t, EqualPredPtr([]string{"3", "1", "2"}, []string{"1", "2", "3"},
+		func(a, b *string) bool { return *a == *b }))
+	assert.False(t, EqualPredPtr(
+		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{1, "1"}, {2, "2"}},
+		func(a, b *St) bool { return *a == *b }))
+	assert.False(t, EqualPredPtr(
+		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{3, "3"}, {2, "2"}, {1, "1"}},
+		func(a, b *St) bool { return *a == *b }))
+}
+
 func Test_ContentEqual(t *testing.T) {
 	assert.True(t, ContentEqual([]int{}, []int{}))
 	assert.True(t, ContentEqual([]int{}, nil))
@@ -130,7 +168,8 @@ func Test_ContentEqualPtr(t *testing.T) {
 	assert.True(t, ContentEqualPtr([]*int{}, nil))
 	assert.True(t, ContentEqualPtr(nil, []*int{}))
 	i1, i2, i3 := New(1), New(2), New(3)
-	assert.True(t, ContentEqual([]*int{i3, i1, i2}, []*int{i1, i2, i3}))
+	assert.True(t, ContentEqualPtr([]*int{i3, i1, i2}, []*int{i1, i2, i3}))
+	assert.True(t, ContentEqualPtr([]*int{i1, i2, i3, i2, i1}, []*int{i3, i1, i2, i1, i2}))
 
 	type St struct {
 		Int int
@@ -204,6 +243,39 @@ func Test_ContainPred(t *testing.T) {
 		func(i interface{}) bool { return i == 2.2 }))
 	assert.True(t, ContainPred([]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(i interface{}) bool { return i == St{3, "3"} }))
+}
+
+func Test_ContainPredPtr(t *testing.T) {
+	assert.False(t, ContainPredPtr([]int{},
+		func(i *int) bool { return *i == 1 }))
+	assert.False(t, ContainPredPtr([]string{"one"},
+		func(i *string) bool { return *i == "One" }))
+	assert.False(t, ContainPredPtr([]string{"one", "two"},
+		func(i *string) bool { return *i == "" }))
+	assert.False(t, ContainPredPtr([]int{1, 2, 3},
+		func(i *int) bool { return *i == 4 }))
+	assert.False(t, ContainPredPtr([]float32{1.1, 2.2, 3.3},
+		func(i *float32) bool { return *i == 3.35 }))
+
+	type St struct {
+		Int int
+		Str string
+	}
+	assert.False(t, ContainPredPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+		func(i *St) bool { return *i == St{3, "4"} }))
+
+	assert.True(t, ContainPredPtr([]int{1},
+		func(i *int) bool { return *i == 1 }))
+	assert.True(t, ContainPredPtr([]int{1, 2, 3, 1, 2, 3},
+		func(i *int) bool { return *i == 2 }))
+	assert.True(t, ContainPredPtr([]string{"one", "two"},
+		func(i *string) bool { return *i == "two" }))
+	assert.True(t, ContainPredPtr([]string{"one", "two", ""},
+		func(i *string) bool { return *i == "" }))
+	assert.True(t, ContainPredPtr([]float32{1.1, 2.2, 3.3},
+		func(i *float32) bool { return *i == 2.2 }))
+	assert.True(t, ContainPredPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+		func(i *St) bool { return *i == St{3, "3"} }))
 }
 
 func Test_ContainAll(t *testing.T) {
@@ -382,6 +454,14 @@ func Test_RemoveAt(t *testing.T) {
 	s3 := []St{{1, "1"}, {2, "2"}, {3, "3"}}
 	RemoveAt(&s3, 1)
 	assert.Equal(t, []St{{1, "1"}, {3, "3"}}, s3)
+
+	// Test IndexOutOfRange error
+	defer func() {
+		e := recover()
+		assert.ErrorIs(t, e.(error), ErrIndexOutOfRange) // nolint: forcetypeassert
+	}()
+	s1 = []int{1, 2, 3}
+	RemoveAt(&s1, 3)
 }
 
 func Test_FastRemoveAt(t *testing.T) {
@@ -408,6 +488,14 @@ func Test_FastRemoveAt(t *testing.T) {
 	s3 := []St{{1, "1"}, {2, "2"}, {3, "3"}}
 	FastRemoveAt(&s3, 1)
 	assert.Equal(t, []St{{1, "1"}, {3, "3"}}, s3)
+
+	// Test IndexOutOfRange error
+	defer func() {
+		e := recover()
+		assert.ErrorIs(t, e.(error), ErrIndexOutOfRange) // nolint: forcetypeassert
+	}()
+	s1 = []int{1, 2, 3}
+	FastRemoveAt(&s1, 3)
 }
 
 func Test_Remove(t *testing.T) {
@@ -654,6 +742,23 @@ func Test_GetFirst(t *testing.T) {
 func Test_GetLast(t *testing.T) {
 	assert.Equal(t, 3, GetLast([]int{1, 2, 3}, 4))
 	assert.Equal(t, 11, GetLast([]int{}, 11))
+}
+
+func Test_ContainSlice(t *testing.T) {
+	assert.False(t, ContainSlice([]int{}, nil))
+	assert.False(t, ContainSlice([]string{"one"}, []string{}))
+	assert.False(t, ContainSlice([]string{"one", "two"}, []string{"Two"}))
+	assert.False(t, ContainSlice([]int64{1, 2, 3}, []int64{1, 2, 3, 4}))
+	assert.False(t, ContainSlice([]uint{0, 1, 2, 3, 4, 5}, []uint{3, 4, 5, 6}))
+	assert.False(t, ContainSlice([]float32{1.1, 2.2, 3.3}, []float32{2.2, 3.31}))
+
+	assert.True(t, ContainSlice([]int{1}, []int{1}))
+	assert.True(t, ContainSlice([]int{0, 1, 2}, []int{2}))
+	assert.True(t, ContainSlice([]int{0, 1, 2, 0, 1, 2, 3}, []int{0, 1, 2}))
+	assert.True(t, ContainSlice([]string{"one", ""}, []string{""}))
+	assert.True(t, ContainSlice([]string{"one", "two", "three"}, []string{"one", "two"}))
+	assert.True(t, ContainSlice([]int64{1, 2, 3}, []int64{1, 2, 3}))
+	assert.True(t, ContainSlice([]uint{0, 1, 1, 1, 1}, []uint{1}))
 }
 
 func Test_IndexOfSlice(t *testing.T) {

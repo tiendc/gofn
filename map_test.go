@@ -1,7 +1,6 @@
 package gofn
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -144,9 +143,11 @@ func Test_MapPop(t *testing.T) {
 	assert.Equal(t, 11, MapPop(map[int]int{}, 1, 11))
 
 	m1 := map[int]int{1: 11}
-	assert.True(t, MapPop(m1, 1, 100) == 11 && reflect.DeepEqual(m1, map[int]int{}))
+	assert.Equal(t, 11, MapPop(m1, 1, 100))
+	assert.Equal(t, map[int]int{}, m1)
 	m2 := map[int]int{1: 11, 2: 22}
-	assert.True(t, MapPop(m2, 3, 100) == 100 && reflect.DeepEqual(m2, map[int]int{1: 11, 2: 22}))
+	assert.Equal(t, 100, MapPop(m2, 3, 100))
+	assert.Equal(t, map[int]int{1: 11, 2: 22}, m2)
 }
 
 func Test_MapSetDefault(t *testing.T) {
@@ -154,9 +155,11 @@ func Test_MapSetDefault(t *testing.T) {
 	assert.Equal(t, 11, MapSetDefault(map[int]int{}, 1, 11))
 
 	m1 := map[int]int{1: 11}
-	assert.True(t, MapSetDefault(m1, 1, 100) == 11 && reflect.DeepEqual(m1, map[int]int{1: 11}))
+	assert.Equal(t, 11, MapSetDefault(m1, 1, 100))
+	assert.Equal(t, map[int]int{1: 11}, m1)
 	m2 := map[int]int{1: 11}
-	assert.True(t, MapSetDefault(m2, 2, 22) == 22 && reflect.DeepEqual(m2, map[int]int{1: 11, 2: 22}))
+	assert.Equal(t, 22, MapSetDefault(m2, 2, 22))
+	assert.Equal(t, map[int]int{1: 11, 2: 22}, m2)
 }
 
 func Test_MapUnionKeys(t *testing.T) {
@@ -179,4 +182,24 @@ func Test_MapIntersectionKeys(t *testing.T) {
 		MapIntersectionKeys(map[int]int{1: 11, 2: 22}, map[int]int{3: 33, 4: 44})))
 	assert.True(t, ContentEqual([]string{"2"},
 		MapIntersectionKeys(map[string]int{"1": 11, "2": 22}, map[string]int{"3": 33, "2": 22})))
+}
+
+func Test_MapDifferenceKeys(t *testing.T) {
+	l, r := MapDifferenceKeys[int, int](nil, nil)
+	assert.Equal(t, []int{}, l)
+	assert.Equal(t, []int{}, r)
+	l, r = MapDifferenceKeys(nil, map[int]int{})
+	assert.Equal(t, []int{}, l)
+	assert.Equal(t, []int{}, r)
+	l, r = MapDifferenceKeys(map[int]int{1: 11}, nil)
+	assert.Equal(t, []int{1}, l)
+	assert.Equal(t, []int{}, r)
+
+	l, r = MapDifferenceKeys(map[int]int{1: 11, 2: 22}, map[int]int{3: 33, 4: 44})
+	assert.True(t, ContentEqual([]int{1, 2}, l))
+	assert.True(t, ContentEqual([]int{3, 4}, r))
+
+	l2, r2 := MapDifferenceKeys(map[string]int{"1": 11, "2": 22}, map[string]int{"3": 33, "2": 22})
+	assert.True(t, ContentEqual([]string{"1"}, l2))
+	assert.True(t, ContentEqual([]string{"3"}, r2))
 }
