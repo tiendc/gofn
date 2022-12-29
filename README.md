@@ -7,7 +7,7 @@ This is a collection of generics utility functions for Go 1.18+.
 ## Why generics?
 
 This library avoids using `reflect` on determined types, such as a slice of `int` or a map of `string` and `struct`.
-With common determined types, using generics will bring us more performance than using `reflect`.
+With common determined types, using generics will bring back more performance than using `reflect`.
 
 ## Contents
 
@@ -21,8 +21,9 @@ With common determined types, using generics will bring us more performance than
   - [Specific algo functions](#specific-algo-functions)
   - [Other functions](#other-functions)
 - [Benchmarks](#benchmarks)
-- [Contribution](#contribution)
+- [Contributing](#contributing)
 - [Authors](#authors)
+- [License](#license)
 
 ## Installation
 
@@ -54,7 +55,7 @@ EqualPred([]string{"one", "TWO"}, []string{"ONE", "two"}, func(elem1, elem2 stri
 
 #### ContentEqual
 
-Returns true if 2 slices equal regardless of the order of elements in the slices.
+Returns true if 2 slices have the same size and contents equal regardless of the order of elements.
 
 ```go
 ContentEqual([]int{1, 2, 3}, []int{2, 1, 3})       // true
@@ -110,7 +111,7 @@ ContainAny([]int{1, 2, 3, 4, 5}, 7, 8, 9) // false
 
 #### IndexOf
 
-Returns the index of an element in a slice if found, -1 otherwise.
+Finds the index of a value in a slice, returns -1 if not found.
 
 ```go
 IndexOf([]int{1, 2, 3}, 4) // -1
@@ -124,7 +125,7 @@ IndexOfPred([]string{"one", "TWO"}, func(elem string) bool {
 
 #### LastIndexOf
 
-Returns the last index of an element in a slice if found, -1 otherwise.
+Finds the last index of an element in a slice, returns -1 if not found.
 
 ```go
 LastIndexOf([]int{1, 2, 3}, 4)    // -1
@@ -133,21 +134,21 @@ LastIndexOf([]int{1, 2, 1, 3}, 1) // 2
 
 #### RemoveAt
 
-Removes an element at the specified index.
+Removes element at the specified index.
 
 ```go
 s := []int{1, 2, 3}
-RemoveAt(&s, 1)    // s == []int{1, 3}
+RemoveAt(&s, 1) // s == []int{1, 3}
 ```
 
 #### FastRemoveAt
 
-Removes an element at the specified index by swapping it with the last element of the slice.
+Removes element at the specified index by swapping it with the last element of the slice.
 This function is fast as it doesn't cause copying of slice content.
 
 ```go
 s := []int{1, 2, 3}
-RemoveAt(&s, 0)    // s == []int{3, 2}
+RemoveAt(&s, 0) // s == []int{3, 2}
 ```
 
 #### Remove
@@ -156,7 +157,7 @@ Removes a value from a slice.
 
 ```go
 s := []int{1, 2, 3}
-Remove(&s, 1)    // s == []int{2, 3}
+Remove(&s, 1) // s == []int{2, 3}
 ```
 
 #### FastRemove
@@ -165,7 +166,7 @@ Removes a value from a slice by swapping it with the last element of the slice.
 
 ```go
 s := []int{1, 2, 3}
-FastRemove(&s, 1)    // s == []int{3, 2}
+FastRemove(&s, 1) // s == []int{3, 2}
 ```
 
 #### RemoveLastOf
@@ -174,7 +175,7 @@ Removes last occurrence of a value from a slice.
 
 ```go
 s := []int{1, 2, 1, 3}
-RemoveLastOf(&s, 1)    // s == []int{1, 2, 3}
+RemoveLastOf(&s, 1) // s == []int{1, 2, 3}
 ```
 
 #### FastRemoveLastOf
@@ -183,7 +184,7 @@ Removes last occurrence of a value from a slice by swapping it with the last ele
 
 ```go
 s := []int{1, 2, 1, 3, 4}
-FastRemoveLastOf(&s, 1)    // s == []int{1, 2, 4, 3}
+FastRemoveLastOf(&s, 1) // s == []int{1, 2, 4, 3}
 ```
 
 #### RemoveAll
@@ -192,7 +193,7 @@ Removes all occurrences of a value from a slice.
 
 ```go
 s := []int{1, 2, 1, 3, 1}
-RemoveAll(&s, 1)    // s == []int{2, 3}
+RemoveAll(&s, 1) // s == []int{2, 3}
 ```
 
 #### Replace
@@ -200,7 +201,7 @@ RemoveAll(&s, 1)    // s == []int{2, 3}
 Replaces first occurrence of a value with another value.
 
 ```go
-Replace([]int{1, 2, 1, 3, 1}, 1, 11)    // []int{11, 2, 1, 3, 1}
+Replace([]int{1, 2, 1, 3, 1}, 1, 11) // []int{11, 2, 1, 3, 1}
 ```
 
 #### ReplaceAll
@@ -208,7 +209,7 @@ Replace([]int{1, 2, 1, 3, 1}, 1, 11)    // []int{11, 2, 1, 3, 1}
 Replaces all occurrences of a value with another value.
 
 ```go
-ReplaceAll([]int{1, 2, 1, 3, 1}, 1, 11)    // []int{11, 2, 11, 3, 11}
+ReplaceAll([]int{1, 2, 1, 3, 1}, 1, 11) // []int{11, 2, 11, 3, 11}
 ```
 
 #### Fill
@@ -225,7 +226,7 @@ Fill(s2, 1) // s2 == []int{1, 1}, s == []int{0, 0, 1, 1, 0}
 
 #### CountValue
 
-Returns the number of occurrences of a value in a slice.
+Counts the number of occurrences of a value in a slice.
 
 ```go
 CountValue([]int{1, 2, 3}, 4)    // 0
@@ -261,7 +262,7 @@ LastIndexOfSlice([]int{1, 2, 3, 4, 5}, []int{2, 4})          // -1
 
 #### GetFirst
 
-Returns the first element of slice if slice is not empty, otherwise return the default value.
+Returns the first element of slice if it is not empty, otherwise return the default value.
 
 ```go
 GetFirst([]int{1, 2, 3}, 4) // 1
@@ -270,7 +271,7 @@ GetFirst([]int{}, 11)       // 11
 
 #### GetLast
 
-Returns the last element of slice if slice is not empty, otherwise return the default value.
+Returns the last element of slice if it is not empty, otherwise return the default value.
 
 ```go
 GetLast([]int{1, 2, 3}, 4) // 3
@@ -288,12 +289,12 @@ This function is equivalent to `reflect.DeepEqual()`, but faster (for how much f
 
 ```go
 MapEqual(map[int]string{1: "one", 2: "two"}, map[int]string{2: "two", 1: "one"}) // true
-MapEqual(map[int]string{1: "one", 2: "two"}, map[int]string{1: "one"})           // false
+MapEqual(map[int]string{1: "one", 2: "two"}, map[int]string{1: "one", 2: "TWO"}) // false
 ```
 
 #### MapContainKeys
 
-Returns true if a map contains one or more keys.
+Returns true if a map contains all given keys.
 
 ```go
 MapContainKeys(map[int]int{1: 11, 2: 22}, 1)    // true
@@ -303,7 +304,7 @@ MapContainKeys(map[int]int{1: 11, 2: 22}, 1, 3) // false
 
 #### MapContainValues
 
-Returns true if a map contains one or more values.
+Returns true if a map contains all given values.
 
 ```go
 MapContainValues(map[int]int{1: 11, 2: 22}, 11)     // true
@@ -313,7 +314,7 @@ MapContainValues(map[int]int{1: 11, 2: 22}, 11, 33) // false
 
 #### MapKeys
 
-Returns a slice of keys of a map.
+Gets all keys of a map.
 
 ```go
 MapKeys(map[int]int{1: 11, 2: 22}) // []int{1, 2} (note: values may be in different order)
@@ -321,7 +322,7 @@ MapKeys(map[int]int{1: 11, 2: 22}) // []int{1, 2} (note: values may be in differ
 
 #### MapValues
 
-Returns a slice of values of a map.
+Gets all values of a map.
 
 ```go
 MapValues(map[int]int{1: 11, 2: 22, 3: 22}) // []int{11, 22, 22} (note: values may be in different order)
@@ -329,7 +330,7 @@ MapValues(map[int]int{1: 11, 2: 22, 3: 22}) // []int{11, 22, 22} (note: values m
 
 #### MapEntries
 
-Returns a slice of entries (key, value) of a map.
+Gets all entries (key, value) of a map.
 
 ```go
 MapEntries(map[int]int{1: 11, 2: 22}) // []*Tuple2[int,int]{{1,11}, {2,22}} (note: values may be in different order)
@@ -346,7 +347,7 @@ MapUpdate(s, map[int]int{3: 33}) // s == map[int]int{1: 11, 2: 22, 3: 33}
 
 #### MapGet
 
-Retrieves value of a key, returns the default value if not exists.
+Retrieves map value for a key, returns the default value if not exists.
 
 ```go
 MapGet(map[int]int{1: 11, 2: 22}, 1, 0) // 11 (found)
@@ -396,7 +397,7 @@ FilterNIN([]int{1, 2, 3, 4}, 3, 2, 7) // []int{1, 4}
 
 #### ToSet
 
-Returns a slice of unique values for the given slice.
+Calculates unique values of a slice.
 
 ```go
 ToSet([]int{1, 2, 3, 1, 2})        // []int{1, 2, 3}
@@ -447,7 +448,7 @@ MapSliceToMapEx([]int{1, 2, 3, -1}, func (i int) (int, string, bool) {
 
 #### Chunk / ChunkByPieces
 
-Splits a slice into chunks.
+Splits slice content into chunks.
 
 ```go
 Chunk([]int{1, 2, 3, 4, 5}, 2)         // [][]int{[]int{1, 2}, []int{3, 4}, []int{5}}
@@ -456,7 +457,7 @@ ChunkByPieces([]int{1, 2, 3, 4, 5}, 2) // [][]int{[]int{1, 2, 3}, []int{4, 5}}
 
 #### Reverse
 
-Reverses a slice.
+Reverses slice content.
 
 ```go
 Reverse([]int{1, 2, 3}) // []int{3, 2, 1}
@@ -467,7 +468,7 @@ s2 := ReverseCopy(s1)  // s1 == []int{1, 2, 3}, s2 == []int{3, 2, 1}
 
 #### Flatten
 
-Flattens multi-dimensional slice.
+Flattens multi-dimension slice.
 
 ```go
 Flatten([]int{1, 2, 3}, []int{4, 5})                    // []int{1, 2, 3, 4, 5}
@@ -519,7 +520,7 @@ ToNumberSlice[int]([]XType{XType(1), XType(2)}) // []int{1, 2}
 
 #### ToSlice
 
-Returns a slice for individual values.
+Creates a slice for individual values.
 
 ```go
 ToSlice(1, 2, 3) // []int{1, 2, 3}
@@ -531,7 +532,7 @@ ToSlice(1, 2, 3) // []int{1, 2, 3}
 
 #### ForEach
 
-Iterates through each element of a slice.
+Iterates over slice content.
 
 ```go
 ForEach([]int{1, 2, 3}, func (i, v int) {
@@ -541,7 +542,7 @@ ForEach([]int{1, 2, 3}, func (i, v int) {
 
 #### ForEachReverse
 
-Iterates through each element of a slice from the end.
+Iterates over slice content from the end.
 
 ```go
 ForEachReverse([]int{1, 2, 3}, func (i, v int) {
@@ -551,26 +552,47 @@ ForEachReverse([]int{1, 2, 3}, func (i, v int) {
 
 #### If
 
-Provides a similar function to C ternary operator (cond ? expr_a : expr_b).
+Provides a similar function to C ternary operator `(cond ? expr_a : expr_b)`.
 
 ```go
 If(direction > 0, 1, -1) // 1 if direction > 0, -1 if direction <= 0
 ```
 
-NOTE: don't use this function this way:
+**NOTE**: don't use the function this way:
 
 ```go
 firstElem := If(len(slice) > 0, slice[0], defaultVal)
 ```
 
-Unlike C ternary operator (cond ? expr_a : expr_b), both expressions are evaluated by If().
+Unlike C ternary operator `(cond ? expr_a : expr_b)`, both expressions are evaluated by `If()`.
 So if the slice is empty, the above statement will cause panic when the code tries
-to evaluate the first expression.
+to evaluate the expression `slice[0]`.
 
+#### All
+
+Returns `true` if all given values are evaluated `true`.
+
+```go
+All(1, "1", 0.5) // true
+All(1, "1", 0.0) // false
+All(1, "", -1)   // false
+All()            // true
+```
+
+#### Any
+
+Returns `true` if any of the given values is evaluated `true`.
+
+```go
+Any(1, "", 0.5)  // true
+Any(1, "1", 0.0) // true
+Any(0, "", 0.0)  // false
+Any()            // false
+```
 
 #### Must
 
-Must accepts any function that returns 2 values and the 2nd value is error type.
+Must accepts any function that returns 2 values and the 2nd value is `error` type.
 Must returns the 1st value if the 2nd is `nil`, otherwise it panics.
 
 ```go
@@ -624,7 +646,7 @@ left, right := Difference([]int{1, 3, 2}, []int{2, 2, 4}) // left == []int{1, 3}
 
 #### Sum / SumAs
 
-Calculates `sum` value of a slice.
+Calculates `sum` value of slice elements.
 
 ```go
 Sum([]int{1, 2, 3})            // 6
@@ -633,7 +655,7 @@ SumAs[int]([]int8{50, 60, 70}) // 180 (Sum() will fail as the result overflows i
 
 #### Product / ProductAs
 
-Calculates `product` value of a slice.
+Calculates `product` value of slice elements.
 
 ```go
 Product([]int{1, 2, 3})         // 6
@@ -748,13 +770,17 @@ Benchmark_Slice_Equal/IntSlice/DeepEqual
 Benchmark_Slice_Equal/IntSlice/DeepEqual-8        	15243183	         77.93 ns/op
 ```
 
-## Contribution
+## Contributing
 
 - You are welcome to make pull requests for new functions and bug fixes.
 
 ## Authors
 
 - Dao Cong Tien (tiendc/tiendc.vn)
+
+## License
+
+- [MIT License](LICENSE)
 
 [doc-img]: https://pkg.go.dev/badge/github.com/tiendc/gofn
 [doc]: https://pkg.go.dev/github.com/tiendc/gofn
