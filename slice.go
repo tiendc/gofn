@@ -42,6 +42,10 @@ func EqualPredPtr[T any](a, b []T, equalFunc func(a, b *T) bool) bool {
 // ContentEqual compares 2 slices without caring about order
 // NOTE: if you want to compare content of slices of pointers, use ContentEqualPtr
 func ContentEqual[T comparable](a, b []T) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
 	mapA := make(map[T]*int, len(a))
 	for i := range a {
 		k := a[i]
@@ -69,6 +73,10 @@ func ContentEqual[T comparable](a, b []T) bool {
 
 // ContentEqualPtr compares 2 slices of pointers without caring about order
 func ContentEqualPtr[T comparable](a, b []*T) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
 	mapA := make(map[T]*int, len(a))
 	for i := range a {
 		k := *a[i]
@@ -96,6 +104,10 @@ func ContentEqualPtr[T comparable](a, b []*T) bool {
 
 // ContentEqualPred compares 2 slices without preserving order
 func ContentEqualPred[T any, K comparable](a, b []T, keyFunc func(t T) K) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
 	mapA := make(map[K]*int, len(a))
 	for i := range a {
 		k := keyFunc(a[i])

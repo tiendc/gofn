@@ -58,8 +58,9 @@ Returns true if 2 slices equal regardless of the order of elements in the slices
 
 ```go
 ContentEqual([]int{1, 2, 3}, []int{2, 1, 3})       // true
-ContentEqual([]int{1, 2, 2, 3}, []int{2, 1, 3})    // true
-ContentEqual([]int{1, 2, 2, 3}, []int{1, 1, 2, 3}) // true
+ContentEqual([]int{1, 2, 2, 3}, []int{2, 1, 3})    // false
+ContentEqual([]int{1, 2, 2, 3}, []int{2, 1, 2, 3}) // true
+ContentEqual([]int{1, 2, 2, 3}, []int{1, 1, 2, 3}) // false
 
 // Use ContentEqualPred for custom key function
 ContentEqualPred([]string{"one", "TWO"}, []string{"two", "ONE"}, func(elem string) string {
