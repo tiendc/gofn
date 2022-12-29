@@ -28,9 +28,11 @@ func Head[T any](t T, s ...interface{}) T {
 }
 
 // Tail returns the last argument
-func Tail[T any](t interface{}, s ...interface{}) T {
-	if len(s) == 0 {
-		return t.(T)
+func Tail[T any](t interface{}, s ...interface{}) (T, bool) {
+	v := t
+	if len(s) > 0 {
+		v = s[len(s)-1]
 	}
-	return s[len(s)-1].(T)
+	ret, ok := v.(T)
+	return ret, ok
 }

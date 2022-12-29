@@ -53,18 +53,19 @@ func ContentEqual[T comparable](a, b []T) bool {
 			cnt := 1
 			mapA[k] = &cnt
 		} else {
-			*count = *count + 1
+			*count++
 		}
 	}
 
 	for i := range b {
 		k := b[i]
-		if count, ok := mapA[k]; !ok {
+		switch count, ok := mapA[k]; {
+		case !ok:
 			return false
-		} else if *count == 1 {
+		case *count == 1:
 			delete(mapA, k)
-		} else {
-			*count = *count - 1
+		default:
+			*count--
 		}
 	}
 
@@ -84,18 +85,19 @@ func ContentEqualPtr[T comparable](a, b []*T) bool {
 			cnt := 1
 			mapA[k] = &cnt
 		} else {
-			*count = *count + 1
+			*count++
 		}
 	}
 
 	for i := range b {
 		k := *b[i]
-		if count, ok := mapA[k]; !ok {
+		switch count, ok := mapA[k]; {
+		case !ok:
 			return false
-		} else if *count == 1 {
+		case *count == 1:
 			delete(mapA, k)
-		} else {
-			*count = *count - 1
+		default:
+			*count--
 		}
 	}
 
@@ -115,18 +117,19 @@ func ContentEqualPred[T any, K comparable](a, b []T, keyFunc func(t T) K) bool {
 			cnt := 1
 			mapA[k] = &cnt
 		} else {
-			*count = *count + 1
+			*count++
 		}
 	}
 
 	for i := range b {
 		k := keyFunc(b[i])
-		if count, ok := mapA[k]; !ok {
+		switch count, ok := mapA[k]; {
+		case !ok:
 			return false
-		} else if *count == 1 {
+		case *count == 1:
 			delete(mapA, k)
-		} else {
-			*count = *count - 1
+		default:
+			*count--
 		}
 	}
 
@@ -284,7 +287,8 @@ func RemoveAt[T any](ps *[]T, i int) {
 	}
 	var zeroT T
 	s[i] = zeroT
-	*ps = append(s[:i], s[i+1:]...)
+	*ps = s[:i]
+	*ps = append(*ps, s[i+1:]...)
 }
 
 // FastRemoveAt removes element at the specified index by swapping it with the last item in slice
@@ -489,9 +493,8 @@ func GetFirst[T any](s []T, defaultVal T) T {
 }
 
 func GetLast[T any](s []T, defaultVal T) T {
-	length := len(s)
-	if length > 0 {
-		return s[length-1]
+	if len(s) > 0 {
+		return s[len(s)-1]
 	}
 	return defaultVal
 }

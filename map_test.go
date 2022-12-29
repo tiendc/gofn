@@ -29,6 +29,7 @@ func Test_MapEqual(t *testing.T) {
 		map[int]st{2: {2, "2"}, 1: {1, "1"}, 3: {3, "3"}}))
 }
 
+// nolint: gocritic
 func Test_MapEqualPred(t *testing.T) {
 	// Empty maps
 	assert.True(t, MapEqualPred(map[int]bool{}, map[int]bool{},
@@ -143,9 +144,9 @@ func Test_MapPop(t *testing.T) {
 	assert.Equal(t, 11, MapPop(map[int]int{}, 1, 11))
 
 	m1 := map[int]int{1: 11}
-	assert.True(t, 11 == MapPop(m1, 1, 100) && reflect.DeepEqual(m1, map[int]int{}))
+	assert.True(t, MapPop(m1, 1, 100) == 11 && reflect.DeepEqual(m1, map[int]int{}))
 	m2 := map[int]int{1: 11, 2: 22}
-	assert.True(t, 100 == MapPop(m2, 3, 100) && reflect.DeepEqual(m2, map[int]int{1: 11, 2: 22}))
+	assert.True(t, MapPop(m2, 3, 100) == 100 && reflect.DeepEqual(m2, map[int]int{1: 11, 2: 22}))
 }
 
 func Test_MapSetDefault(t *testing.T) {
@@ -153,9 +154,9 @@ func Test_MapSetDefault(t *testing.T) {
 	assert.Equal(t, 11, MapSetDefault(map[int]int{}, 1, 11))
 
 	m1 := map[int]int{1: 11}
-	assert.True(t, 11 == MapSetDefault(m1, 1, 100) && reflect.DeepEqual(m1, map[int]int{1: 11}))
+	assert.True(t, MapSetDefault(m1, 1, 100) == 11 && reflect.DeepEqual(m1, map[int]int{1: 11}))
 	m2 := map[int]int{1: 11}
-	assert.True(t, 22 == MapSetDefault(m2, 2, 22) && reflect.DeepEqual(m2, map[int]int{1: 11, 2: 22}))
+	assert.True(t, MapSetDefault(m2, 2, 22) == 22 && reflect.DeepEqual(m2, map[int]int{1: 11, 2: 22}))
 }
 
 func Test_MapUnionKeys(t *testing.T) {

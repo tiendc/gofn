@@ -16,6 +16,7 @@ func Test_Union(t *testing.T) {
 	assert.Equal(t, []string{"1", "2", "3", "4"}, Union([]string{"1", "2", "3", "2"}, []string{"1", "2", "4", "3"}))
 }
 
+// nolint: forcetypeassert
 func Test_UnionPred(t *testing.T) {
 	assert.Equal(t, []interface{}{}, UnionPred[interface{}](nil, nil, func(t interface{}) int { return t.(int) }))
 	assert.Equal(t, []interface{}{}, UnionPred(nil, []interface{}{}, func(t interface{}) int { return t.(int) }))
@@ -25,8 +26,9 @@ func Test_UnionPred(t *testing.T) {
 		func(t interface{}) int { return t.(int) }))
 	assert.Equal(t, []interface{}{1, 2, 3, 4}, UnionPred([]interface{}{1, 2, 3, 2}, []interface{}{1, 2, 4, 3},
 		func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{"1", "2", "3", "4"}, UnionPred([]interface{}{"1", "2", "3", "2"}, []interface{}{"1", "2", "4", "3"},
-		func(t interface{}) string { return t.(string) }))
+	assert.Equal(t, []interface{}{"1", "2", "3", "4"},
+		UnionPred([]interface{}{"1", "2", "3", "2"}, []interface{}{"1", "2", "4", "3"},
+			func(t interface{}) string { return t.(string) }))
 }
 
 func Test_Intersection(t *testing.T) {
@@ -40,6 +42,7 @@ func Test_Intersection(t *testing.T) {
 	assert.Equal(t, []string{"1", "2", "3"}, Intersection([]string{"1", "2", "3", "2"}, []string{"1", "2", "4", "3"}))
 }
 
+// nolint: forcetypeassert
 func Test_IntersectionPred(t *testing.T) {
 	assert.Equal(t, []interface{}{}, IntersectionPred[interface{}](nil, nil, func(t interface{}) int { return t.(int) }))
 	assert.Equal(t, []interface{}{}, IntersectionPred(nil, []interface{}{}, func(t interface{}) int { return t.(int) }))
@@ -50,8 +53,9 @@ func Test_IntersectionPred(t *testing.T) {
 		func(t interface{}) int { return t.(int) }))
 	assert.Equal(t, []interface{}{1, 2, 3}, IntersectionPred([]interface{}{1, 2, 3, 2}, []interface{}{1, 2, 4, 3},
 		func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{"1", "2", "3"}, IntersectionPred([]interface{}{"1", "2", "3", "2"}, []interface{}{"1", "2", "4", "3"},
-		func(t interface{}) string { return t.(string) }))
+	assert.Equal(t, []interface{}{"1", "2", "3"},
+		IntersectionPred([]interface{}{"1", "2", "3", "2"}, []interface{}{"1", "2", "4", "3"},
+			func(t interface{}) string { return t.(string) }))
 }
 
 func Test_Difference(t *testing.T) {
@@ -75,6 +79,7 @@ func Test_Difference(t *testing.T) {
 	assert.Equal(t, []string{"4", ""}, r2)
 }
 
+// nolint: forcetypeassert
 func Test_DifferencePred(t *testing.T) {
 	l, r := DifferencePred[interface{}](nil, nil, func(t interface{}) int { return t.(int) })
 	assert.Equal(t, []interface{}{}, l)

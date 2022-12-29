@@ -22,6 +22,7 @@ func Test_ToSet(t *testing.T) {
 		ToSet([]st{{1, "one"}, {2, "two"}, {1, "one"}}))
 }
 
+// nolint: forcetypeassert
 func Test_ToSetPred(t *testing.T) {
 	// Comparable types
 	assert.Equal(t, []int{},

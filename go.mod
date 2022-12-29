@@ -1,4 +1,4 @@
-module github.com/moneyforwardvietnam/gofn
+module github.com/tiendc/gofn
 
 go 1.18
 

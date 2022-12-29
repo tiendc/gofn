@@ -11,9 +11,12 @@ func Test_Filter(t *testing.T) {
 	assert.Equal(t, []int{}, Filter[int](nil, func(v int) bool { return true }))
 	assert.Equal(t, []float32{}, Filter([]float32{}, func(v float32) bool { return true }))
 
-	assert.Equal(t, []int{-4, 0}, Filter([]int{2, -4, 6, 0}, func(v int) bool { return v <= 0 }))
-	assert.Equal(t, []float32{2, 6, 0.0001}, Filter([]float32{2, -4, 6, 0.0001}, func(v float32) bool { return v > 0 }))
-	assert.Equal(t, []string{"one", "two"}, Filter([]string{"one", "", "two"}, func(v string) bool { return len(v) > 0 }))
+	assert.Equal(t, []int{-4, 0},
+		Filter([]int{2, -4, 6, 0}, func(v int) bool { return v <= 0 }))
+	assert.Equal(t, []float32{2, 6, 0.0001},
+		Filter([]float32{2, -4, 6, 0.0001}, func(v float32) bool { return v > 0 }))
+	assert.Equal(t, []string{"one", "two"},
+		Filter([]string{"one", "", "two"}, func(v string) bool { return len(v) > 0 }))
 }
 
 func Test_FilterPtr(t *testing.T) {
@@ -21,9 +24,12 @@ func Test_FilterPtr(t *testing.T) {
 	assert.Equal(t, []int{}, FilterPtr[int](nil, func(v *int) bool { return true }))
 	assert.Equal(t, []float32{}, FilterPtr([]float32{}, func(v *float32) bool { return true }))
 
-	assert.Equal(t, []int{-4, 0}, FilterPtr([]int{2, -4, 6, 0}, func(v *int) bool { return *v <= 0 }))
-	assert.Equal(t, []float32{2, 6, 0.0001}, FilterPtr([]float32{2, -4, 6, 0.0001}, func(v *float32) bool { return *v > 0 }))
-	assert.Equal(t, []string{"one", "two"}, FilterPtr([]string{"one", "", "two"}, func(v *string) bool { return len(*v) > 0 }))
+	assert.Equal(t, []int{-4, 0},
+		FilterPtr([]int{2, -4, 6, 0}, func(v *int) bool { return *v <= 0 }))
+	assert.Equal(t, []float32{2, 6, 0.0001},
+		FilterPtr([]float32{2, -4, 6, 0.0001}, func(v *float32) bool { return *v > 0 }))
+	assert.Equal(t, []string{"one", "two"},
+		FilterPtr([]string{"one", "", "two"}, func(v *string) bool { return len(*v) > 0 }))
 }
 
 func Test_FilterLT(t *testing.T) {

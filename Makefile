@@ -1,17 +1,21 @@
 all: lint test
 
+prepare:
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.50.1
+	@go install golang.org/x/tools/cmd/goimports@latest
+
 build:
-	go build -v ./...
+	@go build -v ./...
 
 test:
-	go test -cover  -v ./...
+	@go test -cover  -v ./...
 
 cover:
-	go test -race -coverprofile=cover.out -coverpkg=./... ./...
-	go tool cover -html=cover.out -o cover.html
+	@go test -race -coverprofile=cover.out -coverpkg=./... ./...
+	@go tool cover -html=cover.out -o cover.html
 
 lint:
-	golangci-lint run
+	golangci-lint --timeout=5m0s run -v ./...
 
 bench:
 	go test -benchmem -count 100 -bench .

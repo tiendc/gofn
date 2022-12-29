@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/moneyforwardvietnam/gofn"
-	"github.com/moneyforwardvietnam/gofn/internal/testdata"
+	"github.com/tiendc/gofn"
+	"github.com/tiendc/gofn/internal/testdata"
 )
 
 // Benchmark_Slice_Equal

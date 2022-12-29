@@ -3,8 +3,8 @@ package benchmark
 import (
 	"testing"
 
-	"github.com/moneyforwardvietnam/gofn"
-	"github.com/moneyforwardvietnam/gofn/internal/testdata"
+	"github.com/tiendc/gofn"
+	"github.com/tiendc/gofn/internal/testdata"
 )
 
 // Benchmark_ForEach ForEach vs ForEachPtr on big struct slices

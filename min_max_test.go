@@ -121,9 +121,9 @@ func Test_MaxInPred(t *testing.T) {
 
 func Test_MinMax(t *testing.T) {
 	m1, m2 := MinMax(0, 2, -10, -5, 3, 5)
-	assert.True(t, -10 == m1 && 5 == m2)
+	assert.True(t, m1 == -10 && m2 == 5)
 	f1, f2 := MinMax[float32](0.1, -0.2, 0, 0, -0.2, 10)
-	assert.True(t, -0.2 == f1 && 10 == f2)
+	assert.True(t, f1 == -0.2 && f2 == 10)
 	s1, s2 := MinMax("", "1", "A", "a")
-	assert.True(t, "" == s1 && "a" == s2)
+	assert.True(t, s1 == "" && s2 == "a")
 }

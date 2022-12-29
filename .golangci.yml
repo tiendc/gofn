@@ -1,0 +1,80 @@
+linters-settings:
+  funlen:
+    lines: 160
+    statements: 72
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/tiendc/gofn)
+  gocyclo:
+    min-complexity: 30
+  goimports:
+    local-prefixes: github.com/golangci/golangci-lint
+  gomnd:
+    settings:
+      mnd:
+        checks: # don't include the "operation" and "assign"
+          - argument
+          - case
+          - condition
+          - return
+  lll:
+    line-length: 120
+  misspell:
+    locale: US
+
+linters:
+  enable:
+    - bodyclose
+    - contextcheck
+    - depguard
+    - dogsled
+    - errcheck
+    - errname
+    - errorlint
+    - exhaustive
+    - exportloopref
+    - forbidigo
+    - forcetypeassert
+    - funlen
+    - gci
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - goerr113
+    - gofmt
+    - goimports
+    - gomnd
+    - gosec
+    - gosimple
+    - govet
+    - ifshort
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - nestif
+    - nilerr
+    - rowserrcheck
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+    - wrapcheck
+
+run:
+  skip-dirs:
+    - config
+    - deployment
+    - scripts
+    - test-results
+
+# golangci configuration
+# https://github.com/golangci/golangci/wiki/Configuration
+service:
+  golangci-lint-version: 1.50.x

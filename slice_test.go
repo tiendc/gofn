@@ -29,6 +29,7 @@ func Test_Equal(t *testing.T) {
 	assert.False(t, Equal([]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{3, "3"}, {1, "1"}, {2, "2"}}))
 }
 
+// nolint: forcetypeassert
 func Test_EqualPred(t *testing.T) {
 	assert.True(t, EqualPred([]interface{}{}, []interface{}{},
 		func(a, b interface{}) bool { return a.(int) == b.(int) }))
@@ -90,6 +91,7 @@ func Test_ContentEqual(t *testing.T) {
 	assert.False(t, ContentEqual([]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{3, "3"}, {1, "1"}, {3, "3"}}))
 }
 
+// nolint: forcetypeassert
 func Test_ContentEqualPred(t *testing.T) {
 	assert.True(t, ContentEqualPred([]interface{}{}, []interface{}{},
 		func(t interface{}) int { return t.(int) }))
@@ -170,6 +172,7 @@ func Test_Contain(t *testing.T) {
 	assert.True(t, Contain([]St{{1, "1"}, {2, "2"}, {3, "3"}}, St{3, "3"}))
 }
 
+// nolint: goconst, forcetypeassert
 func Test_ContainPred(t *testing.T) {
 	assert.False(t, ContainPred([]interface{}{},
 		func(i interface{}) bool { return i.(int) == 1 }))
@@ -265,7 +268,7 @@ func Test_IndexOf(t *testing.T) {
 	assert.Equal(t, 1, IndexOf([]string{"one", "two"}, "two"))
 	assert.Equal(t, 2, IndexOf([]string{"one", "two", ""}, ""))
 	assert.Equal(t, 2, IndexOf([]float64{1.1, 2.2, 3.3}, 3.3))
-	assert.Equal(t, 2, IndexOf([]St{St{1, "1"}, {2, "2"}, {3, "3"}}, St{3, "3"}))
+	assert.Equal(t, 2, IndexOf([]St{{1, "1"}, {2, "2"}, {3, "3"}}, St{3, "3"}))
 }
 
 func Test_IndexOfPred(t *testing.T) {

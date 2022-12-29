@@ -38,12 +38,10 @@ jobs:
       - name: Download Dependencies
         run: |
           go mod download
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.50.1
 
       - name: Lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.50.1
-        if: matrix.latest
+        run: make lint
 
       - name: Test
         run: make cover

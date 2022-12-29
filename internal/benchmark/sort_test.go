@@ -1,9 +1,10 @@
 package benchmark
 
 import (
-	"github.com/moneyforwardvietnam/gofn"
 	"sort"
 	"testing"
+
+	"github.com/tiendc/gofn"
 )
 
 // Benchmark_Sort
