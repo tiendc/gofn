@@ -73,6 +73,7 @@ func Test_ContentEqual(t *testing.T) {
 	assert.True(t, ContentEqual(nil, []int{}))
 	assert.True(t, ContentEqual([]int{1, 2, 3}, []int{1, 2, 3}))
 	assert.True(t, ContentEqual([]int{3, 1, 2}, []int{1, 2, 3}))
+	assert.True(t, ContentEqual([]int{1, 2, 1, 3}, []int{1, 2, 3, 1}))
 	assert.True(t, ContentEqual([]string{"3", "1", "2"}, []string{"1", "2", "3"}))
 
 	type St struct {
@@ -84,6 +85,8 @@ func Test_ContentEqual(t *testing.T) {
 	assert.False(t, ContentEqual([]int{}, []int{1}))
 	assert.False(t, ContentEqual([]int{1}, nil))
 	assert.False(t, ContentEqual([]int{1, 2, 3}, []int{1, 2, 3, 4}))
+	assert.False(t, ContentEqual([]int{1, 2, 3}, []int{1, 2, 3, 3}))
+	assert.False(t, ContentEqual([]int{1, 2, 1, 3}, []int{1, 2, 2, 3}))
 	assert.False(t, ContentEqual([]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{3, "3"}, {1, "1"}, {3, "3"}}))
 }
 
