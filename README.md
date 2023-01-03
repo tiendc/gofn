@@ -393,6 +393,8 @@ FilterGTE([]int{1, 2, 3, 4}, 3)       // []int{3, 4}
 FilterNE([]int{1, 2, 3, 4}, 3)        // []int{1, 2, 4}
 FilterIN([]int{1, 2, 3, 4}, 3, 2, 7)  // []int{2, 3}
 FilterNIN([]int{1, 2, 3, 4}, 3, 2, 7) // []int{1, 4}
+FilterLIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "Abc")  // []string{"*Abc*"}
+FilterILIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "Abc") // []string{"*Abc*", "*abc*", "abc*", "*abc"}
 ```
 
 #### ToSet

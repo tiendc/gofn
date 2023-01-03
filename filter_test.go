@@ -94,3 +94,45 @@ func Test_FilterNIN(t *testing.T) {
 	assert.Equal(t, []int{-10, 1, -3}, FilterNIN([]int{0, -10, 1, -3, 0, 7}, 3, 7, 0))
 	assert.Equal(t, []string{"Ab"}, FilterNIN([]string{"Ab", "cd", "a"}, "a", "b", "cd"))
 }
+
+func Test_FilterLIKE(t *testing.T) {
+	// Nil/Empty slices
+	assert.Equal(t, []string{}, FilterLIKE[string](nil, ""))
+	assert.Equal(t, []string{}, FilterLIKE([]string{}, ""))
+
+	assert.Equal(t, []string{},
+		FilterLIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "ac"))
+	assert.Equal(t, []string{"*abc*", "abc*", "*abc"},
+		FilterLIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "abc"))
+	assert.Equal(t, []string{"*Abc*"},
+		FilterLIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "Abc"))
+
+	type X string
+	assert.Equal(t, []X{},
+		FilterLIKE([]X{"*Abc*", "*abc*", "abc*", "*abc"}, "ac"))
+	assert.Equal(t, []X{"*abc*", "abc*", "*abc"},
+		FilterLIKE([]X{"*Abc*", "*abc*", "abc*", "*abc"}, "abc"))
+	assert.Equal(t, []X{"*Abc*"},
+		FilterLIKE([]X{"*Abc*", "*abc*", "abc*", "*abc"}, "Abc"))
+}
+
+func Test_FilterILIKE(t *testing.T) {
+	// Nil/Empty slices
+	assert.Equal(t, []string{}, FilterILIKE[string](nil, ""))
+	assert.Equal(t, []string{}, FilterILIKE([]string{}, ""))
+
+	assert.Equal(t, []string{},
+		FilterILIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "aC"))
+	assert.Equal(t, []string{"*Abc*", "*abc*", "abc*", "*abc"},
+		FilterILIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "abc"))
+	assert.Equal(t, []string{"*Abc*", "*abc*", "abc*", "*abc"},
+		FilterILIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "AbC"))
+
+	type X string
+	assert.Equal(t, []X{},
+		FilterILIKE([]X{"*Abc*", "*abc*", "abc*", "*abc"}, "aC"))
+	assert.Equal(t, []X{"*Abc*", "*abc*", "abc*", "*abc"},
+		FilterILIKE([]X{"*Abc*", "*abc*", "abc*", "*abc"}, "abc"))
+	assert.Equal(t, []X{"*Abc*", "*abc*", "abc*", "*abc"},
+		FilterILIKE([]X{"*Abc*", "*abc*", "abc*", "*abc"}, "AbC"))
+}
