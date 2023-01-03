@@ -1,4 +1,4 @@
-[![Build Status][ci-img]][ci] [![GoDoc][doc-img]][doc] [![Coverage Status][cov-img]][cov] [![GoReport][rpt-img]][rpt]
+[![Go Version][gover-img]][gover] [![GoDoc][doc-img]][doc] [![Build Status][ci-img]][ci] [![Coverage Status][cov-img]][cov] [![GoReport][rpt-img]][rpt]
 
 # gofn - Utility functions for Go 1.18+
 
@@ -784,6 +784,8 @@ Benchmark_Slice_Equal/IntSlice/DeepEqual-8        	15243183	         77.93 ns/op
 
 [doc-img]: https://pkg.go.dev/badge/github.com/tiendc/gofn
 [doc]: https://pkg.go.dev/github.com/tiendc/gofn
+[gover-img]: https://img.shields.io/badge/Go-%3E%3D%201.18-blue
+[gover]: https://img.shields.io/badge/Go-%3E%3D%201.18-blue
 [ci-img]: https://github.com/tiendc/gofn/actions/workflows/go.yml/badge.svg
 [ci]: https://github.com/tiendc/gofn/actions/workflows/go.yml
 [cov-img]: https://codecov.io/gh/tiendc/gofn/branch/master/graph/badge.svg
