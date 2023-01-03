@@ -21,7 +21,6 @@ import (
 func Benchmark_ForEach(b *testing.B) {
 	slice := testdata.BigStructSlice
 	fn := func(i int, t testdata.BigStruct) {
-		i += 2 // nolint
 	}
 
 	b.Run("builtin For-Index", func(b *testing.B) {
