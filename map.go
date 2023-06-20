@@ -102,6 +102,40 @@ func MapUpdate[K comparable, V any](m1, m2 map[K]V) map[K]V {
 	return m1
 }
 
+// MapUpdateExistingOnly update map existing items with another map
+// Not change the target map, only change the source map
+func MapUpdateExistingOnly[K comparable, V any](m1, m2 map[K]V) map[K]V {
+	if m1 == nil {
+		return make(map[K]V, 0)
+	}
+	if m2 == nil {
+		return m1
+	}
+	for k, v := range m2 {
+		if _, existing := m1[k]; existing {
+			m1[k] = v
+		}
+	}
+	return m1
+}
+
+// MapUpdateNewOnly update map with another map and not override the existing values
+// Not change the target map, only change the source map
+func MapUpdateNewOnly[K comparable, V any](m1, m2 map[K]V) map[K]V {
+	if m1 == nil {
+		return MapUpdate(make(map[K]V, len(m2)), m2)
+	}
+	if m2 == nil {
+		return m1
+	}
+	for k, v := range m2 {
+		if _, existing := m1[k]; !existing {
+			m1[k] = v
+		}
+	}
+	return m1
+}
+
 // MapGet gets the value for the key, if not exist, returns the default one
 func MapGet[K comparable, V any](m map[K]V, k K, defaultVal V) V {
 	if val, ok := m[k]; ok {
