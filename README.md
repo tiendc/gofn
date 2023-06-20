@@ -350,13 +350,15 @@ Gets all entries (key, value) of a map.
 MapEntries(map[int]int{1: 11, 2: 22}) // []*Tuple2[int,int]{{1,11}, {2,22}} (note: values may be in different order)
 ```
 
-#### MapUpdate
+#### MapUpdate/MapUpdateXX
 
 Updates a map content with another map.
 
 ```go
 s := map[int]int{1: 11, 2: 22}
-MapUpdate(s, map[int]int{3: 33}) // s == map[int]int{1: 11, 2: 22, 3: 33}
+MapUpdate(s, map[int]int{1: 111, 3: 33})             // s == map[int]int{1: 111, 2: 22, 3: 33}
+MapUpdateExistingOnly(s, map[int]int{2: 222, 3: 33}) // s == map[int]int{1: 11, 2: 222}
+MapUpdateNewOnly(s, map[int]int{2: 222, 3: 33})      // s == map[int]int{1: 11, 2: 22, 3: 33}
 ```
 
 #### MapGet
