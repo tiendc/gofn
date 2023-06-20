@@ -133,6 +133,7 @@ func Test_MapUpdate(t *testing.T) {
 func Test_MapUpdateExistingOnly(t *testing.T) {
 	// Update with a nil map
 	assert.Equal(t, map[int]bool{}, MapUpdateExistingOnly(nil, map[int]bool{}))
+	assert.Equal(t, map[int]bool{}, MapUpdateExistingOnly(map[int]bool{}, nil))
 	assert.Equal(t, map[int]int{}, MapUpdateExistingOnly(map[int]int{}, map[int]int{1: 1}))
 	assert.Equal(t, map[int]int{1: 1}, MapUpdateExistingOnly(map[int]int{1: 1}, map[int]int{}))
 	assert.Equal(t, map[int]int{1: 1, 2: 2}, MapUpdateExistingOnly(map[int]int{1: 1, 2: 2}, map[int]int{3: 3, 4: 4}))
@@ -142,6 +143,7 @@ func Test_MapUpdateExistingOnly(t *testing.T) {
 func Test_MapUpdateNewOnly(t *testing.T) {
 	// Update with a nil map
 	assert.Equal(t, map[int]bool{}, MapUpdateNewOnly(nil, map[int]bool{}))
+	assert.Equal(t, map[int]bool{}, MapUpdateNewOnly(map[int]bool{}, nil))
 	assert.Equal(t, map[int]int{}, MapUpdateNewOnly(map[int]int{}, map[int]int{}))
 	assert.Equal(t, map[int]int{1: 1}, MapUpdateNewOnly(map[int]int{1: 1}, map[int]int{1: 11}))
 	assert.Equal(t, map[int]int{1: 1, 2: 2}, MapUpdateNewOnly(map[int]int{1: 1, 2: 2}, map[int]int{1: 11, 2: 22}))
