@@ -235,6 +235,40 @@ func ContainAny[T comparable](a []T, b ...T) bool {
 	return false
 }
 
+// IsUnique checks a slice for uniqueness
+func IsUnique[T comparable](s []T) bool {
+	length := len(s)
+	if length <= 1 {
+		return true
+	}
+	seen := make(map[T]struct{}, length)
+	for i := 0; i < length; i++ {
+		v := s[i]
+		if _, ok := seen[v]; ok {
+			return false
+		}
+		seen[v] = struct{}{}
+	}
+	return true
+}
+
+// IsUniquePred checks a slice for uniqueness using key function
+func IsUniquePred[T any, U comparable](s []T, keyFunc func(t T) U) bool {
+	length := len(s)
+	if length <= 1 {
+		return true
+	}
+	seen := make(map[U]struct{}, length)
+	for i := 0; i < length; i++ {
+		v := keyFunc(s[i])
+		if _, ok := seen[v]; ok {
+			return false
+		}
+		seen[v] = struct{}{}
+	}
+	return true
+}
+
 // IndexOf gets index of item in slice
 // Returns -1 if not found
 func IndexOf[T comparable](a []T, t T) int {

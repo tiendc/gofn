@@ -322,6 +322,53 @@ func Test_ContainAny(t *testing.T) {
 	assert.True(t, ContainAny([]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"}, "100", "0", "1", "2"))
 }
 
+func Test_IsUnique(t *testing.T) {
+	assert.True(t, IsUnique[int](nil))
+	assert.True(t, IsUnique([]int{}))
+	assert.True(t, IsUnique([]string{"one"}))
+	assert.True(t, IsUnique([]string{"one", "two", "One", "Two"}))
+	assert.True(t, IsUnique([]float32{1.1, 2.2, 3.3, 1.11}))
+
+	assert.False(t, IsUnique([]int{1, 2, 3, 1, 2}))
+	assert.False(t, IsUnique([]string{"one", "two", "one"}))
+	assert.False(t, IsUnique([]float32{1.1, 2.2, 1.100}))
+
+	type st struct {
+		I int
+		S string
+	}
+	assert.True(t, IsUnique([]st{{1, "one"}, {2, "two"}, {3, "three"}}))
+	assert.True(t, IsUnique([]st{{1, "one"}, {1, "One"}}))
+	assert.False(t, IsUnique([]st{{1, "one"}, {2, "two"}, {1, "one"}}))
+}
+
+// nolint: forcetypeassert
+func Test_IsUniquePred(t *testing.T) {
+	assert.True(t, IsUniquePred[int, int](nil, nil))
+	assert.True(t, IsUniquePred([]int{}, func(v int) int { return v }))
+	assert.True(t, IsUniquePred([]interface{}{"one"},
+		func(v interface{}) string { return v.(string) }))
+	assert.True(t, IsUniquePred([]interface{}{"one", "two", "One", "Two"},
+		func(v interface{}) string { return v.(string) }))
+	assert.True(t, IsUniquePred([]interface{}{1.1, 2.2, 3.3, 1.11},
+		func(v interface{}) float64 { return v.(float64) }))
+
+	assert.False(t, IsUniquePred([]interface{}{1, 2, 3, 1, 2},
+		func(v interface{}) int { return v.(int) }))
+	assert.False(t, IsUniquePred([]interface{}{"one", "two", "one"},
+		func(v interface{}) string { return v.(string) }))
+	assert.False(t, IsUniquePred([]interface{}{1.1, 2.2, 1.100},
+		func(v interface{}) float64 { return v.(float64) }))
+
+	type st struct {
+		I int
+		S string
+	}
+	assert.True(t, IsUniquePred([]st{{1, "one"}, {2, "two"}, {3, "three"}}, func(v st) int { return v.I }))
+	assert.False(t, IsUniquePred([]st{{1, "one"}, {1, "One"}}, func(v st) int { return v.I }))
+	assert.False(t, IsUniquePred([]st{{1, "one"}, {2, "two"}, {1, "one"}}, func(v st) int { return v.I }))
+}
+
 func Test_IndexOf(t *testing.T) {
 	assert.Equal(t, -1, IndexOf([]int{}, 1))
 	assert.Equal(t, -1, IndexOf([]string{"one"}, "One"))
