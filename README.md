@@ -109,6 +109,20 @@ ContainAny([]int{1, 2, 3, 4, 5}, 2, 4, 7) // true
 ContainAny([]int{1, 2, 3, 4, 5}, 7, 8, 9) // false
 ```
 
+#### IsUnique
+
+Returns true if a slice contains unique values.
+
+```go
+IsUnique([]int{1, 2, 3}) // true
+IsUnique([]int{1, 2, 1}) // false
+
+// Use IsUniquePred for custom function
+IsUniquePred([]string{"one", "ONE"}, func(elem string) string {
+    return strings.ToLower(elem)
+}) // false
+```
+
 #### IndexOf
 
 Finds the index of a value in a slice, returns -1 if not found.
