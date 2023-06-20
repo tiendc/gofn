@@ -28,7 +28,6 @@ linters:
   enable:
     - bodyclose
     - contextcheck
-    - depguard
     - dogsled
     - errcheck
     - errname
