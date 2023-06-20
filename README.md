@@ -778,7 +778,7 @@ Benchmark_Slice_Equal/IntSlice/DeepEqual-8        	15243183	         77.93 ns/op
 
 ## Authors
 
-- Dao Cong Tien (tiendc/tiendc.vn)
+- Dao Cong Tien ([tiendc](https://github.com/tiendc))
 
 ## License
 
