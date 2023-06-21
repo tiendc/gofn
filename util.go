@@ -4,6 +4,9 @@ import "reflect"
 
 // If returns the 2nd arg if the condition is true, 3rd arg otherwise
 // This is similar to C-language ternary operation (cond ? val1 : val2)
+// Deprecated: this function may cause unexpected behavior upon misuses
+//
+//	For example: gofn.If(len(slice) > 0, slice[0], dafaultVal) will crash if slice is empty
 func If[C bool, T any](cond C, v1 T, v2 T) T {
 	if cond {
 		return v1

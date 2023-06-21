@@ -568,24 +568,6 @@ ForEachReverse([]int{1, 2, 3}, func (i, v int) {
 }) // prints 3 2 1
 ```
 
-#### If
-
-Provides a similar function to C ternary operator `(cond ? expr_a : expr_b)`.
-
-```go
-If(direction > 0, 1, -1) // 1 if direction > 0, -1 if direction <= 0
-```
-
-**NOTE**: don't use the function this way:
-
-```go
-firstElem := If(len(slice) > 0, slice[0], defaultVal)
-```
-
-Unlike C ternary operator `(cond ? expr_a : expr_b)`, both expressions are evaluated by `If()`.
-So if the slice is empty, the above statement will cause panic when the code tries
-to evaluate the expression `slice[0]`.
-
 #### All
 
 Returns `true` if all given values are evaluated `true`.
