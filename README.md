@@ -767,6 +767,22 @@ Takes the last argument.
 Tail[string](true, "2", 1.0, "3") // "3"
 ```
 
+
+#### FirstTrue
+
+Returns the first "true" value in the given arguments if found.
+True values are considered:
+  - not zero values (0, empty string, false, nil, ...)
+  - not empty containers (slice, array, map, channel)
+  - NOTE: non-nil pointer is considered "true" value (even it points to a zero object)
+
+```go
+FirstTrue(0, 0, -1, 2, 3)                           // -1
+FirstTrue("", "", " ", "b")                         // " "
+FirstTrue([]int{}, nil, []int{1}, []int{2, 3})      // []int{1}
+FirstTrue[interface{}](nil, 0, 0.0, "", struct{}{}) // nil (the first zero value)
+```
+
 ## Benchmarks
 
 #### Equal vs ContentEqual vs reflect.DeepEqual
