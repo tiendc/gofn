@@ -544,6 +544,25 @@ Creates a slice for individual values.
 ToSlice(1, 2, 3) // []int{1, 2, 3}
 ```
 
+#### ParseInt/ParseIntDef
+
+Parses integer using **strconv.ParseInt** then converts the value to a specific type.
+
+```go
+v, err := ParseInt[int16]("111") // v == int16(111)
+v, err := ParseInt[int8]("128")  // err == strconv.ErrRange
+
+// Returns default value when failed
+v := ParseIntDef("200", 10)       // v == int(200)
+v := ParseIntDef("200", int8(10)) // v == int8(10)
+
+// Parses integer with specific base
+v, err := ParseIntEx[int8]("eeff1234", 16) // err == strconv.ErrRange
+v, err := ParseIntEx[int]("eeff1234", 16)  // v == int of hex "eeff1234"
+```
+
+- **NOTE**: There are also **ParseUint** for unsigned integers and **ParseFloat** for floating numbers.
+
 ### Common functions
 
 ---
