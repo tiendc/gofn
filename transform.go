@@ -9,16 +9,17 @@ func MapSlice[T any, U any](s []T, mapFunc func(b T) U) []U {
 	return result
 }
 
-// MapSliceEx supports map and filter functionality
-func MapSliceEx[T any, U any](s []T, mapFunc func(b T) (U, bool)) []U {
+// MapSliceEx transforms a slice to another with map function and error handling
+func MapSliceEx[T any, U any](s []T, mapFunc func(b T) (U, error)) ([]U, error) {
 	result := make([]U, 0, len(s))
 	for i := range s {
-		item, ok := mapFunc(s[i])
-		if ok {
-			result = append(result, item)
+		v, err := mapFunc(s[i])
+		if err != nil {
+			return nil, err
 		}
+		result = append(result, v)
 	}
-	return result
+	return result, nil
 }
 
 // MapSliceToMap transforms a slice to a map with map function
@@ -31,14 +32,15 @@ func MapSliceToMap[T any, K comparable, V any](s []T, mapFunc func(b T) (K, V)) 
 	return result
 }
 
-// MapSliceToMapEx supports map and filter functionality
-func MapSliceToMapEx[T any, K comparable, V any](s []T, mapFunc func(b T) (K, V, bool)) map[K]V {
+// MapSliceToMapEx transforms a slice to a map with map function and error handling
+func MapSliceToMapEx[T any, K comparable, V any](s []T, mapFunc func(b T) (K, V, error)) (map[K]V, error) {
 	result := make(map[K]V, len(s))
 	for i := range s {
-		k, v, ok := mapFunc(s[i])
-		if ok {
-			result[k] = v
+		k, v, err := mapFunc(s[i])
+		if err != nil {
+			return nil, err
 		}
+		result[k] = v
 	}
-	return result
+	return result, nil
 }

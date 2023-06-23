@@ -20,14 +20,21 @@ func Test_MapSlice(t *testing.T) {
 
 func Test_MapSliceEx(t *testing.T) {
 	// Nil/Empty maps
-	assert.Equal(t, []float32{}, MapSliceEx[int, float32](nil, func(v int) (float32, bool) { return float32(v), true }))
-	assert.Equal(t, []float32{}, MapSliceEx([]int{}, func(v int) (float32, bool) { return float32(v), true }))
+	r1, e := MapSliceEx[int, float32](nil, func(v int) (float32, error) { return float32(v), nil })
+	assert.Nil(t, e)
+	assert.Equal(t, []float32{}, r1)
+	r2, e := MapSliceEx([]int{}, func(v int) (float32, error) { return float32(v), nil })
+	assert.Nil(t, e)
+	assert.Equal(t, []float32{}, r2)
 
-	// []int -> []int, and omit all negatives
-	assert.Equal(t, []int{1, 3}, MapSliceEx([]int{1, -2, 3, -4}, func(v int) (int, bool) { return v, v >= 0 }))
-	// []string -> []string, and omit all empty elements
-	assert.Equal(t, []string{"a", "b", "c"}, MapSliceEx([]string{"a", "", "b", "", "c"},
-		func(v string) (string, bool) { return v, len(v) > 0 }))
+	// []string -> []int
+	r3, e := MapSliceEx([]string{"1", "2", "3"}, ParseInt[int])
+	assert.Nil(t, e)
+	assert.Equal(t, []int{1, 2, 3}, r3)
+
+	// []string -> []int with error
+	_, e = MapSliceEx([]string{"1", "a", "3"}, ParseInt[int])
+	assert.ErrorIs(t, e, strconv.ErrSyntax)
 }
 
 func Test_MapSliceToMap(t *testing.T) {
@@ -42,12 +49,25 @@ func Test_MapSliceToMap(t *testing.T) {
 
 func Test_MapSliceToMapEx(t *testing.T) {
 	// Nil/Empty maps
-	assert.Equal(t, map[int]bool{}, MapSliceToMapEx[int, int, bool](nil,
-		func(v int) (int, bool, bool) { return v, v > 0, v != 0 }))
-	assert.Equal(t, map[int]bool{}, MapSliceToMapEx([]int{},
-		func(v int) (int, bool, bool) { return v, v > 0, v != 0 }))
+	r1, e := MapSliceToMapEx[int, int, bool](nil, func(v int) (int, bool, error) { return v, v > 0, nil })
+	assert.Nil(t, e)
+	assert.Equal(t, map[int]bool{}, r1)
+	r2, e := MapSliceToMapEx([]int{}, func(v int) (int, bool, error) { return v, v > 0, nil })
+	assert.Nil(t, e)
+	assert.Equal(t, map[int]bool{}, r2)
 
-	// []int -> map[int]string, and omit all zeros
-	assert.Equal(t, map[int]string{1: "2", -2: "-4", -4: "-8"}, MapSliceToMapEx([]int{0, 1, -2, 0, -4},
-		func(v int) (int, string, bool) { return v, strconv.Itoa(v * 2), v != 0 }))
+	// []string -> []int
+	r3, e := MapSliceToMapEx([]string{"1", "2", "3"}, func(v string) (string, int, error) {
+		u, e := ParseInt[int](v)
+		return v, u, e
+	})
+	assert.Nil(t, e)
+	assert.Equal(t, map[string]int{"1": 1, "2": 2, "3": 3}, r3)
+
+	// []string -> []int with error
+	_, e = MapSliceToMapEx([]string{"1", "x", "3"}, func(v string) (string, int, error) {
+		u, e := ParseInt[int](v)
+		return v, u, e
+	})
+	assert.ErrorIs(t, e, strconv.ErrSyntax)
 }

@@ -428,26 +428,20 @@ ToSetPred([]string{"one", "TWO", "two", "One"}, func(elem string) string {
 }) // []string{"one", "TWO"}
 ```
 
-#### MapSlice
+#### MapSlice/MapSliceEx
 
 Transforms a slice to a slice.
 
 ```go
-MapSlice([]int{1, 2, 3}, func (i int) string {
-    return fmt.Sprintf("%d", i)
-}) // []string{"1", "2", "3"}
+MapSlice([]string{"1", "2 ", " 3"}, strings.TrimSpace)   // []string{"1", "2", "3"}
 
-
-// Use MapSliceEx for combining both transformation and filter
-MapSliceEx([]int{1, 2, 3, -1}, func (i int) (string, bool) {
-    if i < 0 {
-        return "", false
-    }
-    return fmt.Sprintf("%d", i), true
-}) // []string{"1", "2", "3"}
+// Use MapSliceEx to transform with error handling
+MapSliceEx([]string{"1","2","3"}, gofn.ParseInt[int])    // []int{1, 2, 3}
+MapSliceEx([]string{"1","x","3"}, gofn.ParseInt[int])    // strconv.ErrSyntax
+MapSliceEx([]string{"1","200","3"}, gofn.ParseInt[int8]) // strconv.ErrRange
 ```
 
-#### MapSliceToMap
+#### MapSliceToMap/MapSliceToMapEx
 
 Transforms a slice to a map.
 
@@ -456,13 +450,11 @@ MapSliceToMap([]int{1, 2, 3}, func (i int) (int, string) {
     return i, fmt.Sprintf("%d", i)
 }) // map[int]string{1: "1", 2: "2", 3: "3"}
 
-// Use MapSliceToMapEx for combining both transformation and filter
-MapSliceToMapEx([]int{1, 2, 3, -1}, func (i int) (int, string, bool) {
-    if i < 0 {
-        return 0, "", false
-    }
-    return i, fmt.Sprintf("%d", i), true
-}) // map[int]string{1: "1", 2: "2", 3: "3"}
+// Use MapSliceToMapEx to transform with error handling
+MapSliceToMapEx([]string{"1","300","3"}, func (s string) (string, int, bool) {
+    v, e := gofn.ParseInt[int8](s)
+    return s, v, e
+}) // strconv.ErrRange
 ```
 
 #### Chunk / ChunkByPieces
