@@ -2,6 +2,8 @@ package gofn
 
 import (
 	"math/rand"
+	"strings"
+	"unicode/utf8"
 )
 
 var (
@@ -27,15 +29,30 @@ func RandStringEx(n int, allowedChars []rune) string {
 }
 
 // LinesTrimLeft trim leading characters for every line in the given string
-func LinesTrimLeft(s string, cutset []rune) string {
-	if len(cutset) == 0 {
+func LinesTrimLeft(s string, cutset string) string {
+	if s == "" || cutset == "" {
 		return s
 	}
+	if as, ok := makeASCIISet(cutset); ok {
+		ret := make([]byte, 0, len(s))
+		newLineFound := true
+		for i := range s {
+			ch := s[i]
+			if newLineFound && as.contains(ch) {
+				continue
+			}
+			newLineFound = ch == '\n' || ch == '\r'
+			ret = append(ret, ch)
+		}
+		return string(ret)
+	}
+
+	// Process string as runes
 	runes := []rune(s)
 	ret := make([]rune, 0, len(runes))
 	newLineFound := true
 	for _, ch := range runes {
-		if newLineFound && containRune(ch, cutset) {
+		if newLineFound && strings.ContainsRune(cutset, ch) {
 			continue
 		}
 		newLineFound = ch == '\n' || ch == '\r'
@@ -47,51 +64,86 @@ func LinesTrimLeft(s string, cutset []rune) string {
 // LinesTrimLeftSpace trim leading spaces for every line in the given string
 func LinesTrimLeftSpace(s string) string {
 	// See unicode.IsSpace for what are considered spaces
-	return LinesTrimLeft(s, []rune{' ', '\t', '\v', '\f', 0x85, 0xA0})
+	return LinesTrimLeft(s, string([]rune{' ', '\t', '\v', '\f', 0x85, 0xA0}))
 }
 
 // LinesTrimRight trim trailing characters for every line in the given string
-func LinesTrimRight(s string, cutset []rune) string {
-	if len(cutset) == 0 {
+func LinesTrimRight(s string, cutset string) string {
+	if s == "" || cutset == "" {
 		return s
 	}
+	if as, ok := makeASCIISet(cutset); ok {
+		length := len(s)
+		ret := make([]byte, length)
+		i, j := length-1, length-1
+		newLineFound := true
+		for ; i >= 0; i-- {
+			ch := s[i]
+			if newLineFound && as.contains(ch) {
+				continue
+			}
+			newLineFound = ch == '\n' || ch == '\r'
+			ret[j] = ch
+			j--
+		}
+		return string(ret[j+1:])
+	}
+
+	// Process string as runes
 	runes := []rune(s)
 	length := len(runes)
 	ret := make([]rune, length)
 	i, j := length-1, length-1
 	newLineFound := true
-	for {
-		if i < 0 {
-			break
-		}
+	for ; i >= 0; i-- {
 		ch := runes[i]
-		i--
-		if newLineFound && containRune(ch, cutset) {
+		if newLineFound && strings.ContainsRune(cutset, ch) {
 			continue
 		}
 		newLineFound = ch == '\n' || ch == '\r'
 		ret[j] = ch
 		j--
 	}
-	if j != -1 { // `j` go to -1 if `ret` is fully filled
-		ret = ret[j+1:]
-	}
-	return string(ret)
+	return string(ret[j+1:])
 }
 
 // LinesTrimRightSpace trim trailing characters for every line in the given string
 func LinesTrimRightSpace(s string) string {
 	// See unicode.IsSpace for what are considered spaces
-	return LinesTrimRight(s, []rune{' ', '\t', '\v', '\f', 0x85, 0xA0})
+	return LinesTrimRight(s, string([]rune{' ', '\t', '\v', '\f', 0x85, 0xA0}))
 }
 
-func containRune(r rune, s []rune) bool {
-	for _, rr := range s {
-		if r == rr {
-			return true
-		}
-	}
-	return false
+// LinesTrim trim leading and trailing characters for every line in the given string
+func LinesTrim(s string, cutset string) string {
+	return LinesTrimLeft(LinesTrimRight(s, cutset), cutset)
+}
+
+// LinesTrimSpace trim leading and trailing spaces for every line in the given string
+func LinesTrimSpace(s string) string {
+	return LinesTrim(s, string([]rune{' ', '\t', '\v', '\f', 0x85, 0xA0}))
 }
 
 var MultilineString = LinesTrimLeftSpace
+
+// These code are copied form Go strings source code.
+// asciiSet is a 32-byte value, where each bit represents the presence of a
+// given ASCII character in the set.
+type asciiSet [8]uint32
+
+// makeASCIISet creates a set of ASCII characters and reports whether all
+// characters in chars are ASCII.
+func makeASCIISet(chars string) (as asciiSet, ok bool) {
+	for i := 0; i < len(chars); i++ {
+		c := chars[i]
+		if c >= utf8.RuneSelf {
+			return as, false
+		}
+		as[c/32] |= 1 << (c % 32)
+	}
+	return as, true
+}
+
+// contains reports whether c is inside the set.
+func (as *asciiSet) contains(c byte) bool {
+	return (as[c/32] & (1 << (c % 32))) != 0
+}
