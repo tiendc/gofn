@@ -587,6 +587,15 @@ line-2 abc xyz
 }
 ```
 
+#### LinesTrim/LinesTrimSpace
+
+Removes all certain leading and trailing characters from every line in the given string.
+
+```go
+LinesTrimSpace("  line-1  \n  line-2  ")      // "line-1\nline-2"
+LinesTrim("a line-1 b \n a line-2 ab", " ba") // "line-1\nline2"
+```
+
 #### LinesTrimLeft/LinesTrimLeftSpace
 
 Removes all certain leading characters from every line in the given string.
@@ -603,15 +612,6 @@ Removes all certain trailing characters from every line in the given string.
 ```go
 LinesTrimRightSpace("  line-1  \n  line-2  ")    // "  line-1\nline-2"
 LinesTrimRight("line-1 b \n a line-2 ab", " ba") // "line-1\n a line2"
-```
-
-#### LinesTrim/LinesTrimSpace
-
-Removes all certain leading and trailing characters from every line in the given string.
-
-```go
-LinesTrimSpace("  line-1  \n  line-2  ")      // "line-1\nline-2"
-LinesTrim("a line-1 b \n a line-2 ab", " ba") // "line-1\nline2"
 ```
 
 ### Common functions

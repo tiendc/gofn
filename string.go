@@ -3,7 +3,6 @@ package gofn
 import (
 	"math/rand"
 	"strings"
-	"unicode/utf8"
 )
 
 var (
@@ -33,30 +32,15 @@ func LinesTrimLeft(s string, cutset string) string {
 	if s == "" || cutset == "" {
 		return s
 	}
-	if as, ok := makeASCIISet(cutset); ok {
-		ret := make([]byte, 0, len(s))
-		newLineFound := true
-		for i := range s {
-			ch := s[i]
-			if newLineFound && as.contains(ch) {
-				continue
-			}
-			newLineFound = ch == '\n' || ch == '\r'
-			ret = append(ret, ch)
-		}
-		return string(ret)
-	}
-
-	// Process string as runes
-	runes := []rune(s)
-	ret := make([]rune, 0, len(runes))
-	newLineFound := true
-	for _, ch := range runes {
-		if newLineFound && strings.ContainsRune(cutset, ch) {
-			continue
-		}
-		newLineFound = ch == '\n' || ch == '\r'
+	ret := make([]byte, 0, len(s))
+	s = strings.TrimLeft(s, cutset) // trim the first line
+	for i := 0; i < len(s); i++ {
+		ch := s[i]
 		ret = append(ret, ch)
+		if ch == '\n' || ch == '\r' {
+			s = strings.TrimLeft(s[i+1:], cutset)
+			i = -1
+		}
 	}
 	return string(ret)
 }
@@ -72,37 +56,19 @@ func LinesTrimRight(s string, cutset string) string {
 	if s == "" || cutset == "" {
 		return s
 	}
-	if as, ok := makeASCIISet(cutset); ok {
-		length := len(s)
-		ret := make([]byte, length)
-		i, j := length-1, length-1
-		newLineFound := true
-		for ; i >= 0; i-- {
-			ch := s[i]
-			if newLineFound && as.contains(ch) {
-				continue
-			}
-			newLineFound = ch == '\n' || ch == '\r'
-			ret[j] = ch
-			j--
-		}
-		return string(ret[j+1:])
-	}
 
-	// Process string as runes
-	runes := []rune(s)
-	length := len(runes)
-	ret := make([]rune, length)
-	i, j := length-1, length-1
-	newLineFound := true
-	for ; i >= 0; i-- {
-		ch := runes[i]
-		if newLineFound && strings.ContainsRune(cutset, ch) {
-			continue
-		}
-		newLineFound = ch == '\n' || ch == '\r'
+	ret := make([]byte, len(s))
+	j := len(ret) - 1
+
+	s = strings.TrimRight(s, cutset) // trim the last line
+	for i := len(s) - 1; i >= 0; i-- {
+		ch := s[i]
 		ret[j] = ch
 		j--
+		if ch == '\n' || ch == '\r' {
+			s = strings.TrimRight(s[:i], cutset)
+			i = len(s)
+		}
 	}
 	return string(ret[j+1:])
 }
@@ -124,26 +90,3 @@ func LinesTrimSpace(s string) string {
 }
 
 var MultilineString = LinesTrimLeftSpace
-
-// These code are copied form Go strings source code.
-// asciiSet is a 32-byte value, where each bit represents the presence of a
-// given ASCII character in the set.
-type asciiSet [8]uint32
-
-// makeASCIISet creates a set of ASCII characters and reports whether all
-// characters in chars are ASCII.
-func makeASCIISet(chars string) (as asciiSet, ok bool) {
-	for i := 0; i < len(chars); i++ {
-		c := chars[i]
-		if c >= utf8.RuneSelf {
-			return as, false
-		}
-		as[c/32] |= 1 << (c % 32)
-	}
-	return as, true
-}
-
-// contains reports whether c is inside the set.
-func (as *asciiSet) contains(c byte) bool {
-	return (as[c/32] & (1 << (c % 32))) != 0
-}

@@ -38,6 +38,7 @@ func Test_RandStringEx(t *testing.T) {
 }
 
 func Test_LinesTrimLeft(t *testing.T) {
+	assert.Equal(t, "", LinesTrimLeftSpace(""))
 	assert.Equal(t, "line-1\nline-2", LinesTrimLeftSpace(`line-1
 		line-2`))
 	assert.Equal(t, "\nline-1\nline-2", LinesTrimLeftSpace(`
@@ -55,12 +56,16 @@ func Test_LinesTrimLeft(t *testing.T) {
 		  â  line-1
 		line-2 â`))
 	// Extra func test
+	assert.Equal(t, "\nê b â  line-1\nê line-2 â ê ", LinesTrimLeft(`
+		 a ê b â  line-1
+		  b aê line-2 â ê `, "a b\t")) // ascii cutset
 	assert.Equal(t, "\nâ  line-1\nline-2 â ê", LinesTrimLeft(`
 		 ê â  line-1
-		 ê line-2 â ê`, string([]rune{' ', '\t', 'ê'})))
+		 ê line-2 â ê`, "a b\tê")) // unicode cutset
 }
 
 func Test_LinesTrimRight(t *testing.T) {
+	assert.Equal(t, "", LinesTrimRightSpace(""))
 	assert.Equal(t, "line-1\nline-2", LinesTrimRightSpace(`line-1
 line-2`))
 	assert.Equal(t, "\nline-1\nline-2\n", LinesTrimRightSpace(`
@@ -79,12 +84,16 @@ line-2`))
 â  line-1  â  
 line-2`))
 	// Extra func test
-	assert.Equal(t, "\nâ  line-1  â\nline-2", LinesTrimRight(`
+	assert.Equal(t, "\nâ  line-1  â  ê\nline-2  ê", LinesTrimRight(`
 â  line-1  â  ê  
-line-2  ê  `, string([]rune{' ', '\t', 'ê'})))
+line-2  ê  `, "a b\t")) // ascii cutset
+	assert.Equal(t, "\n â  line-1  â\nline-2", LinesTrimRight(`
+ â  line-1  â  ê  
+line-2  ê  `, "a b\tê")) // unicode cutset
 }
 
 func Test_LinesTrim(t *testing.T) {
+	assert.Equal(t, "", LinesTrimSpace(""))
 	assert.Equal(t, "line-1\nline-2", LinesTrimSpace(`line-1
 line-2`))
 	assert.Equal(t, "\nline-1\nline-2\n", LinesTrimSpace(`
@@ -105,5 +114,5 @@ line-1
 	// Extra func test
 	assert.Equal(t, "\nâ  line-1  â\nline-2", LinesTrim(`
     â  line-1  â  ê  
-    line-2  ê  `, string([]rune{' ', '\t', 'ê'})))
+    line-2  ê  `, "a b\tê"))
 }
