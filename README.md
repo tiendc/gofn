@@ -17,6 +17,7 @@ With common determined types, using generics will bring back more performance th
   - [Functions for maps](#functions-for-maps)
   - [Transformation functions](#transformation-functions)
   - [Conversion functions](#conversion-functions)
+  - [Functions for strings](#functions-for-strings)
   - [Common functions](#common-functions)
   - [Specific algo functions](#specific-algo-functions)
   - [Other functions](#other-functions)
@@ -562,6 +563,47 @@ v, err := ParseIntEx[int]("eeff1234", 16)  // v == int of hex "eeff1234"
 ```
 
 - **NOTE**: There are also **ParseUint** for unsigned integers and **ParseFloat** for floating numbers.
+
+### Functions for strings
+
+---
+
+#### MultilineString
+
+Trims all leading spaces from every line in the given string. This function is useful to declare a string with a neat multiline-style.
+
+```go
+func DoSomething() {
+	// Commonly you may use this style to create multiline string in Go (which looks ugly)
+	s := `
+line-1 abc xyz
+line-2 abc xyz
+`
+	// Use this function
+	s := MultilineString(
+		`line-1 abc xyz
+		line-2 abc xyz`
+	)
+}
+```
+
+#### LinesTrimLeft/LinesTrimLeftSpace
+
+Trims all certain leading characters from every line in the given string.
+
+```go
+LinesTrimLeftSpace("  line-1  \n  line-2  ")                    // "line-1  \nline-2  "
+LinesTrimLeft("ab line-1  \n a line-2 ab", []rune{' ','a','b'}) // "line-1  \nline2 ab"
+```
+
+#### LinesTrimRight/LinesTrimRightSpace
+
+Trims all certain trailing characters from every line in the given string.
+
+```go
+LinesTrimRightSpace("  line-1  \n  line-2  ")                  // "  line-1\nline-2"
+LinesTrimRight("line-1 b \n a line-2 ab", []rune{' ','a','b'}) // "line-1\n a line2"
+```
 
 ### Common functions
 
