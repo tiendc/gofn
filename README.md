@@ -570,7 +570,7 @@ v, err := ParseIntEx[int]("eeff1234", 16)  // v == int of hex "eeff1234"
 
 #### MultilineString
 
-Trims all leading spaces from every line in the given string. This function is useful to declare a string with a neat multiline-style.
+Removes all leading spaces from every line in the given string. This function is useful to declare a string with a neat multiline-style.
 
 ```go
 func DoSomething() {
@@ -589,20 +589,29 @@ line-2 abc xyz
 
 #### LinesTrimLeft/LinesTrimLeftSpace
 
-Trims all certain leading characters from every line in the given string.
+Removes all certain leading characters from every line in the given string.
 
 ```go
-LinesTrimLeftSpace("  line-1  \n  line-2  ")                    // "line-1  \nline-2  "
-LinesTrimLeft("ab line-1  \n a line-2 ab", []rune{' ','a','b'}) // "line-1  \nline2 ab"
+LinesTrimLeftSpace("  line-1  \n  line-2  ")      // "line-1  \nline-2  "
+LinesTrimLeft("ab line-1  \n a line-2 ab", " ba") // "line-1  \nline2 ab"
 ```
 
 #### LinesTrimRight/LinesTrimRightSpace
 
-Trims all certain trailing characters from every line in the given string.
+Removes all certain trailing characters from every line in the given string.
 
 ```go
-LinesTrimRightSpace("  line-1  \n  line-2  ")                  // "  line-1\nline-2"
-LinesTrimRight("line-1 b \n a line-2 ab", []rune{' ','a','b'}) // "line-1\n a line2"
+LinesTrimRightSpace("  line-1  \n  line-2  ")    // "  line-1\nline-2"
+LinesTrimRight("line-1 b \n a line-2 ab", " ba") // "line-1\n a line2"
+```
+
+#### LinesTrim/LinesTrimSpace
+
+Removes all certain leading and trailing characters from every line in the given string.
+
+```go
+LinesTrimSpace("  line-1  \n  line-2  ")      // "line-1\nline-2"
+LinesTrim("a line-1 b \n a line-2 ab", " ba") // "line-1\nline2"
 ```
 
 ### Common functions
