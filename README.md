@@ -15,9 +15,10 @@ With common determined types, using generics will bring back more performance th
 - [Usage](#usage)
   - [Functions for slices](#functions-for-slices)
   - [Functions for maps](#functions-for-maps)
+  - [Functions for strings](#functions-for-strings)
+  - [Functions for numbers](#functions-for-numbers)
   - [Transformation functions](#transformation-functions)
   - [Conversion functions](#conversion-functions)
-  - [Functions for strings](#functions-for-strings)
   - [Common functions](#common-functions)
   - [Specific algo functions](#specific-algo-functions)
   - [Other functions](#other-functions)
@@ -389,6 +390,99 @@ MapSetDefault(map[int]int{1: 11, 2: 22}, 1, 0) // 11 (no value added to the map)
 MapSetDefault(map[int]int{1: 11, 2: 22}, 3, 0) // 0 (entry [3, 0] is added to the map)
 ```
 
+### Functions for strings
+
+---
+
+#### MultilineString
+
+Removes all leading spaces from every line in the given string. This function is useful to declare a string with a neat multiline-style.
+
+```go
+func DoSomething() {
+	// Commonly you may use this style to create multiline string in Go (which looks ugly)
+	s := `
+line-1 abc xyz
+line-2 abc xyz
+`
+	// Use this function
+	s := MultilineString(
+		`line-1 abc xyz
+		line-2 abc xyz`
+	)
+}
+```
+
+#### LinesTrim/LinesTrimSpace
+
+Removes all certain leading and trailing characters from every line in the given string.
+
+```go
+LinesTrimSpace("  line-1  \n  line-2  ")      // "line-1\nline-2"
+LinesTrim("a line-1 b \n a line-2 ab", " ba") // "line-1\nline2"
+```
+
+#### LinesTrimLeft/LinesTrimLeftSpace
+
+Removes all certain leading characters from every line in the given string.
+
+```go
+LinesTrimLeftSpace("  line-1  \n  line-2  ")      // "line-1  \nline-2  "
+LinesTrimLeft("ab line-1  \n a line-2 ab", " ba") // "line-1  \nline2 ab"
+```
+
+#### LinesTrimRight/LinesTrimRightSpace
+
+Removes all certain trailing characters from every line in the given string.
+
+```go
+LinesTrimRightSpace("  line-1  \n  line-2  ")    // "  line-1\nline-2"
+LinesTrimRight("line-1 b \n a line-2 ab", " ba") // "line-1\n a line2"
+```
+
+### Functions for numbers
+
+---
+
+#### ParseInt/ParseIntXX
+
+Parses integer using **strconv.ParseInt** then converts the value to a specific type.
+
+```go
+ParseInt[int16]("111")            // int16(111)
+ParseInt[int8]("128")             // strconv.ErrRange
+
+// Returns default value on failure
+ParseIntDef("200", 10)            // int(200)
+ParseIntDef("200", int8(10))      // int8(10)
+
+// Parses integer with specific base
+ParseIntEx[int8]("eeff1234", 16)  // strconv.ErrRange
+ParseIntEx[int]("eeff1234", 16)   // "eeff1234"
+
+// Parse string containing commas
+ParseInt[int]("1,234,567")        // strconv.ErrSyntax
+ParseIntUngroup[int]("1,234,567") // int(1234567)
+```
+
+- **NOTE**: There are also **ParseUint** for unsigned integers and **ParseFloat** for floating numbers.
+
+#### FormatInt/FormatIntXX
+
+Formats an integer.
+
+```go
+FormatInt(123)            // "123"
+
+// Format number with specific format string (use fmt.Sprintf)
+FormatIntEx(123, "%05d")  // "00123"
+
+// Format number with decimal grouping
+FormatIntGroup(1234567)   // 1,234,567
+```
+
+- **NOTE**: There are also **FormatUint** for unsigned integers and **FormatFloat** for floating numbers.
+
 ### Transformation functions
 
 ---
@@ -535,75 +629,6 @@ Creates a slice for individual values.
 
 ```go
 ToSlice(1, 2, 3) // []int{1, 2, 3}
-```
-
-#### ParseInt/ParseIntDef
-
-Parses integer using **strconv.ParseInt** then converts the value to a specific type.
-
-```go
-v, err := ParseInt[int16]("111") // v == int16(111)
-v, err := ParseInt[int8]("128")  // err == strconv.ErrRange
-
-// Returns default value when failed
-v := ParseIntDef("200", 10)       // v == int(200)
-v := ParseIntDef("200", int8(10)) // v == int8(10)
-
-// Parses integer with specific base
-v, err := ParseIntEx[int8]("eeff1234", 16) // err == strconv.ErrRange
-v, err := ParseIntEx[int]("eeff1234", 16)  // v == int of hex "eeff1234"
-```
-
-- **NOTE**: There are also **ParseUint** for unsigned integers and **ParseFloat** for floating numbers.
-
-### Functions for strings
-
----
-
-#### MultilineString
-
-Removes all leading spaces from every line in the given string. This function is useful to declare a string with a neat multiline-style.
-
-```go
-func DoSomething() {
-	// Commonly you may use this style to create multiline string in Go (which looks ugly)
-	s := `
-line-1 abc xyz
-line-2 abc xyz
-`
-	// Use this function
-	s := MultilineString(
-		`line-1 abc xyz
-		line-2 abc xyz`
-	)
-}
-```
-
-#### LinesTrim/LinesTrimSpace
-
-Removes all certain leading and trailing characters from every line in the given string.
-
-```go
-LinesTrimSpace("  line-1  \n  line-2  ")      // "line-1\nline-2"
-LinesTrim("a line-1 b \n a line-2 ab", " ba") // "line-1\nline2"
-```
-
-#### LinesTrimLeft/LinesTrimLeftSpace
-
-Removes all certain leading characters from every line in the given string.
-
-```go
-LinesTrimLeftSpace("  line-1  \n  line-2  ")      // "line-1  \nline-2  "
-LinesTrimLeft("ab line-1  \n a line-2 ab", " ba") // "line-1  \nline2 ab"
-```
-
-#### LinesTrimRight/LinesTrimRightSpace
-
-Removes all certain trailing characters from every line in the given string.
-
-```go
-LinesTrimRightSpace("  line-1  \n  line-2  ")    // "  line-1\nline-2"
-LinesTrimRight("line-1 b \n a line-2 ab", " ba") // "line-1\n a line2"
 ```
 
 ### Common functions

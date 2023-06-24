@@ -1,6 +1,7 @@
 package gofn
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"testing"
@@ -54,6 +55,17 @@ func Test_ParseInt(t *testing.T) {
 	_, e = ParseInt[X8]("128")
 	assert.ErrorIs(t, e, strconv.ErrRange)
 	_, e = ParseInt[X8]("-129")
+	assert.ErrorIs(t, e, strconv.ErrRange)
+}
+
+func Test_ParseIntUngroup(t *testing.T) {
+	i32, e := ParseIntUngroup[int32]("2147483647")
+	assert.True(t, e == nil && i32 == int32(2147483647))
+	i32, e = ParseIntUngroup[int32]("2,147")
+	assert.True(t, e == nil && i32 == int32(2147))
+	i32, e = ParseIntUngroup[int32]("-2,147,483,647")
+	assert.True(t, e == nil && i32 == int32(-2147483647))
+	_, e = ParseIntUngroup[int32]("-2,147,483,649")
 	assert.ErrorIs(t, e, strconv.ErrRange)
 }
 
@@ -135,6 +147,17 @@ func Test_ParseUint(t *testing.T) {
 	assert.ErrorIs(t, e, strconv.ErrSyntax)
 }
 
+func Test_ParseUintUngroup(t *testing.T) {
+	i32, e := ParseUintUngroup[uint32]("2147483647")
+	assert.True(t, e == nil && i32 == uint32(2147483647))
+	i32, e = ParseUintUngroup[uint32]("2,147")
+	assert.True(t, e == nil && i32 == uint32(2147))
+	i32, e = ParseUintUngroup[uint32]("2,147,483,647")
+	assert.True(t, e == nil && i32 == uint32(2147483647))
+	_, e = ParseUintUngroup[uint32]("4,294,967,296")
+	assert.ErrorIs(t, e, strconv.ErrRange)
+}
+
 func Test_ParseUintDef(t *testing.T) {
 	i8 := ParseUintDef("255", uint8(120))
 	assert.True(t, i8 == uint8(255))
@@ -182,6 +205,13 @@ func Test_ParseFloat(t *testing.T) {
 	assert.ErrorIs(t, e, strconv.ErrRange)
 }
 
+func Test_ParseFloatUngroup(t *testing.T) {
+	f32, e := ParseFloatUngroup[float32]("123456.123456")
+	assert.True(t, e == nil && f32 == float32(123456.123456))
+	f32, e = ParseFloatUngroup[float32]("123,456.123,456")
+	assert.True(t, e == nil && f32 == float32(123456.123456))
+}
+
 func Test_ParseFloatDef(t *testing.T) {
 	f32 := ParseFloatDef("123456.123456", float32(1))
 	assert.True(t, f32 == float32(123456.123456))
@@ -198,4 +228,122 @@ func Test_ParseFloatDef(t *testing.T) {
 	assert.True(t, f64 == math.MaxFloat64)
 	f64 = ParseFloatDef("2.79769313486231570814527423731704356798070e+308", float64(1.2)) // overflow
 	assert.True(t, f64 == float64(1.2))
+}
+
+func Test_FormatInt(t *testing.T) {
+	assert.Equal(t, "127", FormatInt(int8(127)))
+	assert.Equal(t, "-2147483647", FormatInt(int32(-2147483647)))
+	assert.Equal(t, "9223372036854775807", FormatInt(int64(9223372036854775807)))
+	assert.Equal(t, "-9223372036854775807", FormatInt(int64(-9223372036854775807)))
+}
+
+func Test_FormatIntEx(t *testing.T) {
+	assert.Equal(t, "127", FormatIntEx(int8(127), "%d"))
+	assert.Equal(t, "00127", FormatIntEx(int8(127), "%05d"))
+	assert.Equal(t, "-2147483647", FormatIntEx(int32(-2147483647), "%d"))
+	assert.Equal(t, "9223372036854775807", FormatIntEx(int64(9223372036854775807), "%d"))
+	assert.Equal(t, "-7fffffffffffffff", FormatIntEx(int64(-9223372036854775807), "%x"))
+}
+
+func Test_FormatIntGroup(t *testing.T) {
+	assert.Equal(t, "127", FormatIntGroup(int8(127)))
+	assert.Equal(t, "-2,147,483,647", FormatIntGroup(int32(-2147483647)))
+	assert.Equal(t, "9,223,372,036,854,775,807", FormatIntGroup(int64(9223372036854775807)))
+	assert.Equal(t, "-9,223,372,036,854,775,807", FormatIntGroup(int64(-9223372036854775807)))
+}
+
+func Test_FormatUintEx(t *testing.T) {
+	assert.Equal(t, "127", FormatUintEx(uint8(127), "%d"))
+	assert.Equal(t, "00127", FormatUintEx(uint8(127), "%05d"))
+	assert.Equal(t, "9223372036854775807", FormatUintEx(uint64(9223372036854775807), "%d"))
+}
+
+func Test_FormatUint(t *testing.T) {
+	assert.Equal(t, "127", FormatUint(uint8(127)))
+	assert.Equal(t, "2147483647", FormatUint(uint32(2147483647)))
+	assert.Equal(t, "9223372036854775807", FormatUint(uint64(9223372036854775807)))
+}
+
+func Test_FormatUintGroup(t *testing.T) {
+	assert.Equal(t, "255", FormatUintGroup(uint8(255)))
+	assert.Equal(t, "2,147,483,647", FormatUintGroup(uint32(2147483647)))
+	assert.Equal(t, "9,223,372,036,854,775,807", FormatUintGroup(uint64(9223372036854775807)))
+}
+
+func Test_FormatFloatEx(t *testing.T) {
+	assert.Equal(t, "1234567.125", FormatFloatEx(float32(1234567.1234567), "%.3f"))
+	assert.Equal(t, "1234567.123", FormatFloatEx(float64(1234567.1234567), "%.3f"))
+}
+
+func Test_FormatFloat(t *testing.T) {
+	assert.Equal(t, fmt.Sprintf("%f", float32(1234567.1234567)), FormatFloat(float32(1234567.1234567)))
+	assert.Equal(t, fmt.Sprintf("%f", math.MaxFloat32), FormatFloat(math.MaxFloat32))
+	assert.Equal(t, fmt.Sprintf("%f", float64(1234567.1234567)), FormatFloat(float64(1234567.1234567)))
+	assert.Equal(t, fmt.Sprintf("%f", math.MaxFloat64), FormatFloat(math.MaxFloat64))
+}
+
+func Test_FormatFloatGroup(t *testing.T) {
+	assert.Equal(t, "1,234,567.125000", FormatFloatGroup(float32(1234567.1234567)))
+	assert.Equal(t, "123,456,789.123457", FormatFloatGroup(float64(123456789.123456789)))
+}
+
+func Test_FormatFloatGroupEx(t *testing.T) {
+	assert.Equal(t, "1,234,567.125", FormatFloatGroupEx(float32(1234567.1234567), "%.3f"))
+	assert.Equal(t, "123,456,789.123", FormatFloatGroupEx(float64(123456789.123456789), "%.3f"))
+}
+
+func Test_NumberGroups(t *testing.T) {
+	testCases := []struct {
+		ungroup string
+		grouped string
+	}{
+		{"abc123", "abc123"},
+		{"1", "1"},
+		{"12", "12"},
+		{"123", "123"},
+		{"1234", "1,234"},
+		{"12345", "12,345"},
+		{"123456", "123,456"},
+		{"1234567", "1,234,567"},
+		{"12345678", "12,345,678"},
+		{"123456789", "123,456,789"},
+		{"1234567890", "1,234,567,890"},
+
+		{"-1", "-1"},
+		{"-12", "-12"},
+		{"-123", "-123"},
+		{"-1234", "-1,234"},
+		{"-12345", "-12,345"},
+		{"-123456", "-123,456"},
+		{"-1234567", "-1,234,567"},
+		{"-12345678", "-12,345,678"},
+		{"-123456789", "-123,456,789"},
+		{"-1234567890", "-1,234,567,890"},
+
+		{"1.1", "1.1"},
+		{"12.12", "12.12"},
+		{"123.123", "123.123"},
+		{"1234.1234", "1,234.1234"},
+		{"12345.12345", "12,345.12345"},
+		{"123456.123456", "123,456.123456"},
+		{"1234567.1234567", "1,234,567.1234567"},
+		{"12345678.12345678", "12,345,678.12345678"},
+		{"123456789.123456789", "123,456,789.123456789"},
+		{"1234567890.1234567890", "1,234,567,890.1234567890"},
+
+		{"-1.1", "-1.1"},
+		{"-12.12", "-12.12"},
+		{"-123.123", "-123.123"},
+		{"-1234.1234", "-1,234.1234"},
+		{"-12345.12345", "-12,345.12345"},
+		{"-123456.123456", "-123,456.123456"},
+		{"-1234567.1234567", "-1,234,567.1234567"},
+		{"-12345678.12345678", "-12,345,678.12345678"},
+		{"-123456789.123456789", "-123,456,789.123456789"},
+		{"-1234567890.1234567890", "-1,234,567,890.1234567890"},
+	}
+	for i, tc := range testCases {
+		assert.Equal(t, tc.grouped, NumberFmtGroup(tc.ungroup, fractionSep, groupSep), fmt.Sprintf("group #%d", i))
+		assert.Equal(t, tc.ungroup, NumberFmtUngroup(tc.grouped, groupSep), fmt.Sprintf("ungroup #%d", i))
+	}
 }
