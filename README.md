@@ -163,8 +163,8 @@ Removes element at the specified index by swapping it with the last element of t
 This function is fast as it doesn't cause copying of slice content.
 
 ```go
-s := []int{1, 2, 3}
-RemoveAt(&s, 0) // s == []int{3, 2}
+s := []int{1, 2, 3, 4}
+FastRemoveAt(&s, 1) // s == []int{1, 4, 3} (2 and 4 are exchanged)
 ```
 
 #### Remove
@@ -181,8 +181,8 @@ Remove(&s, 1) // s == []int{2, 3}
 Removes a value from a slice by swapping it with the last element of the slice.
 
 ```go
-s := []int{1, 2, 3}
-FastRemove(&s, 1) // s == []int{3, 2}
+s := []int{1, 2, 3, 4}
+FastRemove(&s, 2) // s == []int{1, 4, 3} (2 and 4 are exchanged)
 ```
 
 #### RemoveLastOf
@@ -200,7 +200,7 @@ Removes last occurrence of a value from a slice by swapping it with the last ele
 
 ```go
 s := []int{1, 2, 1, 3, 4}
-FastRemoveLastOf(&s, 1) // s == []int{1, 2, 4, 3}
+FastRemoveLastOf(&s, 1) // s == []int{1, 2, 4, 3} (1 and 4 are exchanged)
 ```
 
 #### RemoveAll
@@ -452,13 +452,13 @@ Parses integer using **strconv.ParseInt** then converts the value to a specific 
 ParseInt[int16]("111")            // int16(111)
 ParseInt[int8]("128")             // strconv.ErrRange
 
-// Returns default value on failure
+// Return default value on failure
 ParseIntDef("200", 10)            // int(200)
 ParseIntDef("200", int8(10))      // int8(10)
 
-// Parses integer with specific base
+// Parse integer with specific base
 ParseIntEx[int8]("eeff1234", 16)  // strconv.ErrRange
-ParseIntEx[int]("eeff1234", 16)   // "eeff1234"
+ParseIntEx[int]("eeff1234", 16)   // int value for "eeff1234"
 
 // Parse string containing commas
 ParseInt[int]("1,234,567")        // strconv.ErrSyntax
@@ -843,7 +843,7 @@ Returns the first "true" value in the given arguments if found.
 True values are considered:
   - not zero values (0, empty string, false, nil, ...)
   - not empty containers (slice, array, map, channel)
-  - NOTE: non-nil pointer is considered "true" value (even it points to a zero object)
+  - NOTE: non-nil pointers are considered "true" (even they point to zero objects)
 
 ```go
 FirstTrue(0, 0, -1, 2, 3)                           // -1
