@@ -50,9 +50,7 @@ Equal([]int{1, 2, 3}, []int{1, 2, 3}) // true
 Equal([]int{1, 2, 3}, []int{3, 2, 1}) // false
 
 // Use EqualPred for custom equal comparison
-EqualPred([]string{"one", "TWO"}, []string{"ONE", "two"}, func(elem1, elem2 string) bool {
-    return strings.ToLower(elem1) == strings.ToLower(elem2)
-}) // true
+EqualPred([]string{"one", "TWO"}, []string{"ONE", "two"}, strings.EqualFold) // true
 ```
 
 #### ContentEqual
@@ -66,9 +64,7 @@ ContentEqual([]int{1, 2, 2, 3}, []int{2, 1, 2, 3}) // true
 ContentEqual([]int{1, 2, 2, 3}, []int{1, 1, 2, 3}) // false
 
 // Use ContentEqualPred for custom key function
-ContentEqualPred([]string{"one", "TWO"}, []string{"two", "ONE"}, func(elem string) string {
-    return strings.ToLower(elem)
-}) // true
+ContentEqualPred([]string{"one", "TWO"}, []string{"two", "ONE"}, strings.ToLower) // true
 ```
 
 #### Concat
@@ -120,9 +116,7 @@ IsUnique([]int{1, 2, 3}) // true
 IsUnique([]int{1, 2, 1}) // false
 
 // Use IsUniquePred for custom function
-IsUniquePred([]string{"one", "ONE"}, func(elem string) string {
-    return strings.ToLower(elem)
-}) // false
+IsUniquePred([]string{"one", "ONE"}, strings.ToLower) // false
 ```
 
 #### IndexOf
@@ -365,7 +359,7 @@ MapUpdateNewOnly(s, map[int]int{2: 222, 3: 33})      // s == map[int]int{1: 11, 
 
 #### MapGet
 
-Retrieves map value for a key, returns the default value if not exists.
+Retrieves map value for a key, returns the default value if not exist.
 
 ```go
 MapGet(map[int]int{1: 11, 2: 22}, 1, 0) // 11 (found)
@@ -517,9 +511,7 @@ ToSet([]int{1, 2, 3, 1, 2})        // []int{1, 2, 3}
 ToSet([]string{"one", "2", "one"}) // []string{"one", "2"}
 
 // Use ToSetPred for custom key function
-ToSetPred([]string{"one", "TWO", "two", "One"}, func(elem string) string {
-    return strings.ToLower(elem)
-}) // []string{"one", "TWO"}
+ToSetPred([]string{"one", "TWO", "two", "One"}, strings.ToLower) // []string{"one", "TWO"}
 ```
 
 #### MapSlice/MapSliceEx
