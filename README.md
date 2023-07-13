@@ -9,6 +9,12 @@ This is a collection of generics utility functions for Go 1.18+.
 This library avoids using `reflect` on determined types, such as a slice of `int` or a map of `string` and `struct`.
 With common determined types, using generics will bring back more performance than using `reflect`.
 
+## Functionalities
+
+`gofn` consists of useful and convenient functions for most common needs when working on slices, maps, transformation, conversion, and so on.
+
+**NOTE**: This lib does not provide deep-copy function as that will require using `reflect`. If you need the function, try [go-deepcopy](https://github.com/tiendc/go-deepcopy).
+
 ## Contents
 
 - [Installation](#installation)
@@ -34,7 +40,6 @@ go get github.com/tiendc/gofn
 ```
 
 ## Usage
-
 
 ### Functions for slices
 
