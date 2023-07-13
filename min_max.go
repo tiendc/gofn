@@ -16,7 +16,7 @@ func Min[T NumberEx | ~string](v1 T, s ...T) T {
 func MinIn[T NumberEx | ~string](s []T) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
-		return zeroT, ErrSliceEmpty
+		return zeroT, ErrEmpty
 	}
 	min := s[0]
 	for i := range s {
@@ -31,7 +31,7 @@ func MinIn[T NumberEx | ~string](s []T) (T, error) {
 func MinInPred[T any](s []T, lessFunc func(a, b T) bool) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
-		return zeroT, ErrSliceEmpty
+		return zeroT, ErrEmpty
 	}
 	min := s[0]
 	for i := range s {
@@ -58,7 +58,7 @@ func Max[T NumberEx | ~string](v1 T, s ...T) T {
 func MaxIn[T NumberEx | ~string](s []T) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
-		return zeroT, ErrSliceEmpty
+		return zeroT, ErrEmpty
 	}
 	max := s[0]
 	for i := range s {
@@ -73,7 +73,7 @@ func MaxIn[T NumberEx | ~string](s []T) (T, error) {
 func MaxInPred[T any](s []T, lessFunc func(a, b T) bool) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
-		return zeroT, ErrSliceEmpty
+		return zeroT, ErrEmpty
 	}
 	max := s[0]
 	for i := range s {

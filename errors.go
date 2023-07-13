@@ -3,6 +3,11 @@ package gofn
 import "errors"
 
 var (
-	ErrSliceEmpty      = errors.New("slice empty")
+	ErrEmpty           = errors.New("container is empty")
 	ErrIndexOutOfRange = errors.New("index out of range")
+)
+
+var (
+	// Deprecated: use ErrEmpty instead
+	ErrSliceEmpty = ErrEmpty
 )
