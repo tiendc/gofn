@@ -1,7 +1,5 @@
 package gofn
 
-import "reflect"
-
 // If returns the 2nd arg if the condition is true, 3rd arg otherwise
 // This is similar to C-language ternary operation (cond ? val1 : val2)
 // Deprecated: this function may cause unexpected behavior upon misuses
@@ -14,37 +12,53 @@ func If[C bool, T any](cond C, v1 T, v2 T) T {
 	return v2
 }
 
-// FirstTrue returns the first "true" value in the given arguments if found
-// True value is not:
-//   - zero value (0, "", nil, false)
-//   - empty slice, array, map, channel
-func FirstTrue[T any](a0 T, args ...T) T {
-	a := a0
-	for i := -1; i < len(args); i++ {
-		if i >= 0 {
-			a = args[i]
-		}
-		v := reflect.ValueOf(a)
-		if !v.IsValid() || v.IsZero() {
-			continue
-		}
-		k := v.Kind()
-		if k == reflect.Slice || k == reflect.Array || k == reflect.Map || k == reflect.Chan {
-			if v.Len() > 0 {
-				return a
-			}
-			continue
-		}
-		return a
+func Must1(e error) {
+	if e != nil {
+		panic(e)
 	}
-	return a0
 }
 
+func Must2[T any](v T, e error) T {
+	if e != nil {
+		panic(e)
+	}
+	return v
+}
+
+// Must is the same as Must2
 func Must[T any](v T, e error) T {
 	if e != nil {
 		panic(e)
 	}
 	return v
+}
+
+func Must3[T1, T2 any](v1 T1, v2 T2, e error) (T1, T2) {
+	if e != nil {
+		panic(e)
+	}
+	return v1, v2
+}
+
+func Must4[T1, T2, T3 any](v1 T1, v2 T2, v3 T3, e error) (T1, T2, T3) {
+	if e != nil {
+		panic(e)
+	}
+	return v1, v2, v3
+}
+
+func Must5[T1, T2, T3, T4 any](v1 T1, v2 T2, v3 T3, v4 T4, e error) (T1, T2, T3, T4) {
+	if e != nil {
+		panic(e)
+	}
+	return v1, v2, v3, v4
+}
+
+func Must6[T1, T2, T3, T4, T5 any](v1 T1, v2 T2, v3 T3, v4 T4, v5 T5, e error) (T1, T2, T3, T4, T5) {
+	if e != nil {
+		panic(e)
+	}
+	return v1, v2, v3, v4, v5
 }
 
 // New returns pointer to the address of the input

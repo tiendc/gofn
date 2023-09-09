@@ -3,7 +3,6 @@ package gofn
 import (
 	"errors"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -14,45 +13,89 @@ func Test_If(t *testing.T) {
 	assert.Equal(t, "b", If(x > y, "a", "b"))
 }
 
-func Test_FirstTrue(t *testing.T) {
-	assert.Equal(t, -1, FirstTrue(0, 0, -1, 2, 3))
-	assert.Equal(t, "a", FirstTrue("", "", "a", "b"))
-	assert.Equal(t, " ", FirstTrue("", "", " ", "b"))
-	assert.Equal(t, []int{1}, FirstTrue([]int{}, []int{}, nil, []int{1}, []int{2, 3}))
-	assert.Equal(t, map[int]int{1: 1}, FirstTrue(map[int]int{}, nil, map[int]int{1: 1}, map[int]int{2: 2}))
-	assert.Nil(t, FirstTrue[*int](nil, nil, nil))
-	int1, int2 := 1, 2
-	assert.Equal(t, &int2, FirstTrue[*int](nil, nil, &int2, &int1))
+// nolint: goerr113, forcetypeassert
+func Test_Must1(t *testing.T) {
+	Must1(func() error { return nil }())
 
-	type Str string
-	type A struct {
-		I  int
-		S  string
-		SS []int
-	}
-	type B struct {
-		I int
-		A A
-	}
-	ch := make(chan int)
-	dt := time.Time{}
-	cp := complex(0, 0)
-	var intf interface{}
-	assert.Equal(t, []int{1}, FirstTrue[interface{}](false, "", 0, 0.0, cp, Str(""), A{}, B{}, struct{}{},
-		nil, ch, dt, intf, []int{}, []string{}, map[int]int{}, []int{1}, "x"))
+	// Panic case: error
+	defer func() {
+		e := recover()
+		assert.True(t, e != nil && e.(error).Error() == "error 1")
+	}()
+	Must1(func() error { return errors.New("error 1") }())
+}
+
+// nolint: goerr113, forcetypeassert
+func Test_Must2(t *testing.T) {
+	assert.Equal(t, 1, Must2(func() (int, error) { return 1, nil }()))
+	assert.Equal(t, "a", Must2(func() (string, error) { return "a", nil }()))
+
+	// Panic case: error
+	defer func() {
+		e := recover()
+		assert.True(t, e != nil && e.(error).Error() == "error 2")
+	}()
+	assert.Equal(t, 0, Must2(func() (int, error) { return 0, errors.New("error 2") }()))
 }
 
 // nolint: goerr113, forcetypeassert
 func Test_Must(t *testing.T) {
 	assert.Equal(t, 1, Must(func() (int, error) { return 1, nil }()))
 	assert.Equal(t, "a", Must(func() (string, error) { return "a", nil }()))
+}
+
+// nolint: goerr113, forcetypeassert
+func Test_Must3(t *testing.T) {
+	v1, v2 := Must3(func() (int, bool, error) { return 1, true, nil }())
+	assert.True(t, v1 == 1 && v2 == true)
 
 	// Panic case: error
 	defer func() {
 		e := recover()
-		assert.True(t, e != nil && e.(error).Error() == "error")
+		assert.True(t, e != nil && e.(error).Error() == "error 3")
 	}()
-	assert.Equal(t, 0, Must(func() (int, error) { return 0, errors.New("error") }()))
+	_, _ = Must3(func() (int, bool, error) { return 0, true, errors.New("error 3") }())
+}
+
+// nolint: goerr113, forcetypeassert, dogsled
+func Test_Must4(t *testing.T) {
+	v1, v2, v3 := Must4(func() (int, bool, string, error) { return 1, true, "x", nil }())
+	assert.True(t, v1 == 1 && v2 == true && v3 == "x")
+
+	// Panic case: error
+	defer func() {
+		e := recover()
+		assert.True(t, e != nil && e.(error).Error() == "error 4")
+	}()
+	_, _, _ = Must4(func() (int, bool, string, error) { return 0, true, "", errors.New("error 4") }())
+}
+
+// nolint: goerr113, forcetypeassert, dogsled
+func Test_Must5(t *testing.T) {
+	v1, v2, v3, v4 := Must5(func() (int, bool, string, float32, error) { return 1, true, "x", 2.1, nil }())
+	assert.True(t, v1 == 1 && v2 == true && v3 == "x" && v4 == 2.1)
+
+	// Panic case: error
+	defer func() {
+		e := recover()
+		assert.True(t, e != nil && e.(error).Error() == "error 5")
+	}()
+	_, _, _, _ = Must5(func() (int, bool, string, float32, error) { return 0, true, "", 2.1, errors.New("error 5") }())
+}
+
+// nolint: goerr113, forcetypeassert, dogsled
+func Test_Must6(t *testing.T) {
+	v1, v2, v3, v4, v5 := Must6(func() (int, bool, string, float32, int64, error) { return 1, true, "x", 2.1, 12, nil }())
+	assert.True(t, v1 == 1 && v2 == true && v3 == "x" && v4 == 2.1 && v5 == 12)
+
+	// Panic case: error
+	defer func() {
+		e := recover()
+		assert.True(t, e != nil && e.(error).Error() == "error 6")
+	}()
+	_, _, _, _, _ = Must6(func() (int, bool, string, float32, int64, error) {
+		return 0, true, "", 2.1, 12, errors.New("error 6")
+	}())
 }
 
 func Test_New(t *testing.T) {

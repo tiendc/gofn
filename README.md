@@ -674,15 +674,17 @@ Any(0, "", 0.0)  // false
 Any()            // false
 ```
 
-#### Must
+#### MustN (N is from 1 to 6)
 
-Must accepts any function that returns 2 values and the 2nd value is `error` type.
-Must returns the 1st value if the 2nd is `nil`, otherwise it panics.
+MustN functions accept a number of arguments with the last one is of `error` type.
+MustN functions return the first N-1 arguments if the error is `nil`, otherwise they panic.
 
 ```go
 func CalculateAmount() (int, error) {}
-
 amount := Must(CalculateAmount()) // panic on error, otherwise returns the amount
+
+func CalculateData() (int, string, float64, error) {}
+v1, v2, v3 := Must4(CalculateData()) // panic on error, otherwise returns the 3 first values
 ```
 
 ### Sorting functions
