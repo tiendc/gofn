@@ -835,20 +835,20 @@ Takes the last argument.
 Tail[string](true, "2", 1.0, "3") // "3"
 ```
 
-
 #### FirstTrue
 
 Returns the first "true" value in the given arguments if found.
-True values are considered:
+Values considered "true" are:
   - not zero values (0, empty string, false, nil, ...)
   - not empty containers (slice, array, map, channel)
-  - NOTE: non-nil pointers are considered "true" (even they point to zero objects)
+  - not pointers that point to zero/empty values
 
 ```go
-FirstTrue(0, 0, -1, 2, 3)                           // -1
-FirstTrue("", "", " ", "b")                         // " "
-FirstTrue([]int{}, nil, []int{1}, []int{2, 3})      // []int{1}
-FirstTrue[interface{}](nil, 0, 0.0, "", struct{}{}) // nil (the first zero value)
+FirstTrue(0, 0, -1, 2, 3)                       // -1
+FirstTrue("", "", " ", "b")                     // " "
+FirstTrue([]int{}, nil, []int{1}, []int{2, 3})  // []int{1}
+FirstTrue([]int{}, nil, &[]int{}, []int{2, 3})  // []int{2, 3}
+FirstTrue[any](nil, 0, 0.0, "", struct{}{})     // nil (the first zero value)
 ```
 
 ## Benchmarks
