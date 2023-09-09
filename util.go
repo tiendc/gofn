@@ -1,5 +1,7 @@
 package gofn
 
+import "reflect"
+
 // If returns the 2nd arg if the condition is true, 3rd arg otherwise
 // This is similar to C-language ternary operation (cond ? val1 : val2)
 // Deprecated: this function may cause unexpected behavior upon misuses
@@ -10,6 +12,38 @@ func If[C bool, T any](cond C, v1 T, v2 T) T {
 		return v1
 	}
 	return v2
+}
+
+// FirstTrue returns the first "true" value in the given arguments if found
+// True value is not:
+//   - zero value (0, "", nil, false)
+//   - empty slice, array, map, channel
+//   - non-nil pointer points to non-zero value
+func FirstTrue[T any](a0 T, args ...T) T {
+	a := a0
+	for i := -1; i < len(args); i++ {
+		if i >= 0 {
+			a = args[i]
+		}
+		if isTrueValue(reflect.ValueOf(a)) {
+			return a
+		}
+	}
+	return a0
+}
+
+func isTrueValue(v reflect.Value) bool {
+	if !v.IsValid() || v.IsZero() {
+		return false
+	}
+	k := v.Kind()
+	if k == reflect.Pointer || k == reflect.Interface {
+		return isTrueValue(v.Elem())
+	}
+	if k == reflect.Slice || k == reflect.Array || k == reflect.Map || k == reflect.Chan {
+		return v.Len() > 0
+	}
+	return true
 }
 
 func Must1(e error) {
