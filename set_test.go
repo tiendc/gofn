@@ -37,14 +37,14 @@ func Test_ToSetPred(t *testing.T) {
 		ToSetPred([]float32{1.1, 1.1, 2.2, 3.3, 1.11}, func(t float32) float32 { return t }))
 
 	// Incomparable types
-	assert.Equal(t, []interface{}{},
-		ToSetPred([]interface{}{}, func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{"one"},
-		ToSetPred([]interface{}{"one"}, func(t interface{}) string { return t.(string) }))
-	assert.Equal(t, []interface{}{"one", "two", "Two"},
-		ToSetPred([]interface{}{"one", "two", "one", "Two"}, func(t interface{}) string { return t.(string) }))
-	assert.Equal(t, []interface{}{1, 2, 3},
-		ToSetPred([]interface{}{1, 2, 3, 1, 2}, func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{1.1, 2.2, 3.3, 1.11},
-		ToSetPred([]interface{}{1.1, 1.1, 2.2, 3.3, 1.11}, func(t interface{}) float64 { return t.(float64) }))
+	assert.Equal(t, []any{},
+		ToSetPred([]any{}, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{"one"},
+		ToSetPred([]any{"one"}, func(t any) string { return t.(string) }))
+	assert.Equal(t, []any{"one", "two", "Two"},
+		ToSetPred([]any{"one", "two", "one", "Two"}, func(t any) string { return t.(string) }))
+	assert.Equal(t, []any{1, 2, 3},
+		ToSetPred([]any{1, 2, 3, 1, 2}, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{1.1, 2.2, 3.3, 1.11},
+		ToSetPred([]any{1.1, 1.1, 2.2, 3.3, 1.11}, func(t any) float64 { return t.(float64) }))
 }

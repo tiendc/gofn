@@ -1,8 +1,8 @@
 package gofn
 
 // ToIntfSlice convert a slice to a slice of interface
-func ToIntfSlice[T any](s []T) []interface{} {
-	result := make([]interface{}, len(s))
+func ToIntfSlice[T any](s []T) []any {
+	result := make([]any, len(s))
 	for i := range s {
 		result[i] = s[i]
 	}

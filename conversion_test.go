@@ -7,11 +7,11 @@ import (
 )
 
 func Test_ToIntfSlice(t *testing.T) {
-	assert.Equal(t, []interface{}{}, ToIntfSlice([]int{}))
-	assert.Equal(t, []interface{}{"one"}, ToIntfSlice([]string{"one"}))
-	assert.Equal(t, []interface{}{1, 2, 3}, ToIntfSlice([]int{1, 2, 3}))
-	assert.Equal(t, []interface{}{float32(1.1), float32(2.2), float32(3.3)}, ToIntfSlice([]float32{1.1, 2.2, 3.3}))
-	assert.Equal(t, []interface{}{"one", 2, 3.3}, ToIntfSlice([]interface{}{"one", 2, 3.3}))
+	assert.Equal(t, []any{}, ToIntfSlice([]int{}))
+	assert.Equal(t, []any{"one"}, ToIntfSlice([]string{"one"}))
+	assert.Equal(t, []any{1, 2, 3}, ToIntfSlice([]int{1, 2, 3}))
+	assert.Equal(t, []any{float32(1.1), float32(2.2), float32(3.3)}, ToIntfSlice([]float32{1.1, 2.2, 3.3}))
+	assert.Equal(t, []any{"one", 2, 3.3}, ToIntfSlice([]any{"one", 2, 3.3}))
 }
 
 func Test_ToStringSlice(t *testing.T) {

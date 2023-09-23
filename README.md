@@ -615,8 +615,8 @@ Zip3([]int{1, 2, 3}, []string{"4", "5"}, []float32{6.0, 7.0}) // []*Tuple3{{1, "
 Converts a slice of any type to a slice of interfaces.
 
 ```go
-ToIntfSlice([]int{1, 2, 3})         // []interface{}{1, 2, 3}
-ToIntfSlice([]string{"foo", "bar"}) // []interface{}{"foo", "bar"}
+ToIntfSlice([]int{1, 2, 3})         // []any{1, 2, 3}
+ToIntfSlice([]string{"foo", "bar"}) // []any{"foo", "bar"}
 ```
 
 #### ToStringSlice

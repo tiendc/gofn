@@ -31,41 +31,41 @@ func Test_Equal(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_EqualPred(t *testing.T) {
-	assert.True(t, EqualPred([]interface{}{}, []interface{}{},
-		func(a, b interface{}) bool { return a.(int) == b.(int) }))
-	assert.True(t, EqualPred([]interface{}{}, nil,
-		func(a, b interface{}) bool { return a.(int) == b.(int) }))
-	assert.True(t, EqualPred(nil, []interface{}{},
-		func(a, b interface{}) bool { return a.(int) == b.(int) }))
-	assert.True(t, EqualPred([]interface{}{1, 2, 3}, []interface{}{1, 2, 3},
-		func(a, b interface{}) bool { return a.(int) == b.(int) }))
-	assert.True(t, EqualPred([]interface{}{"3", "1", "2"}, []interface{}{"3", "1", "2"},
-		func(a, b interface{}) bool { return a.(string) == b.(string) }))
+	assert.True(t, EqualPred([]any{}, []any{},
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.True(t, EqualPred([]any{}, nil,
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.True(t, EqualPred(nil, []any{},
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.True(t, EqualPred([]any{1, 2, 3}, []any{1, 2, 3},
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.True(t, EqualPred([]any{"3", "1", "2"}, []any{"3", "1", "2"},
+		func(a, b any) bool { return a.(string) == b.(string) }))
 
 	type St struct {
 		Int int
 		Str string
 	}
 	assert.True(t, EqualPred(
-		[]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(a, b interface{}) bool { return a.(St) == b.(St) }))
+		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(a, b any) bool { return a.(St) == b.(St) }))
 
-	assert.False(t, EqualPred([]interface{}{}, []interface{}{1},
-		func(a, b interface{}) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]interface{}{1}, nil,
-		func(a, b interface{}) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]interface{}{1, 2, 3}, []interface{}{1, 2, 3, 4},
-		func(a, b interface{}) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]interface{}{1, 2, 3}, []interface{}{3, 2, 1},
-		func(a, b interface{}) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]interface{}{"3", "1", "2"}, []interface{}{"1", "2", "3"},
-		func(a, b interface{}) bool { return a.(string) == b.(string) }))
+	assert.False(t, EqualPred([]any{}, []any{1},
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.False(t, EqualPred([]any{1}, nil,
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.False(t, EqualPred([]any{1, 2, 3}, []any{1, 2, 3, 4},
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.False(t, EqualPred([]any{1, 2, 3}, []any{3, 2, 1},
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.False(t, EqualPred([]any{"3", "1", "2"}, []any{"1", "2", "3"},
+		func(a, b any) bool { return a.(string) == b.(string) }))
 	assert.False(t, EqualPred(
-		[]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []interface{}{St{1, "1"}, St{2, "2"}},
-		func(a, b interface{}) bool { return a.(St) == b.(St) }))
+		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{1, "1"}, St{2, "2"}},
+		func(a, b any) bool { return a.(St) == b.(St) }))
 	assert.False(t, EqualPred(
-		[]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []interface{}{St{3, "3"}, St{2, "2"}, St{1, "1"}},
-		func(a, b interface{}) bool { return a.(St) == b.(St) }))
+		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{3, "3"}, St{2, "2"}, St{1, "1"}},
+		func(a, b any) bool { return a.(St) == b.(St) }))
 }
 
 func Test_EqualPredPtr(t *testing.T) {
@@ -131,36 +131,36 @@ func Test_ContentEqual(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_ContentEqualPred(t *testing.T) {
-	assert.True(t, ContentEqualPred([]interface{}{}, []interface{}{},
-		func(t interface{}) int { return t.(int) }))
-	assert.True(t, ContentEqualPred([]interface{}{}, nil,
-		func(t interface{}) int { return t.(int) }))
-	assert.True(t, ContentEqualPred(nil, []interface{}{},
-		func(t interface{}) int { return t.(int) }))
-	assert.True(t, ContentEqualPred([]interface{}{1, 2, 3}, []interface{}{1, 2, 3},
-		func(t interface{}) int { return t.(int) }))
-	assert.True(t, ContentEqualPred([]interface{}{3, 1, 2}, []interface{}{1, 2, 3},
-		func(t interface{}) int { return t.(int) }))
-	assert.True(t, ContentEqualPred([]interface{}{"3", "1", "2"}, []interface{}{"1", "2", "3"},
-		func(t interface{}) string { return t.(string) }))
+	assert.True(t, ContentEqualPred([]any{}, []any{},
+		func(t any) int { return t.(int) }))
+	assert.True(t, ContentEqualPred([]any{}, nil,
+		func(t any) int { return t.(int) }))
+	assert.True(t, ContentEqualPred(nil, []any{},
+		func(t any) int { return t.(int) }))
+	assert.True(t, ContentEqualPred([]any{1, 2, 3}, []any{1, 2, 3},
+		func(t any) int { return t.(int) }))
+	assert.True(t, ContentEqualPred([]any{3, 1, 2}, []any{1, 2, 3},
+		func(t any) int { return t.(int) }))
+	assert.True(t, ContentEqualPred([]any{"3", "1", "2"}, []any{"1", "2", "3"},
+		func(t any) string { return t.(string) }))
 
 	type St struct {
 		Int int
 		Str string
 	}
 	assert.True(t, ContentEqualPred(
-		[]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []interface{}{St{3, "3"}, St{1, "1"}, St{2, "2"}},
-		func(t interface{}) St { return t.(St) }))
+		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{3, "3"}, St{1, "1"}, St{2, "2"}},
+		func(t any) St { return t.(St) }))
 
-	assert.False(t, ContentEqualPred([]interface{}{}, []interface{}{1},
-		func(t interface{}) int { return t.(int) }))
-	assert.False(t, ContentEqualPred([]interface{}{1}, nil,
-		func(t interface{}) int { return t.(int) }))
-	assert.False(t, ContentEqualPred([]interface{}{1, 2, 3}, []interface{}{1, 2, 3, 4},
-		func(t interface{}) int { return t.(int) }))
+	assert.False(t, ContentEqualPred([]any{}, []any{1},
+		func(t any) int { return t.(int) }))
+	assert.False(t, ContentEqualPred([]any{1}, nil,
+		func(t any) int { return t.(int) }))
+	assert.False(t, ContentEqualPred([]any{1, 2, 3}, []any{1, 2, 3, 4},
+		func(t any) int { return t.(int) }))
 	assert.False(t, ContentEqualPred(
-		[]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []interface{}{St{3, "3"}, St{1, "1"}, St{3, "3"}},
-		func(t interface{}) St { return t.(St) }))
+		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{3, "3"}, St{1, "1"}, St{3, "3"}},
+		func(t any) St { return t.(St) }))
 }
 
 func Test_ContentEqualPtr(t *testing.T) {
@@ -213,36 +213,36 @@ func Test_Contain(t *testing.T) {
 
 // nolint: goconst, forcetypeassert
 func Test_ContainPred(t *testing.T) {
-	assert.False(t, ContainPred([]interface{}{},
-		func(i interface{}) bool { return i.(int) == 1 }))
-	assert.False(t, ContainPred([]interface{}{"one"},
-		func(i interface{}) bool { return i == "One" }))
-	assert.False(t, ContainPred([]interface{}{"one", "two"},
-		func(i interface{}) bool { return i == "" }))
-	assert.False(t, ContainPred([]interface{}{1, 2, 3},
-		func(i interface{}) bool { return i == 4 }))
-	assert.False(t, ContainPred([]interface{}{1.1, 2.2, 3.3},
-		func(i interface{}) bool { return i == 3.35 }))
+	assert.False(t, ContainPred([]any{},
+		func(i any) bool { return i.(int) == 1 }))
+	assert.False(t, ContainPred([]any{"one"},
+		func(i any) bool { return i == "One" }))
+	assert.False(t, ContainPred([]any{"one", "two"},
+		func(i any) bool { return i == "" }))
+	assert.False(t, ContainPred([]any{1, 2, 3},
+		func(i any) bool { return i == 4 }))
+	assert.False(t, ContainPred([]any{1.1, 2.2, 3.3},
+		func(i any) bool { return i == 3.35 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.False(t, ContainPred([]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(i interface{}) bool { return i == St{3, "4"} }))
+	assert.False(t, ContainPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(i any) bool { return i == St{3, "4"} }))
 
-	assert.True(t, ContainPred([]interface{}{1},
-		func(i interface{}) bool { return i == 1 }))
-	assert.True(t, ContainPred([]interface{}{1, 2, 3, 1, 2, 3},
-		func(i interface{}) bool { return i == 2 }))
-	assert.True(t, ContainPred([]interface{}{"one", "two"},
-		func(i interface{}) bool { return i == "two" }))
-	assert.True(t, ContainPred([]interface{}{"one", "two", ""},
-		func(i interface{}) bool { return i == "" }))
-	assert.True(t, ContainPred([]interface{}{1.1, 2.2, 3.3},
-		func(i interface{}) bool { return i == 2.2 }))
-	assert.True(t, ContainPred([]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(i interface{}) bool { return i == St{3, "3"} }))
+	assert.True(t, ContainPred([]any{1},
+		func(i any) bool { return i == 1 }))
+	assert.True(t, ContainPred([]any{1, 2, 3, 1, 2, 3},
+		func(i any) bool { return i == 2 }))
+	assert.True(t, ContainPred([]any{"one", "two"},
+		func(i any) bool { return i == "two" }))
+	assert.True(t, ContainPred([]any{"one", "two", ""},
+		func(i any) bool { return i == "" }))
+	assert.True(t, ContainPred([]any{1.1, 2.2, 3.3},
+		func(i any) bool { return i == 2.2 }))
+	assert.True(t, ContainPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(i any) bool { return i == St{3, "3"} }))
 }
 
 func Test_ContainPredPtr(t *testing.T) {
@@ -346,19 +346,19 @@ func Test_IsUnique(t *testing.T) {
 func Test_IsUniquePred(t *testing.T) {
 	assert.True(t, IsUniquePred[int, int](nil, nil))
 	assert.True(t, IsUniquePred([]int{}, func(v int) int { return v }))
-	assert.True(t, IsUniquePred([]interface{}{"one"},
-		func(v interface{}) string { return v.(string) }))
-	assert.True(t, IsUniquePred([]interface{}{"one", "two", "One", "Two"},
-		func(v interface{}) string { return v.(string) }))
-	assert.True(t, IsUniquePred([]interface{}{1.1, 2.2, 3.3, 1.11},
-		func(v interface{}) float64 { return v.(float64) }))
+	assert.True(t, IsUniquePred([]any{"one"},
+		func(v any) string { return v.(string) }))
+	assert.True(t, IsUniquePred([]any{"one", "two", "One", "Two"},
+		func(v any) string { return v.(string) }))
+	assert.True(t, IsUniquePred([]any{1.1, 2.2, 3.3, 1.11},
+		func(v any) float64 { return v.(float64) }))
 
-	assert.False(t, IsUniquePred([]interface{}{1, 2, 3, 1, 2},
-		func(v interface{}) int { return v.(int) }))
-	assert.False(t, IsUniquePred([]interface{}{"one", "two", "one"},
-		func(v interface{}) string { return v.(string) }))
-	assert.False(t, IsUniquePred([]interface{}{1.1, 2.2, 1.100},
-		func(v interface{}) float64 { return v.(float64) }))
+	assert.False(t, IsUniquePred([]any{1, 2, 3, 1, 2},
+		func(v any) int { return v.(int) }))
+	assert.False(t, IsUniquePred([]any{"one", "two", "one"},
+		func(v any) string { return v.(string) }))
+	assert.False(t, IsUniquePred([]any{1.1, 2.2, 1.100},
+		func(v any) float64 { return v.(float64) }))
 
 	type st struct {
 		I int
@@ -551,36 +551,36 @@ func Test_IndexOf(t *testing.T) {
 }
 
 func Test_IndexOfPred(t *testing.T) {
-	assert.Equal(t, -1, IndexOfPred([]interface{}{},
-		func(i interface{}) bool { return i == 1 }))
-	assert.Equal(t, -1, IndexOfPred([]interface{}{"one"},
-		func(i interface{}) bool { return i == "One" }))
-	assert.Equal(t, -1, IndexOfPred([]interface{}{"one", "two"},
-		func(i interface{}) bool { return i == "" }))
-	assert.Equal(t, -1, IndexOfPred([]interface{}{1, 2, 3},
-		func(i interface{}) bool { return i == 4 }))
-	assert.Equal(t, -1, IndexOfPred([]interface{}{1.1, 2.2, 3.3},
-		func(i interface{}) bool { return i == 3.35 }))
+	assert.Equal(t, -1, IndexOfPred([]any{},
+		func(i any) bool { return i == 1 }))
+	assert.Equal(t, -1, IndexOfPred([]any{"one"},
+		func(i any) bool { return i == "One" }))
+	assert.Equal(t, -1, IndexOfPred([]any{"one", "two"},
+		func(i any) bool { return i == "" }))
+	assert.Equal(t, -1, IndexOfPred([]any{1, 2, 3},
+		func(i any) bool { return i == 4 }))
+	assert.Equal(t, -1, IndexOfPred([]any{1.1, 2.2, 3.3},
+		func(i any) bool { return i == 3.35 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.Equal(t, -1, IndexOfPred([]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(i interface{}) bool { return i == St{3, "4"} }))
+	assert.Equal(t, -1, IndexOfPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(i any) bool { return i == St{3, "4"} }))
 
-	assert.Equal(t, 0, IndexOfPred([]interface{}{1},
-		func(i interface{}) bool { return i == 1 }))
-	assert.Equal(t, 1, IndexOfPred([]interface{}{1, 2, 3, 1, 2, 3},
-		func(i interface{}) bool { return i == 2 }))
-	assert.Equal(t, 1, IndexOfPred([]interface{}{"one", "two"},
-		func(i interface{}) bool { return i == "two" }))
-	assert.Equal(t, 2, IndexOfPred([]interface{}{"one", "two", ""},
-		func(i interface{}) bool { return i == "" }))
-	assert.Equal(t, 2, IndexOfPred([]interface{}{1.1, 2.2, 3.3},
-		func(i interface{}) bool { return i == 3.3 }))
-	assert.Equal(t, 2, IndexOfPred([]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(i interface{}) bool { return i == St{3, "3"} }))
+	assert.Equal(t, 0, IndexOfPred([]any{1},
+		func(i any) bool { return i == 1 }))
+	assert.Equal(t, 1, IndexOfPred([]any{1, 2, 3, 1, 2, 3},
+		func(i any) bool { return i == 2 }))
+	assert.Equal(t, 1, IndexOfPred([]any{"one", "two"},
+		func(i any) bool { return i == "two" }))
+	assert.Equal(t, 2, IndexOfPred([]any{"one", "two", ""},
+		func(i any) bool { return i == "" }))
+	assert.Equal(t, 2, IndexOfPred([]any{1.1, 2.2, 3.3},
+		func(i any) bool { return i == 3.3 }))
+	assert.Equal(t, 2, IndexOfPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(i any) bool { return i == St{3, "3"} }))
 }
 
 func Test_LastIndexOf(t *testing.T) {
@@ -605,36 +605,36 @@ func Test_LastIndexOf(t *testing.T) {
 }
 
 func Test_LastIndexOfPred(t *testing.T) {
-	assert.Equal(t, -1, LastIndexOfPred([]interface{}{},
-		func(i interface{}) bool { return i == 1 }))
-	assert.Equal(t, -1, LastIndexOfPred([]interface{}{"one"},
-		func(i interface{}) bool { return i == "One" }))
-	assert.Equal(t, -1, LastIndexOfPred([]interface{}{"one", "two"},
-		func(i interface{}) bool { return i == "" }))
-	assert.Equal(t, -1, LastIndexOfPred([]interface{}{1, 2, 3},
-		func(i interface{}) bool { return i == 4 }))
-	assert.Equal(t, -1, LastIndexOfPred([]interface{}{1.1, 2.2, 3.3},
-		func(i interface{}) bool { return i == 3.35 }))
+	assert.Equal(t, -1, LastIndexOfPred([]any{},
+		func(i any) bool { return i == 1 }))
+	assert.Equal(t, -1, LastIndexOfPred([]any{"one"},
+		func(i any) bool { return i == "One" }))
+	assert.Equal(t, -1, LastIndexOfPred([]any{"one", "two"},
+		func(i any) bool { return i == "" }))
+	assert.Equal(t, -1, LastIndexOfPred([]any{1, 2, 3},
+		func(i any) bool { return i == 4 }))
+	assert.Equal(t, -1, LastIndexOfPred([]any{1.1, 2.2, 3.3},
+		func(i any) bool { return i == 3.35 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.Equal(t, -1, LastIndexOfPred([]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(i interface{}) bool { return i == St{3, "4"} }))
+	assert.Equal(t, -1, LastIndexOfPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(i any) bool { return i == St{3, "4"} }))
 
-	assert.Equal(t, 0, LastIndexOfPred([]interface{}{1},
-		func(i interface{}) bool { return i == 1 }))
-	assert.Equal(t, 4, LastIndexOfPred([]interface{}{1, 2, 3, 1, 2, 3},
-		func(i interface{}) bool { return i == 2 }))
-	assert.Equal(t, 1, LastIndexOfPred([]interface{}{"one", "two"},
-		func(i interface{}) bool { return i == "two" }))
-	assert.Equal(t, 3, LastIndexOfPred([]interface{}{"one", "", "two", ""},
-		func(i interface{}) bool { return i == "" }))
-	assert.Equal(t, 1, LastIndexOfPred([]interface{}{1.1, 1.1, 2.2, 3.3},
-		func(i interface{}) bool { return i == 1.1 }))
-	assert.Equal(t, 2, LastIndexOfPred([]interface{}{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(i interface{}) bool { return i == St{3, "3"} }))
+	assert.Equal(t, 0, LastIndexOfPred([]any{1},
+		func(i any) bool { return i == 1 }))
+	assert.Equal(t, 4, LastIndexOfPred([]any{1, 2, 3, 1, 2, 3},
+		func(i any) bool { return i == 2 }))
+	assert.Equal(t, 1, LastIndexOfPred([]any{"one", "two"},
+		func(i any) bool { return i == "two" }))
+	assert.Equal(t, 3, LastIndexOfPred([]any{"one", "", "two", ""},
+		func(i any) bool { return i == "" }))
+	assert.Equal(t, 1, LastIndexOfPred([]any{1.1, 1.1, 2.2, 3.3},
+		func(i any) bool { return i == 1.1 }))
+	assert.Equal(t, 2, LastIndexOfPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(i any) bool { return i == St{3, "3"} }))
 }
 
 func Test_RemoveAt(t *testing.T) {
@@ -922,23 +922,23 @@ func Test_CountValue(t *testing.T) {
 }
 
 func Test_CountValuePred(t *testing.T) {
-	assert.Equal(t, 0, CountValuePred([]interface{}{1, 2, 3},
-		func(t interface{}) bool { return t == 4 }))
-	assert.Equal(t, 1, CountValuePred([]interface{}{1, 2, 3},
-		func(t interface{}) bool { return t == 2 }))
-	assert.Equal(t, 2, CountValuePred([]interface{}{1, 2, 3, 2},
-		func(t interface{}) bool { return t == 2 }))
-	assert.Equal(t, 2, CountValuePred([]interface{}{1.1, 2.2, 3.3, 1.100001, 1.1},
-		func(t interface{}) bool { return t == 1.1 }))
+	assert.Equal(t, 0, CountValuePred([]any{1, 2, 3},
+		func(t any) bool { return t == 4 }))
+	assert.Equal(t, 1, CountValuePred([]any{1, 2, 3},
+		func(t any) bool { return t == 2 }))
+	assert.Equal(t, 2, CountValuePred([]any{1, 2, 3, 2},
+		func(t any) bool { return t == 2 }))
+	assert.Equal(t, 2, CountValuePred([]any{1.1, 2.2, 3.3, 1.100001, 1.1},
+		func(t any) bool { return t == 1.1 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.Equal(t, 2, CountValuePred([]interface{}{St{1, "1"}, St{2, "2"}, St{1, "1"}},
-		func(t interface{}) bool { return t == St{1, "1"} }))
-	assert.Equal(t, 0, CountValuePred([]interface{}{St{1, "1"}, St{2, "2"}, St{1, "1"}},
-		func(t interface{}) bool { return t == St{1, "2"} }))
+	assert.Equal(t, 2, CountValuePred([]any{St{1, "1"}, St{2, "2"}, St{1, "1"}},
+		func(t any) bool { return t == St{1, "1"} }))
+	assert.Equal(t, 0, CountValuePred([]any{St{1, "1"}, St{2, "2"}, St{1, "1"}},
+		func(t any) bool { return t == St{1, "2"} }))
 }
 
 func Test_GetFirst(t *testing.T) {
