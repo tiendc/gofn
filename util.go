@@ -102,12 +102,12 @@ func New[T any](t T) *T {
 }
 
 // Head returns the first argument
-func Head[T any](t T, s ...interface{}) T {
+func Head[T any](t T, s ...any) T {
 	return t
 }
 
 // Tail returns the last argument
-func Tail[T any](t interface{}, s ...interface{}) (T, bool) {
+func Tail[T any](t any, s ...any) (T, bool) {
 	v := t
 	if len(s) > 0 {
 		v = s[len(s)-1]

@@ -18,17 +18,17 @@ func Test_Union(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_UnionPred(t *testing.T) {
-	assert.Equal(t, []interface{}{}, UnionPred[interface{}](nil, nil, func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{}, UnionPred(nil, []interface{}{}, func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{1}, UnionPred([]interface{}{1}, nil, func(t interface{}) int { return t.(int) }))
+	assert.Equal(t, []any{}, UnionPred[any](nil, nil, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, UnionPred(nil, []any{}, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{1}, UnionPred([]any{1}, nil, func(t any) int { return t.(int) }))
 
-	assert.Equal(t, []interface{}{1, 2, 3, 4}, UnionPred([]interface{}{1, 2}, []interface{}{3, 4},
-		func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{1, 2, 3, 4}, UnionPred([]interface{}{1, 2, 3, 2}, []interface{}{1, 2, 4, 3},
-		func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{"1", "2", "3", "4"},
-		UnionPred([]interface{}{"1", "2", "3", "2"}, []interface{}{"1", "2", "4", "3"},
-			func(t interface{}) string { return t.(string) }))
+	assert.Equal(t, []any{1, 2, 3, 4}, UnionPred([]any{1, 2}, []any{3, 4},
+		func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{1, 2, 3, 4}, UnionPred([]any{1, 2, 3, 2}, []any{1, 2, 4, 3},
+		func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{"1", "2", "3", "4"},
+		UnionPred([]any{"1", "2", "3", "2"}, []any{"1", "2", "4", "3"},
+			func(t any) string { return t.(string) }))
 }
 
 func Test_Intersection(t *testing.T) {
@@ -44,18 +44,18 @@ func Test_Intersection(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_IntersectionPred(t *testing.T) {
-	assert.Equal(t, []interface{}{}, IntersectionPred[interface{}](nil, nil, func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{}, IntersectionPred(nil, []interface{}{}, func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{}, IntersectionPred([]interface{}{1}, nil, func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{}, IntersectionPred(nil, []interface{}{1}, func(t interface{}) int { return t.(int) }))
+	assert.Equal(t, []any{}, IntersectionPred[any](nil, nil, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, IntersectionPred(nil, []any{}, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, IntersectionPred([]any{1}, nil, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, IntersectionPred(nil, []any{1}, func(t any) int { return t.(int) }))
 
-	assert.Equal(t, []interface{}{}, IntersectionPred([]interface{}{1, 2}, []interface{}{3, 4},
-		func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{1, 2, 3}, IntersectionPred([]interface{}{1, 2, 3, 2}, []interface{}{1, 2, 4, 3},
-		func(t interface{}) int { return t.(int) }))
-	assert.Equal(t, []interface{}{"1", "2", "3"},
-		IntersectionPred([]interface{}{"1", "2", "3", "2"}, []interface{}{"1", "2", "4", "3"},
-			func(t interface{}) string { return t.(string) }))
+	assert.Equal(t, []any{}, IntersectionPred([]any{1, 2}, []any{3, 4},
+		func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{1, 2, 3}, IntersectionPred([]any{1, 2, 3, 2}, []any{1, 2, 4, 3},
+		func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{"1", "2", "3"},
+		IntersectionPred([]any{"1", "2", "3", "2"}, []any{"1", "2", "4", "3"},
+			func(t any) string { return t.(string) }))
 }
 
 func Test_Difference(t *testing.T) {
@@ -81,23 +81,23 @@ func Test_Difference(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_DifferencePred(t *testing.T) {
-	l, r := DifferencePred[interface{}](nil, nil, func(t interface{}) int { return t.(int) })
-	assert.Equal(t, []interface{}{}, l)
-	assert.Equal(t, []interface{}{}, r)
-	l, r = DifferencePred([]interface{}{}, nil, func(t interface{}) int { return t.(int) })
-	assert.Equal(t, []interface{}{}, l)
-	assert.Equal(t, []interface{}{}, r)
+	l, r := DifferencePred[any](nil, nil, func(t any) int { return t.(int) })
+	assert.Equal(t, []any{}, l)
+	assert.Equal(t, []any{}, r)
+	l, r = DifferencePred([]any{}, nil, func(t any) int { return t.(int) })
+	assert.Equal(t, []any{}, l)
+	assert.Equal(t, []any{}, r)
 
-	l, r = DifferencePred([]interface{}{1, 2}, []interface{}{3, 4}, func(t interface{}) int { return t.(int) })
-	assert.Equal(t, []interface{}{1, 2}, l)
-	assert.Equal(t, []interface{}{3, 4}, r)
+	l, r = DifferencePred([]any{1, 2}, []any{3, 4}, func(t any) int { return t.(int) })
+	assert.Equal(t, []any{1, 2}, l)
+	assert.Equal(t, []any{3, 4}, r)
 
-	l, r = DifferencePred([]interface{}{1, 2, 3, 2}, []interface{}{1, 4, 4, 3}, func(t interface{}) int { return t.(int) })
-	assert.Equal(t, []interface{}{2, 2}, l)
-	assert.Equal(t, []interface{}{4, 4}, r)
+	l, r = DifferencePred([]any{1, 2, 3, 2}, []any{1, 4, 4, 3}, func(t any) int { return t.(int) })
+	assert.Equal(t, []any{2, 2}, l)
+	assert.Equal(t, []any{4, 4}, r)
 
-	l, r = DifferencePred([]interface{}{"1", "2", "3", "2"}, []interface{}{"1", "4", "2", "", "3"},
-		func(t interface{}) string { return t.(string) })
-	assert.Equal(t, []interface{}{}, l)
-	assert.Equal(t, []interface{}{"4", ""}, r)
+	l, r = DifferencePred([]any{"1", "2", "3", "2"}, []any{"1", "4", "2", "", "3"},
+		func(t any) string { return t.(string) })
+	assert.Equal(t, []any{}, l)
+	assert.Equal(t, []any{"4", ""}, r)
 }
