@@ -4,16 +4,12 @@
 
 This is a collection of generics utility functions for Go 1.18+.
 
-## Why generics?
-
-This library avoids using `reflect` on determined types, such as a slice of `int` or a map of `string` and `struct`.
-With common determined types, using generics will bring back more performance than using `reflect`.
-
 ## Functionalities
 
-`gofn` consists of useful and convenient functions for most common needs when working on slices, maps, transformation, conversion, and so on.
+`gofn` consists of useful and convenient functions for most common needs when working on slices, maps, structs, transformation, conversion, and so on.
 
-**NOTE**: This lib does not provide deep-copy function as that will require using `reflect`. If you need the function, try [go-deepcopy](https://github.com/tiendc/go-deepcopy).
+Try related libs:
+- [go-deepcopy](https://github.com/tiendc/go-deepcopy): true deep copy function
 
 ## Contents
 
@@ -21,6 +17,7 @@ With common determined types, using generics will bring back more performance th
 - [Usage](#usage)
   - [Functions for slices](#functions-for-slices)
   - [Functions for maps](#functions-for-maps)
+  - [Functions for structs](#functions-for-structs)
   - [Functions for strings](#functions-for-strings)
   - [Functions for numbers](#functions-for-numbers)
   - [Transformation functions](#transformation-functions)
@@ -408,6 +405,18 @@ Sets default value for a key and returns the current value.
 MapSetDefault(map[int]int{1: 11, 2: 22}, 1, 0) // 11 (no value added to the map)
 MapSetDefault(map[int]int{1: 11, 2: 22}, 3, 0) // 0 (entry [3, 0] is added to the map)
 ```
+
+### Functions for structs
+
+---
+
+#### StructToMap
+
+Converts struct contents to a map. This function is a shortcut to [rflutil.StructToMap](https://github.com/tiendc/go-rflutil#structtomap).
+
+#### ParseTag / ParseTagOf / ParseTagsOf
+
+Parses struct tags. These functions are shortcuts to [rflutil.ParseTag](https://github.com/tiendc/go-rflutil#parsetag--parsetagof--parsetagsof).
 
 ### Functions for strings
 
