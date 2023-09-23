@@ -269,6 +269,46 @@ func IsUniquePred[T any, U comparable](s []T, keyFunc func(t T) U) bool {
 	return true
 }
 
+// FindPred finds value in slice by predicate
+func FindPred[T any](a []T, pred func(t T) bool) (t T, found bool) {
+	for i := range a {
+		if pred(a[i]) {
+			return a[i], true
+		}
+	}
+	return t, false
+}
+
+// FindPredPtr finds value in slice by predicate
+func FindPredPtr[T any](a []T, pred func(t *T) bool) (t T, found bool) {
+	for i := range a {
+		if pred(&a[i]) {
+			return a[i], true
+		}
+	}
+	return t, false
+}
+
+// FindLastPred finds value in slice from the end by predicate
+func FindLastPred[T any](a []T, pred func(t T) bool) (t T, found bool) {
+	for i := len(a) - 1; i >= 0; i-- {
+		if pred(a[i]) {
+			return a[i], true
+		}
+	}
+	return t, false
+}
+
+// FindLastPredPtr finds value in slice from the end by predicate
+func FindLastPredPtr[T any](a []T, pred func(t *T) bool) (t T, found bool) {
+	for i := len(a) - 1; i >= 0; i-- {
+		if pred(&a[i]) {
+			return a[i], true
+		}
+	}
+	return t, false
+}
+
 // IndexOf gets index of item in slice
 // Returns -1 if not found
 func IndexOf[T comparable](a []T, t T) int {

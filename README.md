@@ -124,6 +124,26 @@ IsUnique([]int{1, 2, 1}) // false
 IsUniquePred([]string{"one", "ONE"}, strings.ToLower) // false
 ```
 
+#### FindPred
+
+Finds a value in a slice by predicate.
+
+```go
+v, found := FindPred([]string{"one", "TWO"}, func(elem string) bool {
+    return strings.ToLower(elem) == "two"
+}) // v == "TWO", found == true
+```
+
+#### FindLastPred
+
+Finds a value in a slice from the end by predicate.
+
+```go
+v, found := FindLastPred([]string{"one", "TWO", "ONe"}, func(elem string) bool {
+    return strings.ToLower(elem) == "one"
+}) // v == "ONe", found == true
+```
+
 #### IndexOf
 
 Finds the index of a value in a slice, returns -1 if not found.
