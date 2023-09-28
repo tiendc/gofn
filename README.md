@@ -422,6 +422,31 @@ Parses struct tags. These functions are shortcuts to [rflutil.ParseTag](https://
 
 ---
 
+#### RandString / RandStringEx
+
+Generates a random string.
+
+```go
+RandString(10)                         // Generates a string of 10 characters from alphabets and digits
+RandStringEx(10, []rune("0123456789")) // Generates a string of 10 characters from the specified ones
+```
+
+#### StringJoin / StringJoinPred
+
+Joins a slice of any element type.
+
+```go
+s := StringJoin([]int{1,2,3}, ", ") // s == "1, 2, 3"
+
+type Struct struct {
+	I int
+	S string
+}
+s := StringJoinPred([]Struct{{I:1, s:"a"}, {I:2, s:"b"}}, ", ", func (v Struct) string {
+	return fmt.Sprintf("%d:%s", v.I, v.S)
+}) // s == "1:a, 2:b"
+```
+
 #### MultilineString
 
 Removes all leading spaces from every line in the given string. This function is useful to declare a string with a neat multiline-style.
