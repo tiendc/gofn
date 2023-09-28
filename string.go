@@ -1,6 +1,7 @@
 package gofn
 
 import (
+	"fmt"
 	"math/rand"
 	"strings"
 )
@@ -25,6 +26,54 @@ func RandStringEx(n int, allowedChars []rune) string {
 		b[i] = allowedChars[rand.Intn(numChars)] // nolint: gosec
 	}
 	return string(b)
+}
+
+// StringJoin join elements from a slice of any type
+// This function calls fmt.Sprintf("%v", elem) to format every element
+func StringJoin[T any](s []T, sep string) string {
+	return StringJoinEx(s, sep, "%v")
+}
+
+// StringJoinEx join elements from a slice of any type with custom format string
+func StringJoinEx[T any](s []T, sep, format string) string {
+	switch len(s) {
+	case 0:
+		return ""
+	case 1:
+		return stringFormat(format, s[0])
+	}
+
+	ss := make([]string, 0, len(s))
+	for i := range s {
+		ss = append(ss, stringFormat(format, s[i]))
+	}
+	return strings.Join(ss, sep)
+}
+
+// StringJoinPred join elements from a slice of any type with custom format function
+func StringJoinPred[T any](s []T, sep string, fmtFunc func(v T) string) string {
+	switch len(s) {
+	case 0:
+		return ""
+	case 1:
+		return fmtFunc(s[0])
+	}
+
+	ss := make([]string, 0, len(s))
+	for i := range s {
+		ss = append(ss, fmtFunc(s[i]))
+	}
+	return strings.Join(ss, sep)
+}
+
+func stringFormat(format string, v any) string {
+	if v == nil {
+		return "null"
+	}
+	if stringer, ok := v.(fmt.Stringer); ok {
+		return stringer.String()
+	}
+	return fmt.Sprintf(format, v)
 }
 
 // LinesTrimLeft trim leading characters for every line in the given string
