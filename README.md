@@ -411,9 +411,9 @@ MapSetDefault(map[int]int{1: 11, 2: 22}, 3, 0) // 0 (entry [3, 0] is added to th
 
 ---
 
-#### StructToMap
+#### StructToMap / StructToMapEx
 
-Converts struct contents to a map. This function is a shortcut to [rflutil.StructToMap](https://github.com/tiendc/go-rflutil#structtomap).
+Converts struct contents to a map. This function is a shortcut to [rflutil.StructToMap](https://github.com/tiendc/go-rflutil#structtomap--structtomapex).
 
 #### ParseTag / ParseTagOf / ParseTagsOf
 

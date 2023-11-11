@@ -5,8 +5,9 @@ import (
 )
 
 var (
-	StructToMap = rflutil.StructToMap
-	ParseTag    = rflutil.ParseTag
-	ParseTagOf  = rflutil.ParseTagOf
-	ParseTagsOf = rflutil.ParseTagsOf
+	StructToMap   = rflutil.StructToMap
+	StructToMapEx = rflutil.StructToMapEx
+	ParseTag      = rflutil.ParseTag
+	ParseTagOf    = rflutil.ParseTagOf
+	ParseTagsOf   = rflutil.ParseTagsOf
 )
