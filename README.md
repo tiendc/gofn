@@ -22,6 +22,7 @@ Try related libs:
   - [Functions for numbers](#functions-for-numbers)
   - [Transformation functions](#transformation-functions)
   - [Conversion functions](#conversion-functions)
+  - [Bind functions](#bind-functions)
   - [Common functions](#common-functions)
   - [Specific algo functions](#specific-algo-functions)
   - [Other functions](#other-functions)
@@ -680,6 +681,20 @@ Creates a slice for individual values.
 
 ```go
 ToSlice(1, 2, 3) // []int{1, 2, 3}
+```
+
+### Bind functions
+
+---
+
+#### Bind\<N\>Arg\<M\>Ret
+
+Fully binds a function with returning a function which requires no argument.
+
+```go
+func myCalc(a1 int, a2 string) error { ... }
+myQuickCalc := Bind2Arg1Ret(myCalc, 100, "hello")
+err := myQuickCalc()
 ```
 
 ### Common functions
