@@ -182,3 +182,50 @@ func MapIntersectionKeys[K comparable, V any](m1 map[K]V, ms ...map[K]V) []K {
 func MapDifferenceKeys[K comparable, V any](m1, m2 map[K]V) ([]K, []K) {
 	return Difference(MapKeys(m1), MapKeys(m2))
 }
+
+func MapCopy[K comparable, V any](m map[K]V, onlyKeys ...K) map[K]V {
+	// Copy the whole map (this is shallow copy)
+	if len(onlyKeys) == 0 {
+		ret := make(map[K]V, len(m))
+		for k, v := range m {
+			ret[k] = v
+		}
+		return ret
+	}
+
+	// Copy only keys in the list
+	ret := make(map[K]V, len(onlyKeys))
+	for _, k := range onlyKeys {
+		v, ok := m[k]
+		if ok {
+			ret[k] = v
+		}
+	}
+	return ret
+}
+
+func MapCopyExcludeKeys[K comparable, V any](m map[K]V, excludedKeys ...K) map[K]V {
+	// Copy the whole map (this is shallow copy)
+	if len(excludedKeys) == 0 {
+		ret := make(map[K]V, len(m))
+		for k, v := range m {
+			ret[k] = v
+		}
+		return ret
+	}
+
+	excludedMap := make(map[K]struct{}, len(excludedKeys))
+	for _, k := range excludedKeys {
+		excludedMap[k] = struct{}{}
+	}
+
+	// Copy only keys not in the list
+	ret := make(map[K]V, len(m))
+	for k, v := range m {
+		_, ok := excludedMap[k]
+		if !ok {
+			ret[k] = v
+		}
+	}
+	return ret
+}

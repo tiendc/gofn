@@ -223,3 +223,29 @@ func Test_MapDifferenceKeys(t *testing.T) {
 	assert.True(t, ContentEqual([]string{"1"}, l2))
 	assert.True(t, ContentEqual([]string{"3"}, r2))
 }
+
+func Test_MapCopy(t *testing.T) {
+	m := MapCopy[int, int](nil)
+	assert.Equal(t, map[int]int{}, m)
+	m = MapCopy[int, int](map[int]int{}, 1, 2, 3)
+	assert.Equal(t, map[int]int{}, m)
+
+	m = MapCopy(map[int]int{1: 11, 2: 22})
+	assert.True(t, MapEqual(map[int]int{1: 11, 2: 22}, m))
+
+	m = MapCopy(map[int]int{1: 11, 2: 22}, 2, 3)
+	assert.True(t, MapEqual(map[int]int{2: 22}, m))
+}
+
+func Test_MapCopyExcludeKeys(t *testing.T) {
+	m := MapCopyExcludeKeys[int, int](nil)
+	assert.Equal(t, map[int]int{}, m)
+	m = MapCopyExcludeKeys[int, int](map[int]int{}, 1, 2, 3)
+	assert.Equal(t, map[int]int{}, m)
+
+	m = MapCopyExcludeKeys(map[int]int{1: 11, 2: 22})
+	assert.True(t, MapEqual(map[int]int{1: 11, 2: 22}, m))
+
+	m = MapCopyExcludeKeys(map[int]int{1: 11, 2: 22}, 2, 3)
+	assert.True(t, MapEqual(map[int]int{1: 11}, m))
+}
