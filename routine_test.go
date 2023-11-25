@@ -78,6 +78,22 @@ func Test_ExecTasks(t *testing.T) {
 		}
 		return nil
 	}
+	task5 := func(ctx context.Context) error {
+		data := ctx.Value("data").(*ctxData)
+		for i := 30; i < 40; i++ {
+			if err := ctx.Err(); err != nil {
+				return err
+			}
+			if i == 35 {
+				panic(errTest)
+			}
+			data.mu.Lock()
+			data.result = append(data.result, i)
+			data.mu.Unlock()
+			time.Sleep(time.Duration(20+rand.Intn(100)) * time.Millisecond)
+		}
+		return nil
+	}
 
 	checkRes := func(res []int, start, end int) bool {
 		values := []int{}
@@ -86,6 +102,12 @@ func Test_ExecTasks(t *testing.T) {
 		}
 		return ContainAll(res, values...)
 	}
+
+	t.Run("no tasks passed", func(t *testing.T) {
+		ctx := context.Background()
+		errMap := ExecTasksEx(ctx, 0, false)
+		assert.Equal(t, 0, len(errMap))
+	})
 
 	t.Run("no pool size, no stop on error", func(t *testing.T) {
 		data := &ctxData{}
@@ -127,6 +149,19 @@ func Test_ExecTasks(t *testing.T) {
 		data.mu.Unlock()
 	})
 
+	t.Run("no pool size, stop on error. but no error occurred", func(t *testing.T) {
+		data := &ctxData{}
+		ctx := context.WithValue(context.Background(), "data", data)
+
+		// NOTE: call ExecTasks() as ExecTasks() default to stopOnError is true
+		err := ExecTasks(ctx, 0, task1, task2)
+		assert.Nil(t, err)
+
+		result := data.result
+		assert.Equal(t, 20, len(result))
+		assert.True(t, checkRes(result, 0, 20))
+	})
+
 	t.Run("pool size = 1, no stop on error", func(t *testing.T) {
 		data := &ctxData{}
 		ctx := context.WithValue(context.Background(), "data", data)
@@ -140,7 +175,7 @@ func Test_ExecTasks(t *testing.T) {
 			checkRes(result[20:25], 20, 25) && checkRes(result[25:], 30, 35))
 	})
 
-	t.Run("no pool size, no stop on error, context timed out", func(t *testing.T) {
+	t.Run("context timed out", func(t *testing.T) {
 		data := &ctxData{}
 		ctx := context.WithValue(context.Background(), "data", data)
 		ctx, cancel := context.WithTimeout(ctx, 100*time.Millisecond)
@@ -151,5 +186,29 @@ func Test_ExecTasks(t *testing.T) {
 
 		result := data.result
 		assert.True(t, 30 > len(result) && len(result) > 0)
+	})
+
+	t.Run("context canceled too early", func(t *testing.T) {
+		data := &ctxData{}
+		ctx := context.WithValue(context.Background(), "data", data)
+		ctx, cancel := context.WithCancel(ctx)
+		cancel()
+
+		errMap := ExecTasksEx(ctx, 0, false, task1, task2, task3, task4)
+		assert.Equal(t, 4, len(errMap))
+
+		result := data.result
+		assert.Equal(t, 0, len(result))
+	})
+
+	t.Run("panic occurred in the task function", func(t *testing.T) {
+		data := &ctxData{}
+		ctx := context.WithValue(context.Background(), "data", data)
+
+		errMap := ExecTasksEx(ctx, 0, false, task1, task2, task3, task4, task5)
+		assert.Equal(t, 3, len(errMap))
+
+		result := data.result
+		assert.True(t, len(result) > 0)
 	})
 }
