@@ -20,6 +20,7 @@ Try related libs:
   - [Functions for structs](#functions-for-structs)
   - [Functions for strings](#functions-for-strings)
   - [Functions for numbers](#functions-for-numbers)
+  - [Functions for concurrency](#functions-for-concurrency)
   - [Transformation functions](#transformation-functions)
   - [Conversion functions](#conversion-functions)
   - [Bind functions](#bind-functions)
@@ -565,6 +566,46 @@ FormatIntGroup(1234567)   // 1,234,567
 ```
 
 - **NOTE**: There are also **FormatUint** for unsigned integers and **FormatFloat** for floating numbers.
+
+### Functions for concurrency
+
+---
+
+#### ExecTasks / ExecTasksEx
+
+Execute tasks concurrently with ease. This function provides a convenient way for one of the most
+popular use case in practical.
+
+```go
+// In case you want to store the task results into a shared variable,
+// make sure you use enough synchronization
+var task1Result any
+var task2Result []any
+
+// Allow spending maximum 10s to finish all the tasks
+ctx := context.WithTimeout(context.Background(), 10 * time.Second)
+
+err := ExecTasks(ctx, 0 /* max concurrent tasks */,
+    // Task 1st:
+    func(ctx context.Context) (err error) {
+        task1Result, err = getDataFromDB()
+        return err
+    },
+    // Task 2nd:
+    func(ctx context.Context) (err error) {
+        for i:=0; i<10; i++ {
+            if err := ctx.Err(); err != nil {
+                return err
+            }
+            task2Result = append(task2Result, <some data>)
+            return nil
+        }
+    },
+)
+if err != nil {
+    // one or more tasks failed
+}
+```
 
 ### Transformation functions
 
