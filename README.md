@@ -953,6 +953,19 @@ RandStringEx(10, []rune("01234"))  // a random string has 10 characters (only 0-
 
 ---
 
+#### If
+
+A convenient function works like C ternary operator.
+
+**NOTE**: However, this function is deprecated as it has side effect of both expressions are evaluated
+and may cause the program to crash.
+For example: `firstItem := If(len(slice) > 0, slice[0], defaultVal)` will crash if `slice` is empty as
+the expression `slice[0]` is evaluated before the function call. Use it at your own risk.
+
+```go
+val := If(x > 100, val1, val2) // If x > 100, val == val1, otherwise val == val2
+```
+
 #### New
 
 Creates a new variable and return the address of it. Very helpful in unit testing.
