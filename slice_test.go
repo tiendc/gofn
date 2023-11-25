@@ -1009,3 +1009,19 @@ func Test_SubSlice(t *testing.T) {
 	assert.Equal(t, []int{3}, SubSlice([]int{1, 2, 3}, -1, 100))
 	assert.Equal(t, []int{2, 3}, SubSlice([]int{1, 2, 3}, -1, -3))
 }
+
+func Test_SliceByRange(t *testing.T) {
+	// start < end
+	assert.Equal(t, []int{}, SliceByRange(0, 5, 0))
+	assert.Equal(t, []int{0, 1, 2, 3, 4}, SliceByRange(0, 5, 1))
+	assert.Equal(t, []int{0, 2, 4}, SliceByRange(0, 5, 2))
+	assert.Equal(t, []float64{-5, -4, -3, -2, -1}, SliceByRange(float64(-5.0), 0, 1))
+	assert.Equal(t, []int32{-5, -3, -1}, SliceByRange(int32(-5), 0, 2))
+
+	// start > end
+	assert.Equal(t, []int{}, SliceByRange(5, 0, 0))
+	assert.Equal(t, []int{5, 4, 3, 2, 1}, SliceByRange(5, 0, -1))
+	assert.Equal(t, []int{5, 3, 1}, SliceByRange(5, 0, -2))
+	assert.Equal(t, []float64{0, -1, -2, -3, -4}, SliceByRange(float64(0.0), -5, -1))
+	assert.Equal(t, []int32{0, -2, -4}, SliceByRange(int32(0), -5, -2))
+}

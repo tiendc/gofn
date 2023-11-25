@@ -602,3 +602,31 @@ func SubSlice[T any](s []T, start, end int) []T {
 	}
 	return s[start:end]
 }
+
+// SliceByRange generates a slice by range
+// start is inclusive, end is exclusive
+func SliceByRange[T NumberEx](start, end, step T) []T {
+	if end > start {
+		if step <= 0 {
+			return []T{}
+		}
+
+		count := int((end-start)/step) + 1
+		result := make([]T, 0, count)
+		for i := start; i < end; i += step {
+			result = append(result, i)
+		}
+		return result
+	} else {
+		if step >= 0 {
+			return []T{}
+		}
+
+		count := int((end-start)/step) + 1
+		result := make([]T, 0, count)
+		for i := start; i > end; i += step {
+			result = append(result, i)
+		}
+		return result
+	}
+}
