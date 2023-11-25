@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/stretchr/testify v1.8.4
-	github.com/tiendc/go-rflutil v0.0.0-20231111180725-881919f2d5b5
+	github.com/tiendc/go-rflutil v0.0.0-20231112145832-693b7b74d697
 )
 
 require (
