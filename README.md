@@ -323,6 +323,16 @@ SubSlice([]int{1, 2, 3}, -1, -2) // []{3}
 SubSlice([]int{1, 2, 3}, -1, -3) // []{2, 3}
 ```
 
+#### SliceByRange
+
+Generates a slice for the given range.
+
+```go
+s := SliceByRange(0, 5, 1)         // []int{0, 1, 2, 3, 4}
+s := SliceByRange(0.0, 5, 2)       // []float64{0, 2, 4}
+s := SliceByRange(int32(5), 0, -2) // []int32{5, 3, 1}
+```
+
 ### Functions for maps
 
 ---
