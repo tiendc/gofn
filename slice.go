@@ -572,3 +572,33 @@ func GetLast[T any](s []T, defaultVal T) T {
 	}
 	return defaultVal
 }
+
+// SubSlice gets sub slice from a slice
+// Passing negative numbers to get items from the end of the slice
+// For example, using start=-1, end=-2 to get the last item of the slice
+// end param is exclusive.
+func SubSlice[T any](s []T, start, end int) []T {
+	length := len(s)
+	if length == 0 {
+		return []T{}
+	}
+
+	for start < 0 {
+		start += length
+	}
+	if start > length {
+		start = length
+	}
+	for end < 0 {
+		end += length
+	}
+	if end > length {
+		end = length
+	}
+
+	if start > end {
+		// NOTE: end is exclusive
+		return s[end+1 : start+1]
+	}
+	return s[start:end]
+}

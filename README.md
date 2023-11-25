@@ -311,6 +311,17 @@ GetLast([]int{1, 2, 3}, 4) // 3
 GetLast([]int{}, 11)       // 11
 ```
 
+#### SubSlice
+
+Returns sub slice of a slice in range [start, end). `end` param is exclusive. This function doesn't raise error.
+Passing negative numbers for `start` and `end` to get items from the end of the slice.
+
+```go
+SubSlice([]int{1, 2, 3}, 0, 2)   // []{1, 2}
+SubSlice([]int{1, 2, 3}, -1, -2) // []{3}
+SubSlice([]int{1, 2, 3}, -1, -3) // []{2, 3}
+```
+
 ### Functions for maps
 
 ---
