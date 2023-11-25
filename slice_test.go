@@ -1001,3 +1001,11 @@ func Test_LastIndexOfSlice(t *testing.T) {
 	assert.Equal(t, 0, LastIndexOfSlice([]int64{1, 2, 3}, []int64{1, 2, 3}))
 	assert.Equal(t, 4, LastIndexOfSlice([]uint{0, 1, 1, 1, 1}, []uint{1}))
 }
+
+func Test_SubSlice(t *testing.T) {
+	assert.Equal(t, []int{}, SubSlice([]int{}, 0, 100))
+	assert.Equal(t, []int{}, SubSlice([]int{1, 2, 3}, 10, 100))
+	assert.Equal(t, []int{2, 3}, SubSlice([]int{1, 2, 3}, 1, 100))
+	assert.Equal(t, []int{3}, SubSlice([]int{1, 2, 3}, -1, 100))
+	assert.Equal(t, []int{2, 3}, SubSlice([]int{1, 2, 3}, -1, -3))
+}
