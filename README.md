@@ -652,6 +652,10 @@ ToSet([]string{"one", "2", "one"}) // []string{"one", "2"}
 
 // Use ToSetPred for custom key function
 ToSetPred([]string{"one", "TWO", "two", "One"}, strings.ToLower) // []string{"one", "TWO"}
+
+
+// Use ToSetPredReverse for iterating items from the end of the list
+ToSetPredReverse([]string{"one", "TWO", "two", "One"}, strings.ToLower) // []string{"One", "two"}
 ```
 
 #### MapSlice/MapSliceEx

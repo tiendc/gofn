@@ -42,3 +42,25 @@ func ToSetPred[T any, K comparable](s []T, keyFunc func(t T) K) []T {
 
 	return result
 }
+
+func ToSetPredReverse[T any, K comparable](s []T, keyFunc func(t T) K) []T {
+	length := len(s)
+	if length <= 1 {
+		return ToSlice(s...)
+	}
+
+	seen := make(map[K]struct{}, length)
+	result := make([]T, 0, length)
+
+	for i := length - 1; i >= 0; i-- {
+		v := s[i]
+		k := keyFunc(v)
+		if _, ok := seen[k]; ok {
+			continue
+		}
+		seen[k] = struct{}{}
+		result = append(result, v)
+	}
+
+	return result
+}
