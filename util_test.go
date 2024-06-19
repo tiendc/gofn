@@ -14,6 +14,31 @@ func Test_If(t *testing.T) {
 	assert.Equal(t, "b", If(x > y, "a", "b"))
 }
 
+func Test_Or(t *testing.T) {
+	// Primitive types
+	assert.Equal(t, false, Or(false, false))
+	assert.Equal(t, true, Or(false, true, false))
+	assert.Equal(t, 1, Or(1))
+	assert.Equal(t, 1, Or(1, 0, 2))
+	assert.Equal(t, -1.5, Or[float64](0, -1.5))
+	assert.Equal(t, float32(0), Or[float32](0, 0.0, 0))
+	assert.Equal(t, int64(-2), Or[int64](0, 0, -2, 0))
+	assert.Equal(t, byte(1), Or[byte](1, 0, 2, 0))
+	assert.Equal(t, "", Or("", ""))
+	assert.Equal(t, "f", Or("", "f", ""))
+
+	// Pointer to primitive types
+	assert.Equal(t, (*int)(nil), Or[*int](nil, nil))
+	f1, f2 := float32(0), float32(1)
+	assert.Equal(t, &f1, Or(nil, &f1, &f2, nil))
+	s1, s2 := "", "1"
+	assert.Equal(t, &s1, Or(nil, &s1, &s2, nil))
+
+	// Derived type
+	type X string
+	assert.Equal(t, X("f"), Or[X]("", "f", "g"))
+}
+
 func Test_FirstTrue(t *testing.T) {
 	assert.Equal(t, -1, FirstTrue(0, 0, -1, 2, 3))
 	assert.Equal(t, "a", FirstTrue("", "", "a", "b"))

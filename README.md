@@ -961,13 +961,24 @@ RandStringEx(10, []rune("01234"))  // a random string has 10 characters (only 0-
 
 A convenient function works like C ternary operator.
 
-**NOTE**: However, this function is deprecated as it has side effect of both expressions are evaluated
+**NOTE**: This function is deprecated as it has side effect of both expressions are evaluated
 and may cause the program to crash.
 For example: `firstItem := If(len(slice) > 0, slice[0], defaultVal)` will crash if `slice` is empty as
 the expression `slice[0]` is evaluated before the function call. Use it at your own risk.
 
 ```go
 val := If(x > 100, val1, val2) // If x > 100, val == val1, otherwise val == val2
+```
+
+#### Or
+
+Logically selects the first value which is not zero value of type T.
+This function is similar to `FirstTrue`, but it uses generic, not reflection, and it accepts primitive types only.
+
+```go
+Or(0, -1, 2)         // -1
+Or("", " ", "s")     // " "
+Or[*int](ptr1, ptr2) // the first non-nil pointer
 ```
 
 #### New
