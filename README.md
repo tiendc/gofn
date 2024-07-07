@@ -577,6 +577,14 @@ FormatIntGroup(1234567)   // 1,234,567
 
 - **NOTE**: There are also **FormatUint** for unsigned integers and **FormatFloat** for floating numbers.
 
+Groups digits of a number. Input number is of type string.
+
+```go
+NumberFmtGroup("1234567", '.', ',')         // 1,234,567
+NumberFmtGroup("1234567", ',', '.')         // 1.234.567
+NumberFmtGroup("1234567.12345", '.', ',')   // 1,234,567.12345
+```
+
 ### Functions for concurrency
 
 ---
