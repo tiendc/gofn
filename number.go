@@ -165,7 +165,7 @@ func NumberFmtUngroup(num string, groupSep byte) string {
 }
 
 func numberPartFmtGroup(s string, groupSep byte) string {
-	if !stringIsNumeric(s, true) {
+	if groupSep == 0 || !stringIsNumeric(s, true) {
 		return s
 	}
 	buf := make([]byte, 0, len(s)+5) // nolint: gomnd
