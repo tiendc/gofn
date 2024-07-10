@@ -481,11 +481,11 @@ Joins a slice of any element type.
 s := StringJoin([]int{1,2,3}, ", ") // s == "1, 2, 3"
 
 type Struct struct {
-	I int
-	S string
+    I int
+    S string
 }
 s := StringJoinPred([]Struct{{I:1, s:"a"}, {I:2, s:"b"}}, ", ", func (v Struct) string {
-	return fmt.Sprintf("%d:%s", v.I, v.S)
+    return fmt.Sprintf("%d:%s", v.I, v.S)
 }) // s == "1:a, 2:b"
 ```
 
@@ -495,16 +495,16 @@ Removes all leading spaces from every line in the given string. This function is
 
 ```go
 func DoSomething() {
-	// Commonly you may use this style to create multiline string in Go (which looks ugly)
-	s := `
+    // Commonly you may use this style to create multiline string in Go (which looks ugly)
+    s := `
 line-1 abc xyz
 line-2 abc xyz
 `
-	// Use this function
-	s := MultilineString(
-		`line-1 abc xyz
-		line-2 abc xyz`
-	)
+    // Use this function
+    s := MultilineString(
+        `line-1 abc xyz
+        line-2 abc xyz`
+    )
 }
 ```
 
@@ -814,6 +814,41 @@ ForEachReverse([]int{1, 2, 3}, func (i, v int) {
 }) // prints 3 2 1
 ```
 
+#### All
+
+Returns `true` if all given values are evaluated `true`.
+
+```go
+All(1, "1", 0.5) // true
+All(1, "1", 0.0) // false
+All(1, "", -1)   // false
+All()            // true
+```
+
+#### Any
+
+Returns `true` if any of the given values is evaluated `true`.
+
+```go
+Any(1, "", 0.5)  // true
+Any(1, "1", 0.0) // true
+Any(0, "", 0.0)  // false
+Any()            // false
+```
+
+#### MustN (N is from 1 to 6)
+
+MustN functions accept a number of arguments with the last one is of `error` type.
+MustN functions return the first N-1 arguments if the error is `nil`, otherwise they panic.
+
+```go
+func CalculateAmount() (int, error) {}
+amount := Must(CalculateAmount()) // panic on error, otherwise returns the amount
+
+func CalculateData() (int, string, float64, error) {}
+v1, v2, v3 := Must4(CalculateData()) // panic on error, otherwise returns the 3 first values
+```
+
 ### Randomization functions
 
 **NOTE**: Should not use these functions for crypto purpose.
@@ -855,39 +890,13 @@ Shuffle items of a slice. Not change the source slice.
 s := Shuffle([]int{1, 2, 3}) // s is a new slice with random items of the input
 ```
 
-#### All
+#### RandString
 
-Returns `true` if all given values are evaluated `true`.
-
-```go
-All(1, "1", 0.5) // true
-All(1, "1", 0.0) // false
-All(1, "", -1)   // false
-All()            // true
-```
-
-#### Any
-
-Returns `true` if any of the given values is evaluated `true`.
+Generates a random string.
 
 ```go
-Any(1, "", 0.5)  // true
-Any(1, "1", 0.0) // true
-Any(0, "", 0.0)  // false
-Any()            // false
-```
-
-#### MustN (N is from 1 to 6)
-
-MustN functions accept a number of arguments with the last one is of `error` type.
-MustN functions return the first N-1 arguments if the error is `nil`, otherwise they panic.
-
-```go
-func CalculateAmount() (int, error) {}
-amount := Must(CalculateAmount()) // panic on error, otherwise returns the amount
-
-func CalculateData() (int, string, float64, error) {}
-v1, v2, v3 := Must4(CalculateData()) // panic on error, otherwise returns the 3 first values
+RandString(10)                     // a random string has 10 characters (default of alphabets and digits)
+RandStringEx(10, []rune("01234"))  // a random string has 10 characters (only 0-4)
 ```
 
 ### Sorting functions
@@ -992,15 +1001,6 @@ Calculates absolute value of an integer.
 Abs(-123)          // int64(123)
 Abs(123)           // int64(123)
 Abs(math.MinInt64) // math.MinInt64 (special case)
-```
-
-#### RandString
-
-Generates a random string.
-
-```go
-RandString(10)                     // a random string has 10 characters (default of alphabets and digits)
-RandStringEx(10, []rune("01234"))  // a random string has 10 characters (only 0-4)
 ```
 
 ### Other functions
