@@ -2,7 +2,6 @@ package gofn
 
 import (
 	"math/rand"
-	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -51,7 +50,7 @@ func Test_RandChoiceMaker_Next(t *testing.T) {
 	assert.True(t, b30 && b31 && b32)
 	assert.False(t, b33 || b34)
 	v3 := []string{v30, v31, v32, v33, v34}
-	slices.Sort(v3)
+	Sort(v3)
 	assert.Equal(t, []string{"", "", "1", "2", "3"}, v3)
 }
 
@@ -64,6 +63,6 @@ func Test_Shuffle(t *testing.T) {
 	assert.Equal(t, []float32{1.1}, s2)
 	// Multiple items input (with using custom rand function)
 	s3 := Shuffle([]string{"1", "2", "3"}, rand.Intn)
-	slices.Sort(s3)
+	Sort(s3)
 	assert.Equal(t, []string{"1", "2", "3"}, s3)
 }
