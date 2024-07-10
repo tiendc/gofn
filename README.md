@@ -25,6 +25,7 @@ Try related libs:
   - [Conversion functions](#conversion-functions)
   - [Bind functions](#bind-functions)
   - [Common functions](#common-functions)
+  - [Randomization functions](#randomization-functions)
   - [Specific algo functions](#specific-algo-functions)
   - [Other functions](#other-functions)
 - [Benchmarks](#benchmarks)
@@ -811,6 +812,47 @@ Iterates over slice content from the end.
 ForEachReverse([]int{1, 2, 3}, func (i, v int) {
     fmt.Printf("%d ", v)
 }) // prints 3 2 1
+```
+
+### Randomization functions
+
+**NOTE**: Should not use these functions for crypto purpose.
+
+---
+
+#### RandChoice
+
+Picks up an item randomly from a list of items.
+
+```go
+val, valid := RandChoice(1, 2, 3) // valid == true and `val` is one of the input items
+val, valid := RandChoice[int]()   // valid == false and `val` is int(0)
+```
+
+#### RandChoiceMaker
+
+Provides a method to pick up items randomly from a list of items without duplication of choice.
+
+```go
+choiceMaker := NewRandChoiceMaker([]int{1, 2, 3})
+for choiceMaker.HasNext() {
+    randItem, _ := choiceMaker.Next()
+}
+// OR
+for {
+    randItem, valid := choiceMaker.Next()
+    if !valid {
+        break
+    }
+}
+```
+
+#### Shuffle
+
+Shuffle items of a slice. Not change the source slice.
+
+```go
+s := Shuffle([]int{1, 2, 3}) // s is a new slice with random items of the input
 ```
 
 #### All
