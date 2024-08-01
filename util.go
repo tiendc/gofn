@@ -27,10 +27,10 @@ func Or[T NumberEx | NumberPtr | StringEx | StringPtr | ~bool | *bool](args ...T
 }
 
 // FirstTrue returns the first "true" value in the given arguments if found
-// True value is not:
+// True value must be not:
 //   - zero value (0, "", nil, false)
 //   - empty slice, array, map, channel
-//   - non-nil pointer points to non-zero value
+//   - pointer points to zero value
 func FirstTrue[T any](a0 T, args ...T) T {
 	a := a0
 	for i := -1; i < len(args); i++ {
