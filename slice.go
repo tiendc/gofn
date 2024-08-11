@@ -503,6 +503,11 @@ func CountValuePred[T any, S ~[]T](a S, pred func(t T) bool) int {
 	return count
 }
 
+// Drop returns a copied slice with dropping items in the list
+func Drop[T comparable, S ~[]T](a S, values ...T) S {
+	return FilterNIN(a, values...)
+}
+
 // ContainSlice tests if a slice contains a slice
 func ContainSlice[T comparable, S ~[]T](a, b S) bool {
 	return IndexOfSlice(a, b) >= 0
