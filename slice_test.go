@@ -946,6 +946,14 @@ func Test_CountValuePred(t *testing.T) {
 		func(t any) bool { return t == St{1, "2"} }))
 }
 
+func Test_Drop(t *testing.T) {
+	// Nil/empty source slice
+	assert.Equal(t, []int{}, Drop([]int(nil)))
+	assert.Equal(t, []int{}, Drop([]int{}))
+
+	assert.Equal(t, []int{1, 4}, Drop([]int{1, 2, 3, 4, 5}, 5, 3, 2, 7))
+}
+
 func Test_GetFirst(t *testing.T) {
 	assert.Equal(t, 1, GetFirst([]int{1, 2, 3}, 4))
 	assert.Equal(t, 11, GetFirst([]int{}, 11))

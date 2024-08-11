@@ -259,6 +259,15 @@ s2 := s[2:4]
 Fill(s2, 1) // s2 == []int{1, 1}, s == []int{0, 0, 1, 1, 0}
 ```
 
+#### Drop
+
+Returns a new slice with dropping values in the specified list.
+NOTE: this function is just a call to `FilterNIN()`.
+
+```go
+Drop([]int{1, 2, 3, 4}, 3, 1) // []int{2, 4}
+```
+
 #### CountValue
 
 Counts the number of occurrences of a value in a slice.
