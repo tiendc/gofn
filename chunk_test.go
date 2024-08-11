@@ -13,7 +13,7 @@ func Test_Chunk(t *testing.T) {
 	assert.True(t, len(chunks) == 0)
 
 	// Nil input
-	chunks = Chunk[int](nil, 5)
+	chunks = Chunk[int]([]int(nil), 5)
 	assert.True(t, len(chunks) == 0)
 
 	// Chunk size greater than input size
@@ -34,7 +34,7 @@ func Test_ChunkByPieces(t *testing.T) {
 	assert.True(t, len(chunks) == 0)
 
 	// Nil input
-	chunks = ChunkByPieces[int](nil, 5)
+	chunks = ChunkByPieces[int]([]int(nil), 5)
 	assert.True(t, len(chunks) == 0)
 
 	// Chunk count is zero

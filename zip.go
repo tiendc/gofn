@@ -1,6 +1,6 @@
 package gofn
 
-func Zip[T any, U any](slice1 []T, slice2 []U) []*Tuple2[T, U] {
+func Zip[T any, U any, S1 ~[]T, S2 ~[]U](slice1 S1, slice2 S2) []*Tuple2[T, U] {
 	minLen := len(slice1)
 	if minLen > len(slice2) {
 		minLen = len(slice2)
@@ -12,7 +12,7 @@ func Zip[T any, U any](slice1 []T, slice2 []U) []*Tuple2[T, U] {
 	return result
 }
 
-func Zip3[T any, U any, V any](slice1 []T, slice2 []U, slice3 []V) []*Tuple3[T, U, V] {
+func Zip3[T any, U any, V any, S1 ~[]T, S2 ~[]U, S3 ~[]V](slice1 S1, slice2 S2, slice3 S3) []*Tuple3[T, U, V] {
 	minLen := len(slice1)
 	if minLen > len(slice2) {
 		minLen = len(slice2)

@@ -25,7 +25,7 @@ func Test_RandChoice(t *testing.T) {
 
 func Test_RandChoiceMaker_Next(t *testing.T) {
 	// Empty input
-	maker1 := NewRandChoiceMaker[int](nil)
+	maker1 := NewRandChoiceMaker[int]([]int(nil))
 	assert.False(t, maker1.HasNext())
 	v1, b1 := maker1.Next()
 	assert.Equal(t, 0, v1)
@@ -57,7 +57,7 @@ func Test_RandChoiceMaker_Next(t *testing.T) {
 
 func Test_Shuffle(t *testing.T) {
 	// Empty input slice
-	s1 := Shuffle[int](nil)
+	s1 := Shuffle[int]([]int(nil))
 	assert.Equal(t, []int{}, s1)
 	// One item input
 	s2 := Shuffle([]float32{1.1})

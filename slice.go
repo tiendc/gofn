@@ -1,7 +1,7 @@
 package gofn
 
 // Equal compares 2 slices with preserving order
-func Equal[T comparable](a, b []T) bool {
+func Equal[T comparable, S ~[]T](a, b S) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -14,7 +14,7 @@ func Equal[T comparable](a, b []T) bool {
 }
 
 // EqualPred compares 2 slices with preserving order
-func EqualPred[T any](a, b []T, equalFunc func(a, b T) bool) bool {
+func EqualPred[T any, S ~[]T](a, b S, equalFunc func(a, b T) bool) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -27,7 +27,7 @@ func EqualPred[T any](a, b []T, equalFunc func(a, b T) bool) bool {
 }
 
 // EqualPredPtr compares 2 slices with preserving order
-func EqualPredPtr[T any](a, b []T, equalFunc func(a, b *T) bool) bool {
+func EqualPredPtr[T any, S ~[]T](a, b S, equalFunc func(a, b *T) bool) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -39,9 +39,9 @@ func EqualPredPtr[T any](a, b []T, equalFunc func(a, b *T) bool) bool {
 	return true
 }
 
-// ContentEqual compares 2 slices without caring about order
-// NOTE: if you want to compare content of slices of pointers, use ContentEqualPtr
-func ContentEqual[T comparable](a, b []T) bool {
+// ContentEqual compares 2 slices without caring about order.
+// NOTE: if you want to compare content of slices of pointers, use ContentEqualPtr.
+func ContentEqual[T comparable, S ~[]T](a, b S) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -73,7 +73,7 @@ func ContentEqual[T comparable](a, b []T) bool {
 }
 
 // ContentEqualPtr compares 2 slices of pointers without caring about order
-func ContentEqualPtr[T comparable](a, b []*T) bool {
+func ContentEqualPtr[T comparable, S ~[]*T](a, b S) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -105,7 +105,7 @@ func ContentEqualPtr[T comparable](a, b []*T) bool {
 }
 
 // ContentEqualPred compares 2 slices without preserving order
-func ContentEqualPred[T any, K comparable](a, b []T, keyFunc func(t T) K) bool {
+func ContentEqualPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -137,12 +137,12 @@ func ContentEqualPred[T any, K comparable](a, b []T, keyFunc func(t T) K) bool {
 }
 
 // Concat concatenates slices
-func Concat[T any](slices ...[]T) []T {
+func Concat[T any, S ~[]T](slices ...S) S {
 	capacity := 0
 	for _, s := range slices {
 		capacity += len(s)
 	}
-	result := make([]T, 0, capacity)
+	result := make(S, 0, capacity)
 	for _, s := range slices {
 		result = append(result, s...)
 	}
@@ -150,7 +150,7 @@ func Concat[T any](slices ...[]T) []T {
 }
 
 // Contain tests if a slice contains an item
-func Contain[T comparable](a []T, t T) bool {
+func Contain[T comparable, S ~[]T](a S, t T) bool {
 	for i := range a {
 		if a[i] == t {
 			return true
@@ -160,7 +160,7 @@ func Contain[T comparable](a []T, t T) bool {
 }
 
 // ContainPred tests if a slice contains an item by predicate
-func ContainPred[T any](a []T, pred func(t T) bool) bool {
+func ContainPred[T any, S ~[]T](a S, pred func(t T) bool) bool {
 	for i := range a {
 		if pred(a[i]) {
 			return true
@@ -170,7 +170,7 @@ func ContainPred[T any](a []T, pred func(t T) bool) bool {
 }
 
 // ContainPredPtr tests if a slice contains an item by predicate
-func ContainPredPtr[T any](a []T, pred func(t *T) bool) bool {
+func ContainPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) bool {
 	for i := range a {
 		if pred(&a[i]) {
 			return true
@@ -180,7 +180,7 @@ func ContainPredPtr[T any](a []T, pred func(t *T) bool) bool {
 }
 
 // ContainAll tests if a slice contains all given values
-func ContainAll[T comparable](a []T, b ...T) bool {
+func ContainAll[T comparable, S ~[]T](a S, b ...T) bool {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
 		return false
@@ -208,7 +208,7 @@ func ContainAll[T comparable](a []T, b ...T) bool {
 }
 
 // ContainAny tests if a slice contains any given value
-func ContainAny[T comparable](a []T, b ...T) bool {
+func ContainAny[T comparable, S ~[]T](a S, b ...T) bool {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
 		return false
@@ -236,7 +236,7 @@ func ContainAny[T comparable](a []T, b ...T) bool {
 }
 
 // IsUnique checks a slice for uniqueness
-func IsUnique[T comparable](s []T) bool {
+func IsUnique[T comparable, S ~[]T](s S) bool {
 	length := len(s)
 	if length <= 1 {
 		return true
@@ -253,7 +253,7 @@ func IsUnique[T comparable](s []T) bool {
 }
 
 // IsUniquePred checks a slice for uniqueness using key function
-func IsUniquePred[T any, U comparable](s []T, keyFunc func(t T) U) bool {
+func IsUniquePred[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
 	length := len(s)
 	if length <= 1 {
 		return true
@@ -270,7 +270,7 @@ func IsUniquePred[T any, U comparable](s []T, keyFunc func(t T) U) bool {
 }
 
 // FindPred finds value in slice by predicate
-func FindPred[T any](a []T, pred func(t T) bool) (t T, found bool) {
+func FindPred[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
 	for i := range a {
 		if pred(a[i]) {
 			return a[i], true
@@ -280,7 +280,7 @@ func FindPred[T any](a []T, pred func(t T) bool) (t T, found bool) {
 }
 
 // FindPredPtr finds value in slice by predicate
-func FindPredPtr[T any](a []T, pred func(t *T) bool) (t T, found bool) {
+func FindPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 	for i := range a {
 		if pred(&a[i]) {
 			return a[i], true
@@ -290,7 +290,7 @@ func FindPredPtr[T any](a []T, pred func(t *T) bool) (t T, found bool) {
 }
 
 // FindLastPred finds value in slice from the end by predicate
-func FindLastPred[T any](a []T, pred func(t T) bool) (t T, found bool) {
+func FindLastPred[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
 	for i := len(a) - 1; i >= 0; i-- {
 		if pred(a[i]) {
 			return a[i], true
@@ -300,7 +300,7 @@ func FindLastPred[T any](a []T, pred func(t T) bool) (t T, found bool) {
 }
 
 // FindLastPredPtr finds value in slice from the end by predicate
-func FindLastPredPtr[T any](a []T, pred func(t *T) bool) (t T, found bool) {
+func FindLastPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 	for i := len(a) - 1; i >= 0; i-- {
 		if pred(&a[i]) {
 			return a[i], true
@@ -309,9 +309,9 @@ func FindLastPredPtr[T any](a []T, pred func(t *T) bool) (t T, found bool) {
 	return t, false
 }
 
-// IndexOf gets index of item in slice
-// Returns -1 if not found
-func IndexOf[T comparable](a []T, t T) int {
+// IndexOf gets index of item in slice.
+// Returns -1 if not found.
+func IndexOf[T comparable, S ~[]T](a S, t T) int {
 	for i := range a {
 		if a[i] == t {
 			return i
@@ -320,9 +320,9 @@ func IndexOf[T comparable](a []T, t T) int {
 	return -1
 }
 
-// IndexOfPred gets index of item in slice by predicate
-// Returns -1 if not found
-func IndexOfPred[T any](a []T, pred func(t T) bool) int {
+// IndexOfPred gets index of item in slice by predicate.
+// Returns -1 if not found.
+func IndexOfPred[T any, S ~[]T](a S, pred func(t T) bool) int {
 	for i := range a {
 		if pred(a[i]) {
 			return i
@@ -331,9 +331,9 @@ func IndexOfPred[T any](a []T, pred func(t T) bool) int {
 	return -1
 }
 
-// LastIndexOf gets index of item from the end in slice
-// Returns -1 if not found
-func LastIndexOf[T comparable](a []T, t T) int {
+// LastIndexOf gets index of item from the end in slice.
+// Returns -1 if not found.
+func LastIndexOf[T comparable, S ~[]T](a S, t T) int {
 	for i := len(a) - 1; i >= 0; i-- {
 		if a[i] == t {
 			return i
@@ -342,9 +342,9 @@ func LastIndexOf[T comparable](a []T, t T) int {
 	return -1
 }
 
-// LastIndexOfPred gets index of item from the end in slice
-// Returns -1 if not found
-func LastIndexOfPred[T any](a []T, pred func(t T) bool) int {
+// LastIndexOfPred gets index of item from the end in slice.
+// Returns -1 if not found.
+func LastIndexOfPred[T any, S ~[]T](a S, pred func(t T) bool) int {
 	for i := len(a) - 1; i >= 0; i-- {
 		if pred(a[i]) {
 			return i
@@ -354,7 +354,7 @@ func LastIndexOfPred[T any](a []T, pred func(t T) bool) int {
 }
 
 // RemoveAt removes element at the specified index
-func RemoveAt[T any](ps *[]T, i int) {
+func RemoveAt[T any, S ~[]T](ps *S, i int) {
 	s := *ps
 	if i < 0 || i >= len(s) {
 		panic(ErrIndexOutOfRange)
@@ -366,7 +366,7 @@ func RemoveAt[T any](ps *[]T, i int) {
 }
 
 // FastRemoveAt removes element at the specified index by swapping it with the last item in slice
-func FastRemoveAt[T any](ps *[]T, i int) {
+func FastRemoveAt[T any, S ~[]T](ps *S, i int) {
 	s := *ps
 	length := len(s)
 	if i < 0 || i >= length {
@@ -379,7 +379,7 @@ func FastRemoveAt[T any](ps *[]T, i int) {
 }
 
 // Remove removes element value
-func Remove[T comparable](ps *[]T, v T) bool {
+func Remove[T comparable, S ~[]T](ps *S, v T) bool {
 	i := IndexOf(*ps, v)
 	if i == -1 {
 		return false
@@ -389,7 +389,7 @@ func Remove[T comparable](ps *[]T, v T) bool {
 }
 
 // FastRemove removes element value
-func FastRemove[T comparable](ps *[]T, v T) bool {
+func FastRemove[T comparable, S ~[]T](ps *S, v T) bool {
 	i := IndexOf(*ps, v)
 	if i == -1 {
 		return false
@@ -399,7 +399,7 @@ func FastRemove[T comparable](ps *[]T, v T) bool {
 }
 
 // RemoveLastOf removes element value
-func RemoveLastOf[T comparable](ps *[]T, v T) bool {
+func RemoveLastOf[T comparable, S ~[]T](ps *S, v T) bool {
 	i := LastIndexOf(*ps, v)
 	if i == -1 {
 		return false
@@ -409,7 +409,7 @@ func RemoveLastOf[T comparable](ps *[]T, v T) bool {
 }
 
 // FastRemoveLastOf removes element value
-func FastRemoveLastOf[T comparable](ps *[]T, v T) bool {
+func FastRemoveLastOf[T comparable, S ~[]T](ps *S, v T) bool {
 	i := LastIndexOf(*ps, v)
 	if i == -1 {
 		return false
@@ -419,7 +419,7 @@ func FastRemoveLastOf[T comparable](ps *[]T, v T) bool {
 }
 
 // RemoveAll removes all occurrences of value
-func RemoveAll[T comparable](ps *[]T, v T) int {
+func RemoveAll[T comparable, S ~[]T](ps *S, v T) int {
 	newIdx := 0
 	count := 0
 	s := *ps
@@ -438,8 +438,9 @@ func RemoveAll[T comparable](ps *[]T, v T) int {
 	return count
 }
 
-func Compact[T comparable](s []T) []T {
-	result := make([]T, 0, len(s))
+// Compact excludes all zero items in a slice
+func Compact[T comparable, S ~[]T](s S) S {
+	result := make(S, 0, len(s))
 	var zeroT T
 	for _, v := range s {
 		if v == zeroT {
@@ -451,7 +452,7 @@ func Compact[T comparable](s []T) []T {
 }
 
 // Replace replaces a value in slice with another value
-func Replace[T comparable](s []T, value, replacement T) bool {
+func Replace[T comparable, S ~[]T](s S, value, replacement T) bool {
 	for i := range s {
 		if s[i] == value {
 			s[i] = replacement
@@ -462,7 +463,7 @@ func Replace[T comparable](s []T, value, replacement T) bool {
 }
 
 // ReplaceAll replaces a value in slice with another value
-func ReplaceAll[T comparable](s []T, value, replacement T) int {
+func ReplaceAll[T comparable, S ~[]T](s S, value, replacement T) int {
 	count := 0
 	for i := range s {
 		if s[i] == value {
@@ -474,14 +475,14 @@ func ReplaceAll[T comparable](s []T, value, replacement T) int {
 }
 
 // Fill sets slice element values
-func Fill[T any](a []T, val T) {
+func Fill[T any, S ~[]T](a S, val T) {
 	for i := range a {
 		a[i] = val
 	}
 }
 
 // CountValue counts number of occurrences of an item in the slice
-func CountValue[T comparable](a []T, val T) int {
+func CountValue[T comparable, S ~[]T](a S, val T) int {
 	count := 0
 	for i := range a {
 		if a[i] == val {
@@ -492,7 +493,7 @@ func CountValue[T comparable](a []T, val T) int {
 }
 
 // CountValuePred counts number of occurrences of an item in the slice
-func CountValuePred[T any](a []T, pred func(t T) bool) int {
+func CountValuePred[T any, S ~[]T](a S, pred func(t T) bool) int {
 	count := 0
 	for i := range a {
 		if pred(a[i]) {
@@ -503,13 +504,13 @@ func CountValuePred[T any](a []T, pred func(t T) bool) int {
 }
 
 // ContainSlice tests if a slice contains a slice
-func ContainSlice[T comparable](a, b []T) bool {
+func ContainSlice[T comparable, S ~[]T](a, b S) bool {
 	return IndexOfSlice(a, b) >= 0
 }
 
-// IndexOfSlice gets index of sub-slice in slice
-// Returns -1 if not found
-func IndexOfSlice[T comparable](a, sub []T) int {
+// IndexOfSlice gets index of sub-slice in slice.
+// Returns -1 if not found.
+func IndexOfSlice[T comparable, S ~[]T](a, sub S) int {
 	lengthA := len(a)
 	lengthSub := len(sub)
 	if lengthSub == 0 || lengthA < lengthSub {
@@ -535,7 +536,7 @@ func IndexOfSlice[T comparable](a, sub []T) int {
 
 // LastIndexOfSlice gets last index of sub-slice in slice
 // Returns -1 if not found
-func LastIndexOfSlice[T comparable](a []T, sub []T) int {
+func LastIndexOfSlice[T comparable, S ~[]T](a, sub S) int {
 	lengthA := len(a)
 	lengthSub := len(sub)
 	if lengthSub == 0 || lengthA < lengthSub {
@@ -559,7 +560,7 @@ func LastIndexOfSlice[T comparable](a []T, sub []T) int {
 	return -1
 }
 
-func GetFirst[T any](s []T, defaultVal T) T {
+func GetFirst[T any, S ~[]T](s S, defaultVal T) T {
 	if len(s) > 0 {
 		return s[0]
 	}
@@ -573,14 +574,14 @@ func GetLast[T any](s []T, defaultVal T) T {
 	return defaultVal
 }
 
-// SubSlice gets sub slice from a slice
-// Passing negative numbers to get items from the end of the slice
+// SubSlice gets sub slice from a slice.
+// Passing negative numbers to get items from the end of the slice.
 // For example, using start=-1, end=-2 to get the last item of the slice
 // end param is exclusive.
-func SubSlice[T any](s []T, start, end int) []T {
+func SubSlice[T any, S ~[]T](s S, start, end int) S {
 	length := len(s)
 	if length == 0 {
-		return []T{}
+		return S{}
 	}
 
 	for start < 0 {
@@ -603,8 +604,8 @@ func SubSlice[T any](s []T, start, end int) []T {
 	return s[start:end]
 }
 
-// SliceByRange generates a slice by range
-// start is inclusive, end is exclusive
+// SliceByRange generates a slice by range.
+// start is inclusive, end is exclusive.
 func SliceByRange[T NumberEx](start, end, step T) []T {
 	if end > start {
 		if step <= 0 {

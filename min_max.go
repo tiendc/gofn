@@ -13,7 +13,7 @@ func Min[T NumberEx | ~string](v1 T, s ...T) T {
 
 // MinIn find the minimum value in the list
 // Use min := Must(MinIn(slice)) to panic on error
-func MinIn[T NumberEx | ~string](s []T) (T, error) {
+func MinIn[T NumberEx | ~string, S ~[]T](s S) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
 		return zeroT, ErrEmpty
@@ -28,7 +28,7 @@ func MinIn[T NumberEx | ~string](s []T) (T, error) {
 }
 
 // MinInPred find the minimum value in the list
-func MinInPred[T any](s []T, lessFunc func(a, b T) bool) (T, error) {
+func MinInPred[T any, S ~[]T](s S, lessFunc func(a, b T) bool) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
 		return zeroT, ErrEmpty
@@ -55,7 +55,7 @@ func Max[T NumberEx | ~string](v1 T, s ...T) T {
 
 // MaxIn finds the maximum value in the list
 // Use max := Must(MaxIn(slice)) to panic on error
-func MaxIn[T NumberEx | ~string](s []T) (T, error) {
+func MaxIn[T NumberEx | ~string, S ~[]T](s S) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
 		return zeroT, ErrEmpty
@@ -70,7 +70,7 @@ func MaxIn[T NumberEx | ~string](s []T) (T, error) {
 }
 
 // MaxInPred finds the maximum value in the list
-func MaxInPred[T any](s []T, lessFunc func(a, b T) bool) (T, error) {
+func MaxInPred[T any, S ~[]T](s S, lessFunc func(a, b T) bool) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
 		return zeroT, ErrEmpty

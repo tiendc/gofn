@@ -7,12 +7,12 @@ import (
 
 // StringJoin join elements from a slice of any type
 // This function calls fmt.Sprintf("%v", elem) to format every element
-func StringJoin[T any](s []T, sep string) string {
+func StringJoin[T any, S ~[]T](s S, sep string) string {
 	return StringJoinEx(s, sep, "%v")
 }
 
 // StringJoinEx join elements from a slice of any type with custom format string
-func StringJoinEx[T any](s []T, sep, format string) string {
+func StringJoinEx[T any, S ~[]T](s S, sep, format string) string {
 	switch len(s) {
 	case 0:
 		return ""
@@ -28,7 +28,7 @@ func StringJoinEx[T any](s []T, sep, format string) string {
 }
 
 // StringJoinPred join elements from a slice of any type with custom format function
-func StringJoinPred[T any](s []T, sep string, fmtFunc func(v T) string) string {
+func StringJoinPred[T any, S ~[]T](s S, sep string, fmtFunc func(v T) string) string {
 	switch len(s) {
 	case 0:
 		return ""

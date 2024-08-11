@@ -8,7 +8,7 @@ import (
 
 func Test_Filter(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, Filter[int](nil, func(v int) bool { return true }))
+	assert.Equal(t, []int{}, Filter[int]([]int(nil), func(v int) bool { return true }))
 	assert.Equal(t, []float32{}, Filter([]float32{}, func(v float32) bool { return true }))
 
 	assert.Equal(t, []int{-4, 0},
@@ -21,7 +21,7 @@ func Test_Filter(t *testing.T) {
 
 func Test_FilterPtr(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, FilterPtr[int](nil, func(v *int) bool { return true }))
+	assert.Equal(t, []int{}, FilterPtr[int]([]int(nil), func(v *int) bool { return true }))
 	assert.Equal(t, []float32{}, FilterPtr([]float32{}, func(v *float32) bool { return true }))
 
 	assert.Equal(t, []int{-4, 0},
@@ -34,7 +34,7 @@ func Test_FilterPtr(t *testing.T) {
 
 func Test_FilterLT(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, FilterLT[int](nil, 0))
+	assert.Equal(t, []int{}, FilterLT[int]([]int(nil), 0))
 	assert.Equal(t, []int{}, FilterLT([]int{}, 0))
 
 	assert.Equal(t, []int{-10, -3}, FilterLT([]int{0, -10, 1, -3, 0, 7}, 0))
@@ -43,7 +43,7 @@ func Test_FilterLT(t *testing.T) {
 
 func Test_FilterLTE(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, FilterLTE[int](nil, 0))
+	assert.Equal(t, []int{}, FilterLTE[int]([]int(nil), 0))
 	assert.Equal(t, []int{}, FilterLTE([]int{}, 0))
 
 	assert.Equal(t, []int{0, -10, -3, 0}, FilterLTE([]int{0, -10, 1, -3, 0, 7}, 0))
@@ -52,7 +52,7 @@ func Test_FilterLTE(t *testing.T) {
 
 func Test_FilterGT(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, FilterGT[int](nil, 0))
+	assert.Equal(t, []int{}, FilterGT[int]([]int(nil), 0))
 	assert.Equal(t, []int{}, FilterGT([]int{}, 0))
 
 	assert.Equal(t, []int{1, 7}, FilterGT([]int{0, -10, 1, -3, 0, 7}, 0))
@@ -61,7 +61,7 @@ func Test_FilterGT(t *testing.T) {
 
 func Test_FilterGTE(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, FilterGTE[int](nil, 0))
+	assert.Equal(t, []int{}, FilterGTE[int]([]int(nil), 0))
 	assert.Equal(t, []int{}, FilterGTE([]int{}, 0))
 
 	assert.Equal(t, []int{0, 1, 0, 7}, FilterGTE([]int{0, -10, 1, -3, 0, 7}, 0))
@@ -70,7 +70,7 @@ func Test_FilterGTE(t *testing.T) {
 
 func Test_FilterNE(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, FilterNE[int](nil, 0))
+	assert.Equal(t, []int{}, FilterNE[int]([]int(nil), 0))
 	assert.Equal(t, []int{}, FilterNE([]int{}, 0))
 
 	assert.Equal(t, []int{-10, 1, -3, 7}, FilterNE([]int{0, -10, 1, -3, 0, 7}, 0))
@@ -79,7 +79,7 @@ func Test_FilterNE(t *testing.T) {
 
 func Test_FilterIN(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, FilterIN[int](nil, 0))
+	assert.Equal(t, []int{}, FilterIN[int]([]int(nil), 0))
 	assert.Equal(t, []int{}, FilterIN([]int{}, 0))
 
 	assert.Equal(t, []int{1, 7}, FilterIN([]int{0, -10, 1, -3, 0, 7}, 1, 3, 7))
@@ -88,7 +88,7 @@ func Test_FilterIN(t *testing.T) {
 
 func Test_FilterNIN(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []int{}, FilterNIN[int](nil, 0))
+	assert.Equal(t, []int{}, FilterNIN[int]([]int(nil), 0))
 	assert.Equal(t, []int{}, FilterNIN([]int{}, 0))
 
 	assert.Equal(t, []int{-10, 1, -3}, FilterNIN([]int{0, -10, 1, -3, 0, 7}, 3, 7, 0))
@@ -97,7 +97,7 @@ func Test_FilterNIN(t *testing.T) {
 
 func Test_FilterLIKE(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []string{}, FilterLIKE[string](nil, ""))
+	assert.Equal(t, []string{}, FilterLIKE[string]([]string(nil), ""))
 	assert.Equal(t, []string{}, FilterLIKE([]string{}, ""))
 
 	assert.Equal(t, []string{},
@@ -118,7 +118,7 @@ func Test_FilterLIKE(t *testing.T) {
 
 func Test_FilterILIKE(t *testing.T) {
 	// Nil/Empty slices
-	assert.Equal(t, []string{}, FilterILIKE[string](nil, ""))
+	assert.Equal(t, []string{}, FilterILIKE[string]([]string(nil), ""))
 	assert.Equal(t, []string{}, FilterILIKE([]string{}, ""))
 
 	assert.Equal(t, []string{},

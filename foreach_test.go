@@ -8,7 +8,7 @@ import (
 
 func Test_ForEach(t *testing.T) {
 	copy1 := []int{}
-	ForEach[int](nil, func(i int, t int) { copy1 = append(copy1, t) })
+	ForEach[int]([]int(nil), func(i int, t int) { copy1 = append(copy1, t) })
 	assert.Equal(t, []int{}, copy1)
 
 	copy2 := []int64{}
@@ -18,7 +18,7 @@ func Test_ForEach(t *testing.T) {
 
 func Test_ForEachPtr(t *testing.T) {
 	copy1 := []int{}
-	ForEachPtr[int](nil, func(i int, t *int) { copy1 = append(copy1, *t) })
+	ForEachPtr[int]([]int(nil), func(i int, t *int) { copy1 = append(copy1, *t) })
 	assert.Equal(t, []int{}, copy1)
 
 	copy2 := []int64{}
@@ -28,7 +28,7 @@ func Test_ForEachPtr(t *testing.T) {
 
 func Test_ForEachReverse(t *testing.T) {
 	copy1 := []int{}
-	ForEachReverse[int](nil, func(i int, t int) { copy1 = append(copy1, t) })
+	ForEachReverse[int]([]int(nil), func(i int, t int) { copy1 = append(copy1, t) })
 	assert.Equal(t, []int{}, copy1)
 
 	copy2 := []int64{}
@@ -38,7 +38,7 @@ func Test_ForEachReverse(t *testing.T) {
 
 func Test_ForEachReversePtr(t *testing.T) {
 	copy1 := []int{}
-	ForEachReversePtr[int](nil, func(i int, t *int) { copy1 = append(copy1, *t) })
+	ForEachReversePtr[int]([]int(nil), func(i int, t *int) { copy1 = append(copy1, *t) })
 	assert.Equal(t, []int{}, copy1)
 
 	copy2 := []int64{}

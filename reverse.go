@@ -1,7 +1,7 @@
 package gofn
 
 // Reverse func Reverse[S ~[]E, E any](s S)  {
-func Reverse[T any](s []T) []T {
+func Reverse[T any, S ~[]T](s S) S {
 	if len(s) == 0 {
 		return s
 	}
@@ -11,8 +11,8 @@ func Reverse[T any](s []T) []T {
 	return s
 }
 
-func ReverseCopy[T any](s []T) []T {
-	result := make([]T, len(s))
+func ReverseCopy[T any, S ~[]T](s S) S {
+	result := make(S, len(s))
 	for i, j := 0, len(s)-1; j >= 0; j-- {
 		result[i] = s[j]
 		i++

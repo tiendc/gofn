@@ -1,6 +1,6 @@
 package gofn
 
-func Union[T comparable](a, b []T) []T {
+func Union[T comparable, S ~[]T](a, b S) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 {
 		return ToSet(b)
@@ -10,7 +10,7 @@ func Union[T comparable](a, b []T) []T {
 	}
 
 	seen := make(map[T]struct{}, lenA+lenB)
-	result := make([]T, 0, lenA+lenB)
+	result := make(S, 0, lenA+lenB)
 
 	for i := 0; i < lenA; i++ {
 		v := a[i]
@@ -32,7 +32,7 @@ func Union[T comparable](a, b []T) []T {
 	return result
 }
 
-func UnionPred[T any, K comparable](a, b []T, keyFunc func(t T) K) []T {
+func UnionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 {
 		return ToSetPred(b, keyFunc)
@@ -42,7 +42,7 @@ func UnionPred[T any, K comparable](a, b []T, keyFunc func(t T) K) []T {
 	}
 
 	seen := make(map[K]struct{}, lenA+lenB)
-	result := make([]T, 0, lenA+lenB)
+	result := make(S, 0, lenA+lenB)
 
 	for i := 0; i < lenA; i++ {
 		v := a[i]
@@ -66,14 +66,14 @@ func UnionPred[T any, K comparable](a, b []T, keyFunc func(t T) K) []T {
 	return result
 }
 
-func Intersection[T comparable](a, b []T) []T {
+func Intersection[T comparable, S ~[]T](a, b S) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
-		return []T{}
+		return S{}
 	}
 
 	seen := make(map[T]*bool, lenA)
-	result := make([]T, 0, Min(lenA, lenB))
+	result := make(S, 0, Min(lenA, lenB))
 
 	for i := 0; i < lenA; i++ {
 		active := true
@@ -90,14 +90,14 @@ func Intersection[T comparable](a, b []T) []T {
 	return result
 }
 
-func IntersectionPred[T any, K comparable](a, b []T, keyFunc func(t T) K) []T {
+func IntersectionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
-		return []T{}
+		return S{}
 	}
 
 	seen := make(map[K]*bool, lenA)
-	result := make([]T, 0, Min(lenA, lenB))
+	result := make(S, 0, Min(lenA, lenB))
 
 	for i := 0; i < lenA; i++ {
 		active := true
@@ -115,15 +115,15 @@ func IntersectionPred[T any, K comparable](a, b []T, keyFunc func(t T) K) []T {
 	return result
 }
 
-// Difference calculates the differences between two slices
-// NOTE: this function does not return unique values
-func Difference[T comparable](a []T, b []T) ([]T, []T) {
+// Difference calculates the differences between two slices.
+// NOTE: this function does not return unique values.
+func Difference[T comparable, S ~[]T](a, b S) (S, S) {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
-		return ToSlice(a...), ToSlice(b...)
+		return append(S{}, a...), append(S{}, b...)
 	}
 
-	leftDiff, rightDiff := []T{}, []T{}
+	leftDiff, rightDiff := S{}, S{}
 	leftMap, rightMap := make(map[T]struct{}, lenA), make(map[T]struct{}, lenB)
 
 	for _, v := range a {
@@ -149,13 +149,13 @@ func Difference[T comparable](a []T, b []T) ([]T, []T) {
 
 // DifferencePred calculates the differences between two slices using special key function
 // NOTE: this function does not return unique values
-func DifferencePred[T any, K comparable](a, b []T, keyFunc func(t T) K) ([]T, []T) {
+func DifferencePred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) (S, S) {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
-		return ToSlice(a...), ToSlice(b...)
+		return append(S{}, a...), append(S{}, b...)
 	}
 
-	leftDiff, rightDiff := []T{}, []T{}
+	leftDiff, rightDiff := S{}, S{}
 	leftMap, rightMap := make(map[K]struct{}, lenA), make(map[K]struct{}, lenB)
 
 	for _, v := range a {

@@ -7,7 +7,7 @@ import (
 )
 
 func Test_Union(t *testing.T) {
-	assert.Equal(t, []int{}, Union[int](nil, nil))
+	assert.Equal(t, []int{}, Union[int]([]int(nil), nil))
 	assert.Equal(t, []int{}, Union(nil, []int{}))
 	assert.Equal(t, []int{1}, Union([]int{1}, nil))
 
@@ -18,7 +18,7 @@ func Test_Union(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_UnionPred(t *testing.T) {
-	assert.Equal(t, []any{}, UnionPred[any](nil, nil, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, UnionPred[any]([]any(nil), nil, func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{}, UnionPred(nil, []any{}, func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{1}, UnionPred([]any{1}, nil, func(t any) int { return t.(int) }))
 
@@ -32,7 +32,7 @@ func Test_UnionPred(t *testing.T) {
 }
 
 func Test_Intersection(t *testing.T) {
-	assert.Equal(t, []int{}, Intersection[int](nil, nil))
+	assert.Equal(t, []int{}, Intersection[int]([]int(nil), nil))
 	assert.Equal(t, []int{}, Intersection(nil, []int{}))
 	assert.Equal(t, []int{}, Intersection([]int{1}, nil))
 	assert.Equal(t, []int{}, Intersection(nil, []int{1}))
@@ -44,7 +44,7 @@ func Test_Intersection(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_IntersectionPred(t *testing.T) {
-	assert.Equal(t, []any{}, IntersectionPred[any](nil, nil, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, IntersectionPred[any]([]any(nil), nil, func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{}, IntersectionPred(nil, []any{}, func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{}, IntersectionPred([]any{1}, nil, func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{}, IntersectionPred(nil, []any{1}, func(t any) int { return t.(int) }))
@@ -59,7 +59,7 @@ func Test_IntersectionPred(t *testing.T) {
 }
 
 func Test_Difference(t *testing.T) {
-	l, r := Difference[int](nil, nil)
+	l, r := Difference[int]([]int(nil), nil)
 	assert.Equal(t, []int{}, l)
 	assert.Equal(t, []int{}, r)
 	l, r = Difference([]int{}, nil)
@@ -81,7 +81,7 @@ func Test_Difference(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_DifferencePred(t *testing.T) {
-	l, r := DifferencePred[any](nil, nil, func(t any) int { return t.(int) })
+	l, r := DifferencePred[any]([]any(nil), nil, func(t any) int { return t.(int) })
 	assert.Equal(t, []any{}, l)
 	assert.Equal(t, []any{}, r)
 	l, r = DifferencePred([]any{}, nil, func(t any) int { return t.(int) })
