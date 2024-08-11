@@ -89,7 +89,7 @@ func Test_MapContainValues(t *testing.T) {
 }
 
 func Test_MapKeys(t *testing.T) {
-	assert.Equal(t, []int{}, MapKeys[int, bool](nil))
+	assert.Equal(t, []int{}, MapKeys[int, bool, map[int]bool](nil))
 	assert.Equal(t, []int{}, MapKeys(map[int]bool{}))
 
 	assert.Equal(t, []int{1}, MapKeys(map[int]int{1: 11}))
@@ -108,7 +108,7 @@ func Test_MapValues(t *testing.T) {
 }
 
 func Test_MapEntries(t *testing.T) {
-	assert.Equal(t, []*Tuple2[int, bool]{}, MapEntries[int, bool](nil))
+	assert.Equal(t, []*Tuple2[int, bool]{}, MapEntries[int, bool, map[int]bool](nil))
 	assert.Equal(t, []*Tuple2[int, int]{}, MapEntries(map[int]int{}))
 
 	assert.Equal(t, []*Tuple2[int, int]{{1, 11}}, MapEntries(map[int]int{1: 11}))
@@ -128,6 +128,11 @@ func Test_MapUpdate(t *testing.T) {
 	// Merge 2 maps with override
 	assert.Equal(t, map[int]string{1: "one", 2: "TWO", 3: "three"},
 		MapUpdate(map[int]string{2: "two"}, map[int]string{1: "one", 2: "TWO", 3: "three"}))
+
+	// Derived type
+	type Map map[int]string
+	assert.Equal(t, Map{1: "one", 2: "two", 3: "three"},
+		MapUpdate(Map{2: "two"}, map[int]string{1: "one", 3: "three"}))
 }
 
 func Test_MapUpdateExistingOnly(t *testing.T) {
@@ -151,7 +156,7 @@ func Test_MapUpdateNewOnly(t *testing.T) {
 }
 
 func Test_MapGet(t *testing.T) {
-	assert.Equal(t, true, MapGet[int, bool](nil, 1, true))
+	assert.Equal(t, true, MapGet[int, bool, map[int]bool](nil, 1, true))
 	assert.Equal(t, 11, MapGet(map[int]int{}, 1, 11))
 
 	assert.Equal(t, 11, MapGet(map[int]int{1: 11}, 1, 100))
@@ -159,7 +164,7 @@ func Test_MapGet(t *testing.T) {
 }
 
 func Test_MapPop(t *testing.T) {
-	assert.Equal(t, true, MapPop[int, bool](nil, 1, true))
+	assert.Equal(t, true, MapPop[int, bool, map[int]bool](nil, 1, true))
 	assert.Equal(t, 11, MapPop(map[int]int{}, 1, 11))
 
 	m1 := map[int]int{1: 11}
@@ -171,7 +176,7 @@ func Test_MapPop(t *testing.T) {
 }
 
 func Test_MapSetDefault(t *testing.T) {
-	assert.Equal(t, true, MapSetDefault[int, bool](nil, 1, true))
+	assert.Equal(t, true, MapSetDefault[int, bool, map[int]bool](nil, 1, true))
 	assert.Equal(t, 11, MapSetDefault(map[int]int{}, 1, 11))
 
 	m1 := map[int]int{1: 11}
@@ -183,7 +188,7 @@ func Test_MapSetDefault(t *testing.T) {
 }
 
 func Test_MapUnionKeys(t *testing.T) {
-	assert.Equal(t, []int{}, MapUnionKeys[int, int](nil, nil))
+	assert.Equal(t, []int{}, MapUnionKeys[int, int, map[int]int](nil, nil))
 	assert.Equal(t, []int{}, MapUnionKeys(nil, map[int]int{}))
 	assert.Equal(t, []int{1}, MapUnionKeys(map[int]int{1: 11}, nil))
 
@@ -194,7 +199,7 @@ func Test_MapUnionKeys(t *testing.T) {
 }
 
 func Test_MapIntersectionKeys(t *testing.T) {
-	assert.Equal(t, []int{}, MapIntersectionKeys[int, int](nil, nil))
+	assert.Equal(t, []int{}, MapIntersectionKeys[int, int, map[int]int](nil, nil))
 	assert.Equal(t, []int{}, MapIntersectionKeys(nil, map[int]int{}))
 	assert.Equal(t, []int{}, MapIntersectionKeys(map[int]int{1: 11}, nil))
 
@@ -205,7 +210,7 @@ func Test_MapIntersectionKeys(t *testing.T) {
 }
 
 func Test_MapDifferenceKeys(t *testing.T) {
-	l, r := MapDifferenceKeys[int, int](nil, nil)
+	l, r := MapDifferenceKeys[int, int, map[int]int](nil, nil)
 	assert.Equal(t, []int{}, l)
 	assert.Equal(t, []int{}, r)
 	l, r = MapDifferenceKeys(nil, map[int]int{})
@@ -215,17 +220,21 @@ func Test_MapDifferenceKeys(t *testing.T) {
 	assert.Equal(t, []int{1}, l)
 	assert.Equal(t, []int{}, r)
 
-	l, r = MapDifferenceKeys(map[int]int{1: 11, 2: 22}, map[int]int{3: 33, 4: 44})
+	// Derived types
+	type MapII map[int]int
+	type MapSI map[string]int
+
+	l, r = MapDifferenceKeys(map[int]int{1: 11, 2: 22}, MapII{3: 33, 4: 44})
 	assert.True(t, ContentEqual([]int{1, 2}, l))
 	assert.True(t, ContentEqual([]int{3, 4}, r))
 
-	l2, r2 := MapDifferenceKeys(map[string]int{"1": 11, "2": 22}, map[string]int{"3": 33, "2": 22})
+	l2, r2 := MapDifferenceKeys(MapSI{"1": 11, "2": 22}, map[string]int{"3": 33, "2": 22})
 	assert.True(t, ContentEqual([]string{"1"}, l2))
 	assert.True(t, ContentEqual([]string{"3"}, r2))
 }
 
 func Test_MapCopy(t *testing.T) {
-	m := MapCopy[int, int](nil)
+	m := MapCopy[int, int, map[int]int](nil)
 	assert.Equal(t, map[int]int{}, m)
 	m = MapCopy[int, int](map[int]int{}, 1, 2, 3)
 	assert.Equal(t, map[int]int{}, m)
@@ -238,7 +247,7 @@ func Test_MapCopy(t *testing.T) {
 }
 
 func Test_MapCopyExcludeKeys(t *testing.T) {
-	m := MapCopyExcludeKeys[int, int](nil)
+	m := MapCopyExcludeKeys[int, int, map[int]int](nil)
 	assert.Equal(t, map[int]int{}, m)
 	m = MapCopyExcludeKeys[int, int](map[int]int{}, 1, 2, 3)
 	assert.Equal(t, map[int]int{}, m)
