@@ -1,7 +1,7 @@
 package gofn
 
-// MapEqual compares contents of 2 map
-func MapEqual[K comparable, V comparable](m1, m2 map[K]V) bool {
+// MapEqual compares contents of 2 maps
+func MapEqual[K comparable, V comparable, M ~map[K]V](m1, m2 M) bool {
 	if len(m1) != len(m2) {
 		return false
 	}
@@ -13,8 +13,8 @@ func MapEqual[K comparable, V comparable](m1, m2 map[K]V) bool {
 	return true
 }
 
-// MapEqualPred compares contents of 2 map
-func MapEqualPred[K comparable, V any](m1, m2 map[K]V, equalFunc func(v1, v2 V) bool) bool {
+// MapEqualPred compares contents of 2 maps
+func MapEqualPred[K comparable, V any, M ~map[K]V](m1, m2 M, equalFunc func(v1, v2 V) bool) bool {
 	if len(m1) != len(m2) {
 		return false
 	}
@@ -27,7 +27,7 @@ func MapEqualPred[K comparable, V any](m1, m2 map[K]V, equalFunc func(v1, v2 V) 
 }
 
 // MapContainKeys tests if a map contains one or more keys
-func MapContainKeys[K comparable, V any](m map[K]V, keys ...K) bool {
+func MapContainKeys[K comparable, V any, M ~map[K]V](m M, keys ...K) bool {
 	for _, k := range keys {
 		if _, exists := m[k]; !exists {
 			return false
@@ -36,9 +36,9 @@ func MapContainKeys[K comparable, V any](m map[K]V, keys ...K) bool {
 	return true
 }
 
-// MapContainValues tests if a map contains one or more values (complexity is O(n))
-// If you often need to check existence of map value, consider using bi-map data structure
-func MapContainValues[K comparable, V comparable](m map[K]V, values ...V) bool {
+// MapContainValues tests if a map contains one or more values (complexity is O(n)).
+// If you often need to check existence of map value, consider using bi-map data structure.
+func MapContainValues[K comparable, V comparable, M ~map[K]V](m M, values ...V) bool {
 	for _, v := range values {
 		found := false
 		for _, x := range m {
@@ -55,7 +55,7 @@ func MapContainValues[K comparable, V comparable](m map[K]V, values ...V) bool {
 }
 
 // MapKeys gets map keys as slice
-func MapKeys[K comparable, V any](m map[K]V) []K {
+func MapKeys[K comparable, V any, M ~map[K]V](m M) []K {
 	keys := make([]K, len(m))
 	i := 0
 	for k := range m {
@@ -77,7 +77,7 @@ func MapValues[K comparable, V any](m map[K]V) []V {
 }
 
 // MapEntries returns a slice of map entries as Tuple2 type
-func MapEntries[K comparable, V any](m map[K]V) []*Tuple2[K, V] {
+func MapEntries[K comparable, V any, M ~map[K]V](m M) []*Tuple2[K, V] {
 	items := make([]*Tuple2[K, V], len(m))
 	i := 0
 	for k, v := range m {
@@ -87,11 +87,11 @@ func MapEntries[K comparable, V any](m map[K]V) []*Tuple2[K, V] {
 	return items
 }
 
-// MapUpdate merges map content with another map
-// Not change the target map, only change the source map
-func MapUpdate[K comparable, V any](m1, m2 map[K]V) map[K]V {
+// MapUpdate merges map content with another map.
+// Not change the target map, only change the source map.
+func MapUpdate[K comparable, V any, M ~map[K]V](m1, m2 M) M {
 	if m1 == nil {
-		m1 = make(map[K]V, len(m2))
+		m1 = make(M, len(m2))
 	}
 	if m2 == nil {
 		return m1
@@ -102,11 +102,11 @@ func MapUpdate[K comparable, V any](m1, m2 map[K]V) map[K]V {
 	return m1
 }
 
-// MapUpdateExistingOnly update map existing items with another map
-// Not change the target map, only change the source map
-func MapUpdateExistingOnly[K comparable, V any](m1, m2 map[K]V) map[K]V {
+// MapUpdateExistingOnly update map existing items with another map.
+// Not change the target map, only change the source map.
+func MapUpdateExistingOnly[K comparable, V any, M ~map[K]V](m1, m2 M) M {
 	if m1 == nil {
-		return make(map[K]V, 0)
+		return make(M, 0)
 	}
 	if m2 == nil {
 		return m1
@@ -119,11 +119,11 @@ func MapUpdateExistingOnly[K comparable, V any](m1, m2 map[K]V) map[K]V {
 	return m1
 }
 
-// MapUpdateNewOnly update map with another map and not override the existing values
-// Not change the target map, only change the source map
-func MapUpdateNewOnly[K comparable, V any](m1, m2 map[K]V) map[K]V {
+// MapUpdateNewOnly update map with another map and not override the existing values.
+// Not change the target map, only change the source map.
+func MapUpdateNewOnly[K comparable, V any, M ~map[K]V](m1, m2 M) M {
 	if m1 == nil {
-		return MapUpdate(make(map[K]V, len(m2)), m2)
+		return MapUpdate(make(M, len(m2)), m2)
 	}
 	if m2 == nil {
 		return m1
@@ -137,7 +137,7 @@ func MapUpdateNewOnly[K comparable, V any](m1, m2 map[K]V) map[K]V {
 }
 
 // MapGet gets the value for the key, if not exist, returns the default one
-func MapGet[K comparable, V any](m map[K]V, k K, defaultVal V) V {
+func MapGet[K comparable, V any, M ~map[K]V](m M, k K, defaultVal V) V {
 	if val, ok := m[k]; ok {
 		return val
 	}
@@ -145,7 +145,7 @@ func MapGet[K comparable, V any](m map[K]V, k K, defaultVal V) V {
 }
 
 // MapPop deletes and returns the value of the key if exists, returns the default one if not
-func MapPop[K comparable, V any](m map[K]V, k K, defaultVal V) V {
+func MapPop[K comparable, V any, M ~map[K]V](m M, k K, defaultVal V) V {
 	if val, ok := m[k]; ok {
 		delete(m, k)
 		return val
@@ -153,7 +153,7 @@ func MapPop[K comparable, V any](m map[K]V, k K, defaultVal V) V {
 	return defaultVal
 }
 
-func MapSetDefault[K comparable, V any](m map[K]V, k K, defaultVal V) V {
+func MapSetDefault[K comparable, V any, M ~map[K]V](m M, k K, defaultVal V) V {
 	if val, ok := m[k]; ok {
 		return val
 	}
@@ -163,7 +163,7 @@ func MapSetDefault[K comparable, V any](m map[K]V, k K, defaultVal V) V {
 	return defaultVal
 }
 
-func MapUnionKeys[K comparable, V any](m1 map[K]V, ms ...map[K]V) []K {
+func MapUnionKeys[K comparable, V any, M ~map[K]V](m1 M, ms ...M) []K {
 	keys := MapKeys(m1)
 	for _, m := range ms {
 		keys = Union(keys, MapKeys(m))
@@ -171,7 +171,7 @@ func MapUnionKeys[K comparable, V any](m1 map[K]V, ms ...map[K]V) []K {
 	return keys
 }
 
-func MapIntersectionKeys[K comparable, V any](m1 map[K]V, ms ...map[K]V) []K {
+func MapIntersectionKeys[K comparable, V any, M ~map[K]V](m1 M, ms ...M) []K {
 	keys := MapKeys(m1)
 	for _, m := range ms {
 		keys = Intersection(keys, MapKeys(m))
@@ -179,14 +179,14 @@ func MapIntersectionKeys[K comparable, V any](m1 map[K]V, ms ...map[K]V) []K {
 	return keys
 }
 
-func MapDifferenceKeys[K comparable, V any](m1, m2 map[K]V) ([]K, []K) {
+func MapDifferenceKeys[K comparable, V any, M ~map[K]V](m1, m2 M) ([]K, []K) {
 	return Difference(MapKeys(m1), MapKeys(m2))
 }
 
-func MapCopy[K comparable, V any](m map[K]V, onlyKeys ...K) map[K]V {
+func MapCopy[K comparable, V any, M ~map[K]V](m M, onlyKeys ...K) M {
 	// Copy the whole map (this is shallow copy)
 	if len(onlyKeys) == 0 {
-		ret := make(map[K]V, len(m))
+		ret := make(M, len(m))
 		for k, v := range m {
 			ret[k] = v
 		}
@@ -194,7 +194,7 @@ func MapCopy[K comparable, V any](m map[K]V, onlyKeys ...K) map[K]V {
 	}
 
 	// Copy only keys in the list
-	ret := make(map[K]V, len(onlyKeys))
+	ret := make(M, len(onlyKeys))
 	for _, k := range onlyKeys {
 		v, ok := m[k]
 		if ok {
@@ -204,10 +204,10 @@ func MapCopy[K comparable, V any](m map[K]V, onlyKeys ...K) map[K]V {
 	return ret
 }
 
-func MapCopyExcludeKeys[K comparable, V any](m map[K]V, excludedKeys ...K) map[K]V {
+func MapCopyExcludeKeys[K comparable, V any, M ~map[K]V](m M, excludedKeys ...K) M {
 	// Copy the whole map (this is shallow copy)
 	if len(excludedKeys) == 0 {
-		ret := make(map[K]V, len(m))
+		ret := make(M, len(m))
 		for k, v := range m {
 			ret[k] = v
 		}
@@ -220,7 +220,7 @@ func MapCopyExcludeKeys[K comparable, V any](m map[K]V, excludedKeys ...K) map[K
 	}
 
 	// Copy only keys not in the list
-	ret := make(map[K]V, len(m))
+	ret := make(M, len(m))
 	for k, v := range m {
 		_, ok := excludedMap[k]
 		if !ok {
