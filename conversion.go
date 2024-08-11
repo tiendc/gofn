@@ -1,7 +1,7 @@
 package gofn
 
 // ToIntfSlice convert a slice to a slice of interface
-func ToIntfSlice[T any](s []T) []any {
+func ToIntfSlice[T any, S ~[]T](s S) []any {
 	result := make([]any, len(s))
 	for i := range s {
 		result[i] = s[i]
@@ -10,7 +10,7 @@ func ToIntfSlice[T any](s []T) []any {
 }
 
 // ToStringSlice converts str-approximate slice to string slice
-func ToStringSlice[U, T ~string](slice []T) []U {
+func ToStringSlice[U, T ~string, S ~[]T](slice S) []U {
 	result := make([]U, len(slice))
 	for i := range slice {
 		result[i] = U(slice[i])
@@ -19,7 +19,7 @@ func ToStringSlice[U, T ~string](slice []T) []U {
 }
 
 // ToNumberSlice converts int-approximate slice to int slice
-func ToNumberSlice[U, T NumberEx](slice []T) []U {
+func ToNumberSlice[U, T NumberEx, S ~[]T](slice S) []U {
 	result := make([]U, len(slice))
 	for i := range slice {
 		result[i] = U(slice[i])

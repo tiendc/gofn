@@ -41,7 +41,7 @@ func (m *RandChoiceMaker[T]) HasNext() bool {
 	return len(m.source) > 0
 }
 
-func NewRandChoiceMaker[T any](s []T, randFuncs ...func(n int) int) RandChoiceMaker[T] {
+func NewRandChoiceMaker[T any, S ~[]T](s S, randFuncs ...func(n int) int) RandChoiceMaker[T] {
 	var source []*T
 	for i := range s {
 		source = append(source, &s[i])
@@ -65,12 +65,12 @@ func RandChoice[T any](s ...T) (T, bool) {
 }
 
 // Shuffle items of a slice and returns a new slice
-func Shuffle[T any](s []T, randFuncs ...func(n int) int) []T {
+func Shuffle[T any, S ~[]T](s S, randFuncs ...func(n int) int) S {
 	if len(s) <= 1 {
-		return append([]T{}, s...)
+		return append(S{}, s...)
 	}
 	maker := NewRandChoiceMaker(s, randFuncs...)
-	result := make([]T, 0, len(s))
+	result := make(S, 0, len(s))
 	for {
 		item, valid := maker.Next()
 		if !valid {
@@ -87,7 +87,7 @@ func RandString(n int) string {
 }
 
 // RandStringEx generates a random string
-func RandStringEx(n int, allowedChars []rune) string {
+func RandStringEx[S ~[]rune](n int, allowedChars S) string {
 	b := make([]rune, n)
 	numChars := len(allowedChars)
 	for i := range b {

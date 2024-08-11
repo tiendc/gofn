@@ -1,7 +1,7 @@
 package gofn
 
 // MapSlice transforms a slice to another with map function
-func MapSlice[T any, U any](s []T, mapFunc func(b T) U) []U {
+func MapSlice[T any, U any, S ~[]T](s S, mapFunc func(b T) U) []U {
 	result := make([]U, len(s))
 	for i := range s {
 		result[i] = mapFunc(s[i])
@@ -10,7 +10,7 @@ func MapSlice[T any, U any](s []T, mapFunc func(b T) U) []U {
 }
 
 // MapSliceEx transforms a slice to another with map function and error handling
-func MapSliceEx[T any, U any](s []T, mapFunc func(b T) (U, error)) ([]U, error) {
+func MapSliceEx[T any, U any, S ~[]T](s S, mapFunc func(b T) (U, error)) ([]U, error) {
 	result := make([]U, 0, len(s))
 	for i := range s {
 		v, err := mapFunc(s[i])
@@ -23,7 +23,7 @@ func MapSliceEx[T any, U any](s []T, mapFunc func(b T) (U, error)) ([]U, error) 
 }
 
 // MapSliceToMap transforms a slice to a map with map function
-func MapSliceToMap[T any, K comparable, V any](s []T, mapFunc func(b T) (K, V)) map[K]V {
+func MapSliceToMap[T any, K comparable, V any, S ~[]T](s S, mapFunc func(b T) (K, V)) map[K]V {
 	result := make(map[K]V, len(s))
 	for i := range s {
 		k, v := mapFunc(s[i])
@@ -33,7 +33,7 @@ func MapSliceToMap[T any, K comparable, V any](s []T, mapFunc func(b T) (K, V)) 
 }
 
 // MapSliceToMapEx transforms a slice to a map with map function and error handling
-func MapSliceToMapEx[T any, K comparable, V any](s []T, mapFunc func(b T) (K, V, error)) (map[K]V, error) {
+func MapSliceToMapEx[T any, K comparable, V any, S ~[]T](s S, mapFunc func(b T) (K, V, error)) (map[K]V, error) {
 	result := make(map[K]V, len(s))
 	for i := range s {
 		k, v, err := mapFunc(s[i])

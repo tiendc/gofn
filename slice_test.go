@@ -27,6 +27,11 @@ func Test_Equal(t *testing.T) {
 	assert.False(t, Equal([]string{"3", "1", "2"}, []string{"1", "2", "3"}))
 	assert.False(t, Equal([]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{1, "1"}, {2, "2"}}))
 	assert.False(t, Equal([]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{3, "3"}, {1, "1"}, {2, "2"}}))
+
+	// Derived types
+	type SI []int
+	assert.True(t, Equal([]int{1, 2, 3}, SI{1, 2, 3}))
+	assert.False(t, Equal(SI{1, 2}, []int{1, 2, 3}))
 }
 
 // nolint: forcetypeassert
@@ -184,7 +189,7 @@ func Test_ContentEqualPtr(t *testing.T) {
 }
 
 func Test_Concat(t *testing.T) {
-	assert.Equal(t, []int{}, Concat[int](nil, nil, nil))
+	assert.Equal(t, []int{}, Concat[int, []int](nil, nil, nil))
 	assert.Equal(t, []bool{}, Concat([]bool{}, []bool{}))
 	assert.Equal(t, []float64{1.1}, Concat([]float64{}, []float64{}, []float64{1.1}))
 	assert.Equal(t, []string{"", "1", "2", "3"}, Concat([]string{""}, []string{"1", "2"}, []string{}, []string{"3"}))
@@ -323,7 +328,7 @@ func Test_ContainAny(t *testing.T) {
 }
 
 func Test_IsUnique(t *testing.T) {
-	assert.True(t, IsUnique[int](nil))
+	assert.True(t, IsUnique[int, []int](nil))
 	assert.True(t, IsUnique([]int{}))
 	assert.True(t, IsUnique([]string{"one"}))
 	assert.True(t, IsUnique([]string{"one", "two", "One", "Two"}))
@@ -344,7 +349,7 @@ func Test_IsUnique(t *testing.T) {
 
 // nolint: forcetypeassert
 func Test_IsUniquePred(t *testing.T) {
-	assert.True(t, IsUniquePred[int, int](nil, nil))
+	assert.True(t, IsUniquePred[int, int, []int](nil, nil))
 	assert.True(t, IsUniquePred([]int{}, func(v int) int { return v }))
 	assert.True(t, IsUniquePred([]any{"one"},
 		func(v any) string { return v.(string) }))

@@ -9,7 +9,7 @@ import (
 )
 
 func Test_StringJoin(t *testing.T) {
-	assert.Equal(t, "", StringJoin[int](nil, ","))
+	assert.Equal(t, "", StringJoin[int]([]int(nil), ","))
 	assert.Equal(t, "1", StringJoin[int]([]int{1}, ","))
 	assert.Equal(t, "1,2,3", StringJoin[int64]([]int64{1, 2, 3}, ","))
 	// Slice has nil element
@@ -22,7 +22,7 @@ func Test_StringJoin(t *testing.T) {
 }
 
 func Test_StringJoinPred(t *testing.T) {
-	assert.Equal(t, "", StringJoinPred[int](nil, ",", func(v int) string {
+	assert.Equal(t, "", StringJoinPred[int]([]int(nil), ",", func(v int) string {
 		return fmt.Sprintf("%d", v)
 	}))
 	assert.Equal(t, "1", StringJoinPred[int]([]int{1}, ",", func(v int) string {

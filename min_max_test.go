@@ -16,7 +16,7 @@ func Test_Min(t *testing.T) {
 
 func Test_MinIn(t *testing.T) {
 	// Nil/Empty slices
-	m1, err := MinIn[uint64](nil)
+	m1, err := MinIn[uint64]([]uint64(nil))
 	assert.True(t, m1 == 0 && errors.Is(err, ErrEmpty))
 	m2, err := MinIn([]int{})
 	assert.True(t, m2 == 0 && errors.Is(err, ErrEmpty))
@@ -37,7 +37,7 @@ func Test_MinIn(t *testing.T) {
 
 func Test_MinInPred(t *testing.T) {
 	// Nil/Empty slices
-	m1, err := MinInPred[uint64](nil, func(v1, v2 uint64) bool { return v1 < v2 })
+	m1, err := MinInPred[uint64]([]uint64(nil), func(v1, v2 uint64) bool { return v1 < v2 })
 	assert.True(t, m1 == 0 && errors.Is(err, ErrEmpty))
 	m2, err := MinInPred([]int{}, func(v1, v2 int) bool { return v1 < v2 })
 	assert.True(t, m2 == 0 && errors.Is(err, ErrEmpty))
@@ -72,7 +72,7 @@ func Test_Max(t *testing.T) {
 
 func Test_MaxIn(t *testing.T) {
 	// Nil/Empty slices
-	m1, err := MaxIn[uint64](nil)
+	m1, err := MaxIn[uint64]([]uint64(nil))
 	assert.True(t, m1 == 0 && errors.Is(err, ErrEmpty))
 	m2, err := MaxIn([]int{})
 	assert.True(t, m2 == 0 && errors.Is(err, ErrEmpty))
@@ -93,7 +93,7 @@ func Test_MaxIn(t *testing.T) {
 
 func Test_MaxInPred(t *testing.T) {
 	// Nil/Empty slices
-	m1, err := MaxInPred[uint64](nil, func(v1, v2 uint64) bool { return v1 < v2 })
+	m1, err := MaxInPred[uint64]([]uint64(nil), func(v1, v2 uint64) bool { return v1 < v2 })
 	assert.True(t, m1 == 0 && errors.Is(err, ErrEmpty))
 	m2, err := MaxInPred([]int{}, func(v1, v2 int) bool { return v1 < v2 })
 	assert.True(t, m2 == 0 && errors.Is(err, ErrEmpty))

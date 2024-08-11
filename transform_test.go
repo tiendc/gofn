@@ -9,7 +9,7 @@ import (
 
 func Test_MapSlice(t *testing.T) {
 	// Nil/Empty maps
-	assert.Equal(t, []float32{}, MapSlice[int, float32](nil, func(v int) float32 { return float32(v) }))
+	assert.Equal(t, []float32{}, MapSlice[int, float32]([]int(nil), func(v int) float32 { return float32(v) }))
 	assert.Equal(t, []float32{}, MapSlice([]int{}, func(v int) float32 { return float32(v) }))
 
 	// []int -> []int
@@ -20,7 +20,7 @@ func Test_MapSlice(t *testing.T) {
 
 func Test_MapSliceEx(t *testing.T) {
 	// Nil/Empty maps
-	r1, e := MapSliceEx[int, float32](nil, func(v int) (float32, error) { return float32(v), nil })
+	r1, e := MapSliceEx[int, float32]([]int(nil), func(v int) (float32, error) { return float32(v), nil })
 	assert.Nil(t, e)
 	assert.Equal(t, []float32{}, r1)
 	r2, e := MapSliceEx([]int{}, func(v int) (float32, error) { return float32(v), nil })
@@ -39,7 +39,7 @@ func Test_MapSliceEx(t *testing.T) {
 
 func Test_MapSliceToMap(t *testing.T) {
 	// Nil/Empty maps
-	assert.Equal(t, map[int]bool{}, MapSliceToMap[int, int, bool](nil, func(v int) (int, bool) { return v, v > 0 }))
+	assert.Equal(t, map[int]bool{}, MapSliceToMap[int, int, bool]([]int(nil), func(v int) (int, bool) { return v, v > 0 }))
 	assert.Equal(t, map[int]bool{}, MapSliceToMap([]int{}, func(v int) (int, bool) { return v, v > 0 }))
 
 	// []int -> map[int]string
@@ -49,7 +49,7 @@ func Test_MapSliceToMap(t *testing.T) {
 
 func Test_MapSliceToMapEx(t *testing.T) {
 	// Nil/Empty maps
-	r1, e := MapSliceToMapEx[int, int, bool](nil, func(v int) (int, bool, error) { return v, v > 0, nil })
+	r1, e := MapSliceToMapEx[int, int, bool]([]int(nil), func(v int) (int, bool, error) { return v, v > 0, nil })
 	assert.Nil(t, e)
 	assert.Equal(t, map[int]bool{}, r1)
 	r2, e := MapSliceToMapEx([]int{}, func(v int) (int, bool, error) { return v, v > 0, nil })

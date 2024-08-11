@@ -1,11 +1,11 @@
 package gofn
 
-func Chunk[T any](s []T, chunkSize int) [][]T {
+func Chunk[T any, S ~[]T](s S, chunkSize int) []S {
 	if chunkSize <= 0 {
-		return [][]T{}
+		return []S{}
 	}
 
-	chunks := make([][]T, 0, len(s)/chunkSize+1)
+	chunks := make([]S, 0, len(s)/chunkSize+1)
 	for {
 		if len(s) == 0 {
 			break
@@ -19,9 +19,9 @@ func Chunk[T any](s []T, chunkSize int) [][]T {
 	return chunks
 }
 
-func ChunkByPieces[T any](s []T, chunkCount int) [][]T {
+func ChunkByPieces[T any, S ~[]T](s S, chunkCount int) []S {
 	if chunkCount <= 0 {
-		return [][]T{}
+		return []S{}
 	}
 	chunkSize := len(s) / chunkCount
 	if chunkSize*chunkCount < len(s) {
