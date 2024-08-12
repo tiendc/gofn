@@ -176,7 +176,7 @@ func Test_MapPop(t *testing.T) {
 }
 
 func Test_MapSetDefault(t *testing.T) {
-	assert.Equal(t, true, MapSetDefault[int, bool, map[int]bool](nil, 1, true))
+	assert.Equal(t, false, MapSetDefault[int, bool, map[int]bool](nil, 1, true))
 	assert.Equal(t, 11, MapSetDefault(map[int]int{}, 1, 11))
 
 	m1 := map[int]int{1: 11}
