@@ -16,7 +16,7 @@ const (
 	groupSep      = ','
 )
 
-func ParseIntEx[T IntEx](s string, base int) (T, error) {
+func ParseIntEx[T IntExt](s string, base int) (T, error) {
 	var zeroT T
 	v, err := strconv.ParseInt(s, base, int(unsafe.Sizeof(zeroT)*byte2Bits))
 	if err == nil {
@@ -25,16 +25,16 @@ func ParseIntEx[T IntEx](s string, base int) (T, error) {
 	return zeroT, err // nolint: wrapcheck
 }
 
-func ParseInt[T IntEx](s string) (T, error) {
+func ParseInt[T IntExt](s string) (T, error) {
 	return ParseIntEx[T](s, base10)
 }
 
 // ParseIntUngroup omit all grouping commas then parse the string value
-func ParseIntUngroup[T IntEx](s string) (T, error) {
+func ParseIntUngroup[T IntExt](s string) (T, error) {
 	return ParseIntEx[T](NumberFmtUngroup(s, groupSep), base10)
 }
 
-func ParseIntDef[T IntEx](s string, defaultVal T) T {
+func ParseIntDef[T IntExt](s string, defaultVal T) T {
 	v, err := strconv.ParseInt(s, base10, int(unsafe.Sizeof(defaultVal)*byte2Bits))
 	if err == nil {
 		return T(v)
@@ -42,7 +42,7 @@ func ParseIntDef[T IntEx](s string, defaultVal T) T {
 	return defaultVal
 }
 
-func ParseUintEx[T UIntEx](s string, base int) (T, error) {
+func ParseUintEx[T UIntExt](s string, base int) (T, error) {
 	var zeroT T
 	v, err := strconv.ParseUint(s, base, int(unsafe.Sizeof(zeroT)*byte2Bits))
 	if err == nil {
@@ -51,16 +51,16 @@ func ParseUintEx[T UIntEx](s string, base int) (T, error) {
 	return zeroT, err // nolint: wrapcheck
 }
 
-func ParseUint[T UIntEx](s string) (T, error) {
+func ParseUint[T UIntExt](s string) (T, error) {
 	return ParseUintEx[T](s, base10)
 }
 
 // ParseUintUngroup omit all grouping commas then parse the string value
-func ParseUintUngroup[T UIntEx](s string) (T, error) {
+func ParseUintUngroup[T UIntExt](s string) (T, error) {
 	return ParseUintEx[T](NumberFmtUngroup(s, groupSep), base10)
 }
 
-func ParseUintDef[T UIntEx](s string, defaultVal T) T {
+func ParseUintDef[T UIntExt](s string, defaultVal T) T {
 	v, err := strconv.ParseUint(s, base10, int(unsafe.Sizeof(defaultVal)*byte2Bits))
 	if err == nil {
 		return T(v)
@@ -68,7 +68,7 @@ func ParseUintDef[T UIntEx](s string, defaultVal T) T {
 	return defaultVal
 }
 
-func ParseFloat[T FloatEx](s string) (T, error) {
+func ParseFloat[T FloatExt](s string) (T, error) {
 	var zeroT T
 	v, err := strconv.ParseFloat(s, int(unsafe.Sizeof(zeroT)*byte2Bits))
 	if err == nil {
@@ -78,11 +78,11 @@ func ParseFloat[T FloatEx](s string) (T, error) {
 }
 
 // ParseFloatUngroup omit all grouping commas then parse the string value
-func ParseFloatUngroup[T FloatEx](s string) (T, error) {
+func ParseFloatUngroup[T FloatExt](s string) (T, error) {
 	return ParseFloat[T](NumberFmtUngroup(s, groupSep))
 }
 
-func ParseFloatDef[T FloatEx](s string, defaultVal T) T {
+func ParseFloatDef[T FloatExt](s string, defaultVal T) T {
 	v, err := strconv.ParseFloat(s, int(unsafe.Sizeof(defaultVal)*byte2Bits))
 	if err == nil {
 		return T(v)
@@ -90,48 +90,48 @@ func ParseFloatDef[T FloatEx](s string, defaultVal T) T {
 	return defaultVal
 }
 
-func FormatIntEx[T IntEx](v T, format string) string {
+func FormatIntEx[T IntExt](v T, format string) string {
 	return fmt.Sprintf(format, v)
 }
 
-func FormatInt[T IntEx](v T) string {
+func FormatInt[T IntExt](v T) string {
 	return strconv.FormatInt(int64(v), base10)
 }
 
 // FormatIntGroup format the value then group the decimal using comma
-func FormatIntGroup[T IntEx](v T) string {
+func FormatIntGroup[T IntExt](v T) string {
 	s := strconv.FormatInt(int64(v), base10)
 	return NumberFmtGroup(s, noFractionSep, groupSep)
 }
 
-func FormatUintEx[T UIntEx](v T, format string) string {
+func FormatUintEx[T UIntExt](v T, format string) string {
 	return fmt.Sprintf(format, v)
 }
 
-func FormatUint[T UIntEx](v T) string {
+func FormatUint[T UIntExt](v T) string {
 	return strconv.FormatUint(uint64(v), base10)
 }
 
 // FormatUintGroup format the value then group the decimal using comma
-func FormatUintGroup[T UIntEx](v T) string {
+func FormatUintGroup[T UIntExt](v T) string {
 	return NumberFmtGroup(strconv.FormatUint(uint64(v), base10), noFractionSep, groupSep)
 }
 
-func FormatFloatEx[T FloatEx](v T, format string) string {
+func FormatFloatEx[T FloatExt](v T, format string) string {
 	return fmt.Sprintf(format, v)
 }
 
-func FormatFloat[T FloatEx](v T) string {
+func FormatFloat[T FloatExt](v T) string {
 	return fmt.Sprintf("%f", v)
 }
 
 // FormatFloatGroup format the value then group the decimal using comma
-func FormatFloatGroup[T FloatEx](v T) string {
+func FormatFloatGroup[T FloatExt](v T) string {
 	return NumberFmtGroup(fmt.Sprintf("%f", v), fractionSep, groupSep)
 }
 
 // FormatFloatGroupEx format the value then group the decimal using comma
-func FormatFloatGroupEx[T FloatEx](v T, format string) string {
+func FormatFloatGroupEx[T FloatExt](v T, format string) string {
 	return NumberFmtGroup(fmt.Sprintf(format, v), fractionSep, groupSep)
 }
 

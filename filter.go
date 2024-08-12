@@ -29,22 +29,22 @@ func FilterPtr[T any, S ~[]T](s S, filterFunc func(t *T) bool) S {
 }
 
 // FilterLT returns all values which are less than the specified value
-func FilterLT[T NumberEx | StringEx, S ~[]T](s S, v T) S {
+func FilterLT[T NumberExt | StringExt, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t < v })
 }
 
 // FilterLTE returns all values which are less than or equal to the specified value
-func FilterLTE[T NumberEx | StringEx, S ~[]T](s S, v T) S {
+func FilterLTE[T NumberExt | StringExt, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t <= v })
 }
 
 // FilterGT returns all values which are greater than the specified value
-func FilterGT[T NumberEx | StringEx, S ~[]T](s S, v T) S {
+func FilterGT[T NumberExt | StringExt, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t > v })
 }
 
 // FilterGTE returns all values which are greater than or equal to the specified value
-func FilterGTE[T NumberEx | StringEx, S ~[]T](s S, v T) S {
+func FilterGTE[T NumberExt | StringExt, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t >= v })
 }
 
@@ -80,7 +80,7 @@ func FilterNIN[T comparable, S ~[]T](s S, v ...T) S {
 // FilterLIKE returns all strings which contain the specified substring.
 // Don't use wildcard in the input string.
 // For example: FilterLIKE(names, "tom").
-func FilterLIKE[T StringEx, S ~[]T](s S, v string) S {
+func FilterLIKE[T StringExt, S ~[]T](s S, v string) S {
 	if len(v) == 0 {
 		return S{}
 	}
@@ -90,7 +90,7 @@ func FilterLIKE[T StringEx, S ~[]T](s S, v string) S {
 }
 
 // FilterILIKE returns all strings which contain the specified substring with case-insensitive
-func FilterILIKE[T StringEx, S ~[]T](s S, v string) S {
+func FilterILIKE[T StringExt, S ~[]T](s S, v string) S {
 	if len(v) == 0 {
 		return S{}
 	}

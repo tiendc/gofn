@@ -615,7 +615,7 @@ func SubSlice[T any, S ~[]T](s S, start, end int) S {
 
 // SliceByRange generates a slice by range.
 // start is inclusive, end is exclusive.
-func SliceByRange[T NumberEx](start, end, step T) []T {
+func SliceByRange[T NumberExt](start, end, step T) []T {
 	if end > start {
 		if step <= 0 {
 			return []T{}
