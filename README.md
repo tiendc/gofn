@@ -441,20 +441,26 @@ MapSetDefault(map[int]int{1: 11, 2: 22}, 3, 0) // 0 (entry [3, 0] is added to th
 
 #### MapCopy
 
-Copies map content with filter keys.
+Copies a map.
 
 ```go
-m1 := map[int]int{1: 11, 2: 22, 3: 33}
-m2 := MapCopy(m1, 2, 3, 4) // m2 == map[int]int{2: 22, 3: 33}
+MapCopy(map[int]int{1: 11, 2: 22, 3: 33}) // map[int]int{1: 11, 2: 22, 3: 33}
 ```
 
-#### MapCopyExcludeKeys
+#### MapPick
 
-Copies map content with excluding keys.
+Copies map content for specified keys only.
 
 ```go
-m1 := map[int]int{1: 11, 2: 22, 3: 33}
-m2 := MapCopyExcludeKeys(m1, 2, 3, 4) // m2 == map[int]int{1: 11}
+MapPick(map[int]int{1: 11, 2: 22, 3: 33}, 2, 3, 2) // map[int]int{2: 22, 3: 33}
+```
+
+#### MapOmit
+
+Copies map content with omitting specified keys.
+
+```go
+MapOmit(map[int]int{1: 11, 2: 22, 3: 33}, 2, 3, 4) // map[int]int{1: 11}
 ```
 
 ### Functions for structs

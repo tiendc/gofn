@@ -153,6 +153,7 @@ func MapPop[K comparable, V any, M ~map[K]V](m M, k K, defaultVal V) V {
 	return defaultVal
 }
 
+// MapSetDefault sets default value for a key and returns the current value
 func MapSetDefault[K comparable, V any, M ~map[K]V](m M, k K, defaultVal V) V {
 	if val, ok := m[k]; ok {
 		return val
@@ -163,6 +164,7 @@ func MapSetDefault[K comparable, V any, M ~map[K]V](m M, k K, defaultVal V) V {
 	return defaultVal
 }
 
+// MapUnionKeys returns a list of unique keys that are collected from multiple maps
 func MapUnionKeys[K comparable, V any, M ~map[K]V](m1 M, ms ...M) []K {
 	keys := MapKeys(m1)
 	for _, m := range ms {
@@ -171,6 +173,7 @@ func MapUnionKeys[K comparable, V any, M ~map[K]V](m1 M, ms ...M) []K {
 	return keys
 }
 
+// MapIntersectionKeys returns a list of unique keys that exist in all maps
 func MapIntersectionKeys[K comparable, V any, M ~map[K]V](m1 M, ms ...M) []K {
 	keys := MapKeys(m1)
 	for _, m := range ms {
@@ -179,23 +182,24 @@ func MapIntersectionKeys[K comparable, V any, M ~map[K]V](m1 M, ms ...M) []K {
 	return keys
 }
 
+// MapDifferenceKeys returns 2 lists of keys that are differences of 2 maps
 func MapDifferenceKeys[K comparable, V any, M ~map[K]V](m1, m2 M) ([]K, []K) {
 	return Difference(MapKeys(m1), MapKeys(m2))
 }
 
-func MapCopy[K comparable, V any, M ~map[K]V](m M, onlyKeys ...K) M {
-	// Copy the whole map (this is shallow copy)
-	if len(onlyKeys) == 0 {
-		ret := make(M, len(m))
-		for k, v := range m {
-			ret[k] = v
-		}
-		return ret
+// MapCopy returns a copied a map
+func MapCopy[K comparable, V any, M ~map[K]V](m M) M {
+	ret := make(M, len(m))
+	for k, v := range m {
+		ret[k] = v
 	}
+	return ret
+}
 
-	// Copy only keys in the list
-	ret := make(M, len(onlyKeys))
-	for _, k := range onlyKeys {
+// MapPick returns a new map with picking up the specified keys only
+func MapPick[K comparable, V any, M ~map[K]V](m M, keys ...K) M {
+	ret := make(M, len(keys))
+	for _, k := range keys {
 		v, ok := m[k]
 		if ok {
 			ret[k] = v
@@ -204,28 +208,23 @@ func MapCopy[K comparable, V any, M ~map[K]V](m M, onlyKeys ...K) M {
 	return ret
 }
 
-func MapCopyExcludeKeys[K comparable, V any, M ~map[K]V](m M, excludedKeys ...K) M {
-	// Copy the whole map (this is shallow copy)
-	if len(excludedKeys) == 0 {
-		ret := make(M, len(m))
-		for k, v := range m {
-			ret[k] = v
-		}
-		return ret
-	}
-
-	excludedMap := make(map[K]struct{}, len(excludedKeys))
-	for _, k := range excludedKeys {
-		excludedMap[k] = struct{}{}
-	}
+// MapOmit returns a new map with omitting the specified keys
+func MapOmit[K comparable, V any, M ~map[K]V](m M, keys ...K) M {
+	omitKeys := MapSliceToMapKeys(keys, struct{}{})
 
 	// Copy only keys not in the list
 	ret := make(M, len(m))
 	for k, v := range m {
-		_, ok := excludedMap[k]
+		_, ok := omitKeys[k]
 		if !ok {
 			ret[k] = v
 		}
 	}
 	return ret
+}
+
+// MapCopyExcludeKeys returns a new map with omitting the specified keys.
+// Deprecated: Use MapOmit instead.
+func MapCopyExcludeKeys[K comparable, V any, M ~map[K]V](m M, excludedKeys ...K) M {
+	return MapOmit(m, excludedKeys...)
 }

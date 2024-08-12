@@ -234,27 +234,32 @@ func Test_MapDifferenceKeys(t *testing.T) {
 }
 
 func Test_MapCopy(t *testing.T) {
-	m := MapCopy[int, int, map[int]int](nil)
-	assert.Equal(t, map[int]int{}, m)
-	m = MapCopy[int, int](map[int]int{}, 1, 2, 3)
-	assert.Equal(t, map[int]int{}, m)
+	// Nil/empty maps
+	assert.Equal(t, map[int]int{}, MapCopy[int, int](map[int]int(nil)))
+	assert.Equal(t, map[int]int{}, MapCopy[int, int](map[int]int{}))
 
-	m = MapCopy(map[int]int{1: 11, 2: 22})
-	assert.True(t, MapEqual(map[int]int{1: 11, 2: 22}, m))
+	assert.True(t, MapEqual(map[int]int{1: 11, 2: 22}, MapCopy(map[int]int{1: 11, 2: 22})))
+}
 
-	m = MapCopy(map[int]int{1: 11, 2: 22}, 2, 3)
-	assert.True(t, MapEqual(map[int]int{2: 22}, m))
+func Test_MapPick(t *testing.T) {
+	// Nil/empty maps
+	assert.Equal(t, map[int]int{}, MapPick[int, int](map[int]int(nil)))
+	assert.Equal(t, map[int]int{}, MapPick[int, int](map[int]int{}, 1, 2, 3))
+
+	assert.True(t, MapEqual(map[int]int{}, MapPick(map[int]int{1: 11, 2: 22})))
+	assert.True(t, MapEqual(map[int]int{2: 22}, MapPick(map[int]int{1: 11, 2: 22}, 2, 3, 2)))
+}
+
+func Test_MapOmit(t *testing.T) {
+	// Nil/empty maps
+	assert.Equal(t, map[int]int{}, MapOmit[int, int, map[int]int](nil))
+	assert.Equal(t, map[int]int{}, MapOmit[int, int](map[int]int{}, 1, 2, 3))
+
+	assert.True(t, MapEqual(map[int]int{1: 11, 2: 22}, MapOmit(map[int]int{1: 11, 2: 22})))
+	assert.True(t, MapEqual(map[int]int{1: 11}, MapOmit(map[int]int{1: 11, 2: 22}, 2, 3, 2)))
 }
 
 func Test_MapCopyExcludeKeys(t *testing.T) {
-	m := MapCopyExcludeKeys[int, int, map[int]int](nil)
-	assert.Equal(t, map[int]int{}, m)
-	m = MapCopyExcludeKeys[int, int](map[int]int{}, 1, 2, 3)
-	assert.Equal(t, map[int]int{}, m)
-
-	m = MapCopyExcludeKeys(map[int]int{1: 11, 2: 22})
-	assert.True(t, MapEqual(map[int]int{1: 11, 2: 22}, m))
-
-	m = MapCopyExcludeKeys(map[int]int{1: 11, 2: 22}, 2, 3)
+	m := MapCopyExcludeKeys(map[int]int{1: 11, 2: 22}, 2, 3)
 	assert.True(t, MapEqual(map[int]int{1: 11}, m))
 }
