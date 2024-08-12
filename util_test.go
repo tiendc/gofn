@@ -162,9 +162,27 @@ func Test_Head(t *testing.T) {
 	assert.Equal(t, 1, Head(1, 2.0, "3", 1))
 }
 
+func Test_HeadOf(t *testing.T) {
+	v1, f := HeadOf([]string{})
+	assert.True(t, v1 == "" && !f)
+	v2, f := HeadOf([]int(nil))
+	assert.True(t, v2 == 0 && !f)
+	v3, f := HeadOf([]int{1, 2, 3})
+	assert.True(t, v3 == 1 && f)
+}
+
 func Test_Tail(t *testing.T) {
 	t1, _ := Tail[int](-1)
 	assert.Equal(t, -1, t1)
 	t2, _ := Tail[string](1, 2.0, "3", "-1")
 	assert.Equal(t, "-1", t2)
+}
+
+func Test_TailOf(t *testing.T) {
+	v1, f := TailOf([]string{})
+	assert.True(t, v1 == "" && !f)
+	v2, f := TailOf([]int(nil))
+	assert.True(t, v2 == 0 && !f)
+	v3, f := TailOf([]int{1, 2, 3})
+	assert.True(t, v3 == 3 && f)
 }

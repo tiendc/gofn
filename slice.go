@@ -565,6 +565,8 @@ func LastIndexOfSlice[T comparable, S ~[]T](a, sub S) int {
 	return -1
 }
 
+// GetFirst gets the first item in slice.
+// Returns the default value if slice is empty.
 func GetFirst[T any, S ~[]T](s S, defaultVal T) T {
 	if len(s) > 0 {
 		return s[0]
@@ -572,7 +574,9 @@ func GetFirst[T any, S ~[]T](s S, defaultVal T) T {
 	return defaultVal
 }
 
-func GetLast[T any](s []T, defaultVal T) T {
+// GetLast gets the last item in slice.
+// Returns the default value if slice is empty.
+func GetLast[T any, S ~[]T](s S, defaultVal T) T {
 	if len(s) > 0 {
 		return s[len(s)-1]
 	}

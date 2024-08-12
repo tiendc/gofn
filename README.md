@@ -1070,20 +1070,26 @@ f(&val)
 f(New(10))
 ```
 
-#### Head
+#### Head / HeadOf
 
 Takes the first argument.
 
 ```go
-Head(1, "2", 1.0, 3) // 1
+Head(1, "2", 1.0, 3)   // 1
+
+HeadOf([]int{1, 2, 3}) // 1, true
+HeadOf([]string{})     // "", false
 ```
 
-#### Tail
+#### Tail / TailOf
 
 Takes the last argument.
 
 ```go
 Tail[string](true, "2", 1.0, "3") // "3"
+
+TailOf([]int{1, 2, 3}) // 3, true
+TailOf([]string{})     // "", false
 ```
 
 #### FirstTrue
