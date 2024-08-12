@@ -19,7 +19,7 @@ func ToStringSlice[U, T ~string, S ~[]T](slice S) []U {
 }
 
 // ToNumberSlice converts int-approximate slice to int slice
-func ToNumberSlice[U, T NumberEx, S ~[]T](slice S) []U {
+func ToNumberSlice[U, T NumberExt, S ~[]T](slice S) []U {
 	result := make([]U, len(slice))
 	for i := range slice {
 		result[i] = U(slice[i])

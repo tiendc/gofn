@@ -1,7 +1,7 @@
 package gofn
 
 // Product calculates product value of slice elements
-func Product[T IntEx | UIntEx | FloatEx](s ...T) T {
+func Product[T NumberExt](s ...T) T {
 	if len(s) == 0 {
 		return 0
 	}
@@ -15,7 +15,7 @@ func Product[T IntEx | UIntEx | FloatEx](s ...T) T {
 // ProductAs calculates product value with conversion to another type.
 // Type size of the result should be wider than the input's.
 // E.g. product := ProductAs[int64](int32Slice...)
-func ProductAs[U, T IntEx | UIntEx | FloatEx](s ...T) U {
+func ProductAs[U, T NumberExt](s ...T) U {
 	if len(s) == 0 {
 		return 0
 	}

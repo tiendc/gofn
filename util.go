@@ -16,7 +16,7 @@ func If[C bool, T any](cond C, v1 T, v2 T) T {
 
 // Or logically selects the first value which is not zero value of type T.
 // This function is similar to `FirstTrue`, but it uses generic, not reflection.
-func Or[T NumberEx | NumberPtr | StringEx | StringPtr | ~bool | *bool](args ...T) T {
+func Or[T NumberExt | NumberPtr | StringExt | StringPtr | ~bool | *bool](args ...T) T {
 	var defaultVal T
 	for _, v := range args {
 		if v != defaultVal {

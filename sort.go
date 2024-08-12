@@ -3,13 +3,13 @@ package gofn
 import "sort"
 
 // Sort sorts slice values
-func Sort[T NumberEx | StringEx, S ~[]T](s S) S {
+func Sort[T NumberExt | StringExt, S ~[]T](s S) S {
 	sort.Slice(s, func(i, j int) bool { return s[i] < s[j] })
 	return s
 }
 
 // SortDesc sorts slice values in descending order
-func SortDesc[T NumberEx | StringEx, S ~[]T](s S) S {
+func SortDesc[T NumberExt | StringExt, S ~[]T](s S) S {
 	sort.Slice(s, func(i, j int) bool { return s[i] > s[j] })
 	return s
 }
@@ -21,13 +21,13 @@ func SortEx[T any, S ~[]T](s S, less func(i, j int) bool) S {
 }
 
 // SortStable sorts slice values
-func SortStable[T NumberEx | StringEx, S ~[]T](s S) S {
+func SortStable[T NumberExt | StringExt, S ~[]T](s S) S {
 	sort.SliceStable(s, func(i, j int) bool { return s[i] < s[j] })
 	return s
 }
 
 // SortStableDesc sorts slice values in descending order
-func SortStableDesc[T NumberEx | StringEx, S ~[]T](s S) S {
+func SortStableDesc[T NumberExt | StringExt, S ~[]T](s S) S {
 	sort.SliceStable(s, func(i, j int) bool { return s[i] > s[j] })
 	return s
 }
@@ -39,11 +39,11 @@ func SortStableEx[T any, S ~[]T](s S, less func(i, j int) bool) S {
 }
 
 // IsSorted checks if a slice is sorted
-func IsSorted[T NumberEx | StringEx, S ~[]T](s S) bool {
+func IsSorted[T NumberExt | StringExt, S ~[]T](s S) bool {
 	return sort.SliceIsSorted(s, func(i, j int) bool { return s[i] < s[j] })
 }
 
 // IsSortedDesc checks if a slice is sorted in descending order
-func IsSortedDesc[T NumberEx | StringEx, S ~[]T](s S) bool {
+func IsSortedDesc[T NumberExt | StringExt, S ~[]T](s S) bool {
 	return sort.SliceIsSorted(s, func(i, j int) bool { return s[i] > s[j] })
 }
