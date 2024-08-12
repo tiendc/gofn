@@ -705,6 +705,15 @@ MapSliceToMapEx([]string{"1","300","3"}, func (s string) (string, int, bool) {
 }) // strconv.ErrRange
 ```
 
+#### MapSliceToMapKeys
+
+Transforms a slice to a map with using slice items as map keys.
+
+```go
+MapSliceToMapKeys([]int{1, 2, 3, 2}, "x")     // map[int]string{1: "x", 2: "x", 3: "x"}
+MapSliceToMapKeys([]int{1, 2, 1}, struct{}{}) // map[int]struct{}{1: struct{}{}, 2: struct{}{}}
+```
+
 #### Chunk / ChunkByPieces
 
 Splits slice content into chunks.

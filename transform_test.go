@@ -71,3 +71,12 @@ func Test_MapSliceToMapEx(t *testing.T) {
 	})
 	assert.ErrorIs(t, e, strconv.ErrSyntax)
 }
+
+func Test_MapSliceToMapKeys(t *testing.T) {
+	// Nil/Empty maps
+	assert.Equal(t, map[int]struct{}{}, MapSliceToMapKeys[int]([]int(nil), struct{}{}))
+	assert.Equal(t, map[int]int{}, MapSliceToMapKeys([]int{}, 0))
+
+	// []int -> map[int]string
+	assert.Equal(t, map[int]string{1: "x", 2: "x", 3: "x"}, MapSliceToMapKeys([]int{1, 2, 3, 2}, "x"))
+}
