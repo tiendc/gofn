@@ -455,12 +455,12 @@ Copies map content for specified keys only.
 MapPick(map[int]int{1: 11, 2: 22, 3: 33}, 2, 3, 2) // map[int]int{2: 22, 3: 33}
 ```
 
-#### MapOmit
+#### MapOmitCopy
 
 Copies map content with omitting specified keys.
 
 ```go
-MapOmit(map[int]int{1: 11, 2: 22, 3: 33}, 2, 3, 4) // map[int]int{1: 11}
+MapOmitCopy(map[int]int{1: 11, 2: 22, 3: 33}, 2, 3, 4) // map[int]int{1: 11}
 ```
 
 ### Functions for structs
