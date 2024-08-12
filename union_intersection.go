@@ -1,5 +1,6 @@
 package gofn
 
+// Union returns all unique values from multiple slices
 func Union[T comparable, S ~[]T](a, b S) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 {
@@ -32,6 +33,7 @@ func Union[T comparable, S ~[]T](a, b S) S {
 	return result
 }
 
+// UnionPred returns all unique values from multiple slices with key function
 func UnionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 {
@@ -66,6 +68,7 @@ func UnionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	return result
 }
 
+// Intersection returns all unique shared values from multiple slices
 func Intersection[T comparable, S ~[]T](a, b S) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
@@ -90,6 +93,7 @@ func Intersection[T comparable, S ~[]T](a, b S) S {
 	return result
 }
 
+// IntersectionPred returns all unique shared values from multiple slices with key function
 func IntersectionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
@@ -116,6 +120,8 @@ func IntersectionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) 
 }
 
 // Difference calculates the differences between two slices.
+// The first result list contains all the values exist in the left list, but the right.
+// The second result list contains all the values exist in the right list, but the left.
 // NOTE: this function does not return unique values.
 func Difference[T comparable, S ~[]T](a, b S) (S, S) {
 	lenA, lenB := len(a), len(b)
@@ -124,14 +130,7 @@ func Difference[T comparable, S ~[]T](a, b S) (S, S) {
 	}
 
 	leftDiff, rightDiff := S{}, S{}
-	leftMap, rightMap := make(map[T]struct{}, lenA), make(map[T]struct{}, lenB)
-
-	for _, v := range a {
-		leftMap[v] = struct{}{}
-	}
-	for _, v := range b {
-		rightMap[v] = struct{}{}
-	}
+	leftMap, rightMap := MapSliceToMapKeys(a, struct{}{}), MapSliceToMapKeys(b, struct{}{})
 
 	for _, v := range a {
 		if _, ok := rightMap[v]; !ok {
@@ -147,8 +146,8 @@ func Difference[T comparable, S ~[]T](a, b S) (S, S) {
 	return leftDiff, rightDiff
 }
 
-// DifferencePred calculates the differences between two slices using special key function
-// NOTE: this function does not return unique values
+// DifferencePred calculates the differences between two slices using special key function.
+// NOTE: this function does not return unique values.
 func DifferencePred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) (S, S) {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
