@@ -15,8 +15,8 @@ type RandChoiceMaker[T any] struct {
 	intNFunc func(n int) int
 }
 
-// Next gets the next item randomly from the source
-// If there is no item in the source, returns false as the 2nd value
+// Next gets the next item randomly from the source.
+// If there is no item in the source, returns false as the 2nd value.
 func (m *RandChoiceMaker[T]) Next() (T, bool) {
 	count := len(m.source)
 	if count == 0 {

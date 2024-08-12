@@ -2,11 +2,11 @@ package gofn
 
 import "reflect"
 
-// If returns the 2nd arg if the condition is true, 3rd arg otherwise
-// This is similar to C-language ternary operation (cond ? val1 : val2)
-// Deprecated: this function may cause unexpected behavior upon misuses
+// If returns the 2nd arg if the condition is true, 3rd arg otherwise.
+// This is similar to C-language ternary operation (cond ? val1 : val2).
+// Deprecated: this function may cause unexpected behavior upon misuses.
 //
-//	For example: gofn.If(len(slice) > 0, slice[0], dafaultVal) will crash if slice is empty
+//	For example: gofn.If(len(slice) > 0, slice[0], defaultVal) will crash if slice is empty
 func If[C bool, T any](cond C, v1 T, v2 T) T {
 	if cond {
 		return v1
@@ -14,7 +14,7 @@ func If[C bool, T any](cond C, v1 T, v2 T) T {
 	return v2
 }
 
-// Or logically selects the first value which is not zero value of type T
+// Or logically selects the first value which is not zero value of type T.
 // This function is similar to `FirstTrue`, but it uses generic, not reflection.
 func Or[T NumberEx | NumberPtr | StringEx | StringPtr | ~bool | *bool](args ...T) T {
 	var defaultVal T
@@ -26,7 +26,7 @@ func Or[T NumberEx | NumberPtr | StringEx | StringPtr | ~bool | *bool](args ...T
 	return defaultVal
 }
 
-// FirstTrue returns the first "true" value in the given arguments if found
+// FirstTrue returns the first "true" value in the given arguments if found.
 // True value must be not:
 //   - zero value (0, "", nil, false)
 //   - empty slice, array, map, channel
@@ -107,8 +107,8 @@ func Must6[T1, T2, T3, T4, T5 any](v1 T1, v2 T2, v3 T3, v4 T4, v5 T5, e error) (
 	return v1, v2, v3, v4, v5
 }
 
-// New returns pointer to the address of the input
-// Helpful for unit testing when create a struct that has field requires pointer type
+// New returns pointer to the address of the input.
+// Helpful for unit testing when create a struct that has field requires pointer type.
 func New[T any](t T) *T {
 	return &t
 }

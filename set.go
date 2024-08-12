@@ -1,5 +1,6 @@
 package gofn
 
+// ToSet calculates unique values of a slice
 func ToSet[T comparable, S ~[]T](s S) S {
 	length := len(s)
 	if length <= 1 {
@@ -21,6 +22,7 @@ func ToSet[T comparable, S ~[]T](s S) S {
 	return result
 }
 
+// ToSetPred calculates unique values of a slice with custom key function
 func ToSetPred[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	length := len(s)
 	if length <= 1 {
@@ -43,6 +45,8 @@ func ToSetPred[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	return result
 }
 
+// ToSetPredReverse calculates unique values of a slice with custom key function.
+// Unlike ToSetPred, this function iterates over the slice from the end.
 func ToSetPredReverse[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	length := len(s)
 	if length <= 1 {

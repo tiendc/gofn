@@ -11,8 +11,8 @@ func Min[T NumberEx | ~string](v1 T, s ...T) T {
 	return min
 }
 
-// MinIn find the minimum value in the list
-// Use min := Must(MinIn(slice)) to panic on error
+// MinIn find the minimum value in the list.
+// Use min := Must(MinIn(slice)) to panic on error.
 func MinIn[T NumberEx | ~string, S ~[]T](s S) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
@@ -53,8 +53,8 @@ func Max[T NumberEx | ~string](v1 T, s ...T) T {
 	return max
 }
 
-// MaxIn finds the maximum value in the list
-// Use max := Must(MaxIn(slice)) to panic on error
+// MaxIn finds the maximum value in the list.
+// Use max := Must(MaxIn(slice)) to panic on error.
 func MaxIn[T NumberEx | ~string, S ~[]T](s S) (T, error) {
 	if len(s) == 0 {
 		var zeroT T
