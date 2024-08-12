@@ -155,12 +155,14 @@ func MapPop[K comparable, V any, M ~map[K]V](m M, k K, defaultVal V) V {
 
 // MapSetDefault sets default value for a key and returns the current value
 func MapSetDefault[K comparable, V any, M ~map[K]V](m M, k K, defaultVal V) V {
+	if m == nil {
+		var zero V
+		return zero
+	}
 	if val, ok := m[k]; ok {
 		return val
 	}
-	if m != nil {
-		m[k] = defaultVal
-	}
+	m[k] = defaultVal
 	return defaultVal
 }
 
