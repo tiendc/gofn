@@ -210,6 +210,13 @@ func MapPick[K comparable, V any, M ~map[K]V](m M, keys ...K) M {
 	return ret
 }
 
+// MapOmit omits keys from a map
+func MapOmit[K comparable, V any, M ~map[K]V](m M, keys ...K) {
+	for _, k := range keys {
+		delete(m, k)
+	}
+}
+
 // MapOmitCopy returns a new map with omitting the specified keys
 func MapOmitCopy[K comparable, V any, M ~map[K]V](m M, keys ...K) M {
 	omitKeys := MapSliceToMapKeys(keys, struct{}{})
