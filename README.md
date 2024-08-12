@@ -455,6 +455,15 @@ Copies map content for specified keys only.
 MapPick(map[int]int{1: 11, 2: 22, 3: 33}, 2, 3, 2) // map[int]int{2: 22, 3: 33}
 ```
 
+#### MapOmit
+
+Omits keys from a map.
+
+```go
+m := map[int]int{1: 11, 2: 22, 3: 33}
+MapOmit(m, 2, 3, 4) // m == map[int]int{1: 11}
+```
+
 #### MapOmitCopy
 
 Copies map content with omitting specified keys.
