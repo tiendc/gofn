@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-// StringJoin join elements from a slice of any type
-// This function calls fmt.Sprintf("%v", elem) to format every element
+// StringJoin join elements from a slice of any type.
+// This function calls fmt.Sprintf("%v", elem) to format every element.
 func StringJoin[T any, S ~[]T](s S, sep string) string {
 	return StringJoinEx(s, sep, "%v")
 }

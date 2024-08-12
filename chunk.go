@@ -1,5 +1,6 @@
 package gofn
 
+// Chunk splits slice content into chunks by chunk size
 func Chunk[T any, S ~[]T](s S, chunkSize int) []S {
 	if chunkSize <= 0 {
 		return []S{}
@@ -19,6 +20,7 @@ func Chunk[T any, S ~[]T](s S, chunkSize int) []S {
 	return chunks
 }
 
+// ChunkByPieces splits slice content into chunks by number of pieces
 func ChunkByPieces[T any, S ~[]T](s S, chunkCount int) []S {
 	if chunkCount <= 0 {
 		return []S{}

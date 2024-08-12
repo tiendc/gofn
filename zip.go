@@ -1,5 +1,6 @@
 package gofn
 
+// Zip combines values from 2 slices by each position
 func Zip[T any, U any, S1 ~[]T, S2 ~[]U](slice1 S1, slice2 S2) []*Tuple2[T, U] {
 	minLen := len(slice1)
 	if minLen > len(slice2) {
@@ -12,6 +13,7 @@ func Zip[T any, U any, S1 ~[]T, S2 ~[]U](slice1 S1, slice2 S2) []*Tuple2[T, U] {
 	return result
 }
 
+// Zip3 combines values from 3 slices by each position
 func Zip3[T any, U any, V any, S1 ~[]T, S2 ~[]U, S3 ~[]V](slice1 S1, slice2 S2, slice3 S3) []*Tuple3[T, U, V] {
 	minLen := len(slice1)
 	if minLen > len(slice2) {

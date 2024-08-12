@@ -28,26 +28,32 @@ func FilterPtr[T any, S ~[]T](s S, filterFunc func(t *T) bool) S {
 	return result
 }
 
+// FilterLT returns all values which are less than the specified value
 func FilterLT[T NumberEx | StringEx, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t < v })
 }
 
+// FilterLTE returns all values which are less than or equal to the specified value
 func FilterLTE[T NumberEx | StringEx, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t <= v })
 }
 
+// FilterGT returns all values which are greater than the specified value
 func FilterGT[T NumberEx | StringEx, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t > v })
 }
 
+// FilterGTE returns all values which are greater than or equal to the specified value
 func FilterGTE[T NumberEx | StringEx, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t >= v })
 }
 
+// FilterNE returns all values which are not equal to the specified value
 func FilterNE[T comparable, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t != v })
 }
 
+// FilterIN returns all values which are present in the specified list
 func FilterIN[T comparable, S ~[]T](s S, v ...T) S {
 	m := make(map[T]struct{}, len(v))
 	for _, t := range v {
@@ -59,6 +65,7 @@ func FilterIN[T comparable, S ~[]T](s S, v ...T) S {
 	})
 }
 
+// FilterNIN returns all values which are not present in the specified list
 func FilterNIN[T comparable, S ~[]T](s S, v ...T) S {
 	m := make(map[T]struct{}, len(v))
 	for _, t := range v {
@@ -70,6 +77,9 @@ func FilterNIN[T comparable, S ~[]T](s S, v ...T) S {
 	})
 }
 
+// FilterLIKE returns all strings which contain the specified substring.
+// Don't use wildcard in the input string.
+// For example: FilterLIKE(names, "tom").
 func FilterLIKE[T StringEx, S ~[]T](s S, v string) S {
 	if len(v) == 0 {
 		return S{}
@@ -79,6 +89,7 @@ func FilterLIKE[T StringEx, S ~[]T](s S, v string) S {
 	})
 }
 
+// FilterILIKE returns all strings which contain the specified substring with case-insensitive
 func FilterILIKE[T StringEx, S ~[]T](s S, v string) S {
 	if len(v) == 0 {
 		return S{}
