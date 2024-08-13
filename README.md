@@ -1003,6 +1003,18 @@ Reduce([]int{1, 2, 3}, func (accumulator int, currentValue int) int {
 }) // 6
 ```
 
+#### Partition / PartitionN
+
+Splits a slice into multiple partitions.
+
+```go
+// Splits a slice into 2 partitions
+p0, p1 := Partition([]int{1, 2, 3, 4, 5}, func (v int, index int) bool {return v%2==0})) // p0 == []int{2, 4}, p1 == []int{1, 3, 5}
+
+// Splits a slice into 3 partitions
+p := PartitionN([]int{1, 2, 3, 4, 5}, 3, func (v int, index int) int {return v%3})) // p == [[3], [1, 4], [2, 5]]
+```
+
 #### Min / Max
 
 Finds minimum/maximum value in a slice.
