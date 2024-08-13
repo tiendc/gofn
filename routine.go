@@ -99,3 +99,35 @@ func ExecTasksEx(
 	}
 	return errResult
 }
+
+// ExecTaskFunc executes a function on every target objects
+func ExecTaskFunc[T any](
+	ctx context.Context,
+	maxConcurrentTasks uint,
+	taskFunc func(ctx context.Context, obj T) error,
+	targetObjects ...T,
+) error {
+	errMap := ExecTaskFuncEx(ctx, maxConcurrentTasks, true, taskFunc, targetObjects...)
+	for _, v := range errMap {
+		return v
+	}
+	return nil
+}
+
+// ExecTaskFuncEx executes a function on every target objects
+func ExecTaskFuncEx[T any](
+	ctx context.Context,
+	maxConcurrentTasks uint,
+	stopOnError bool,
+	taskFunc func(ctx context.Context, obj T) error,
+	targetObjects ...T,
+) map[int]error {
+	tasks := make([]func(ctx context.Context) error, len(targetObjects))
+	for i := range targetObjects {
+		obj := targetObjects[i]
+		tasks[i] = func(ctx context.Context) error {
+			return taskFunc(ctx, obj)
+		}
+	}
+	return ExecTasksEx(ctx, maxConcurrentTasks, stopOnError, tasks...)
+}
