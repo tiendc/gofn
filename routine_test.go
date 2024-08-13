@@ -212,3 +212,56 @@ func Test_ExecTasks(t *testing.T) {
 		assert.True(t, len(result) > 0)
 	})
 }
+
+// nolint
+func Test_ExecTaskFunc(t *testing.T) {
+	type ctxData struct {
+		mu    sync.Mutex
+		evens []int
+		odds  []int
+	}
+
+	errTest := errors.New("test error")
+
+	taskFunc := func(ctx context.Context, v int) error {
+		data := ctx.Value("data").(*ctxData)
+		if v > 10 {
+			return errTest
+		}
+		data.mu.Lock()
+		if v%2 == 0 {
+			data.evens = append(data.evens, v)
+		} else {
+			data.odds = append(data.odds, v)
+		}
+		data.mu.Unlock()
+		time.Sleep(time.Duration(20+rand.Intn(100)) * time.Millisecond)
+		return nil
+	}
+
+	t.Run("no tasks passed", func(t *testing.T) {
+		ctx := context.Background()
+		err := ExecTaskFunc(ctx, 0, taskFunc)
+		assert.Nil(t, err)
+	})
+
+	t.Run("no pool size, success", func(t *testing.T) {
+		data := &ctxData{}
+		ctx := context.WithValue(context.Background(), "data", data)
+
+		errMap := ExecTaskFuncEx(ctx, 0, false, taskFunc, 1, 2, 3, 4, 5)
+		assert.Equal(t, 0, len(errMap))
+		assert.True(t, ContentEqual([]int{2, 4}, data.evens))
+		assert.True(t, ContentEqual([]int{1, 3, 5}, data.odds))
+	})
+
+	t.Run("no pool size, no stop on error, failure", func(t *testing.T) {
+		data := &ctxData{}
+		ctx := context.WithValue(context.Background(), "data", data)
+
+		errMap := ExecTaskFuncEx(ctx, 0, false, taskFunc, 1, 2, 3, 11, 4, 5)
+		assert.Equal(t, 1, len(errMap))
+		assert.True(t, ContentEqual([]int{2, 4}, data.evens))
+		assert.True(t, ContentEqual([]int{1, 3, 5}, data.odds))
+	})
+}

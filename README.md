@@ -616,7 +616,7 @@ NumberFmtGroup("1234567.12345", '.', ',')   // 1,234,567.12345
 
 #### ExecTasks / ExecTasksEx
 
-Execute tasks concurrently with ease. This function provides a convenient way for one of the most
+Executes tasks concurrently with ease. This function provides a convenient way for one of the most
 popular use case in practical.
 
 ```go
@@ -648,6 +648,35 @@ err := ExecTasks(ctx, 0 /* max concurrent tasks */,
 if err != nil {
     // one or more tasks failed
 }
+```
+
+#### ExecTaskFunc / ExecTaskFuncEx
+
+Executes a task function on every target objects concurrently. This function is similar to `ExecTasks()`, but it
+takes only one function and a list of target objects.
+
+```go
+var mu sync.Mutex
+var evens []int
+var odds []any
+
+taskFunc := func(ctx context.Context, v int) error {
+    mu.Lock()
+    if v%2 == 0 {
+        evens = append(evens, v)
+    } else {
+        odds = append(odds, v)
+    }
+    mu.Unlock()
+    return nil
+}
+
+err := ExecTaskFunc(ctx, 0 /* max concurrent tasks */, taskFunc, 1, 2, 3, 4, 5)
+if err != nil {
+    // one or more tasks failed
+}
+
+// Result is: evens has [2, 4], odds has [1, 3, 5] (with undetermined order of items)
 ```
 
 ### Transformation functions
