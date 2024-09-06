@@ -18,7 +18,7 @@ const (
 
 func ParseIntEx[T IntExt](s string, base int) (T, error) {
 	var zeroT T
-	v, err := strconv.ParseInt(s, base, int(unsafe.Sizeof(zeroT)*byte2Bits))
+	v, err := strconv.ParseInt(s, base, int(unsafe.Sizeof(zeroT)*byte2Bits)) //nolint:gosec
 	if err == nil {
 		return T(v), nil
 	}
@@ -35,7 +35,7 @@ func ParseIntUngroup[T IntExt](s string) (T, error) {
 }
 
 func ParseIntDef[T IntExt](s string, defaultVal T) T {
-	v, err := strconv.ParseInt(s, base10, int(unsafe.Sizeof(defaultVal)*byte2Bits))
+	v, err := strconv.ParseInt(s, base10, int(unsafe.Sizeof(defaultVal)*byte2Bits)) //nolint:gosec
 	if err == nil {
 		return T(v)
 	}
@@ -44,7 +44,7 @@ func ParseIntDef[T IntExt](s string, defaultVal T) T {
 
 func ParseUintEx[T UIntExt](s string, base int) (T, error) {
 	var zeroT T
-	v, err := strconv.ParseUint(s, base, int(unsafe.Sizeof(zeroT)*byte2Bits))
+	v, err := strconv.ParseUint(s, base, int(unsafe.Sizeof(zeroT)*byte2Bits)) //nolint:gosec
 	if err == nil {
 		return T(v), nil
 	}
@@ -61,7 +61,7 @@ func ParseUintUngroup[T UIntExt](s string) (T, error) {
 }
 
 func ParseUintDef[T UIntExt](s string, defaultVal T) T {
-	v, err := strconv.ParseUint(s, base10, int(unsafe.Sizeof(defaultVal)*byte2Bits))
+	v, err := strconv.ParseUint(s, base10, int(unsafe.Sizeof(defaultVal)*byte2Bits)) //nolint:gosec
 	if err == nil {
 		return T(v)
 	}
@@ -70,7 +70,7 @@ func ParseUintDef[T UIntExt](s string, defaultVal T) T {
 
 func ParseFloat[T FloatExt](s string) (T, error) {
 	var zeroT T
-	v, err := strconv.ParseFloat(s, int(unsafe.Sizeof(zeroT)*byte2Bits))
+	v, err := strconv.ParseFloat(s, int(unsafe.Sizeof(zeroT)*byte2Bits)) //nolint:gosec
 	if err == nil {
 		return T(v), nil
 	}
@@ -83,7 +83,7 @@ func ParseFloatUngroup[T FloatExt](s string) (T, error) {
 }
 
 func ParseFloatDef[T FloatExt](s string, defaultVal T) T {
-	v, err := strconv.ParseFloat(s, int(unsafe.Sizeof(defaultVal)*byte2Bits))
+	v, err := strconv.ParseFloat(s, int(unsafe.Sizeof(defaultVal)*byte2Bits)) //nolint:gosec
 	if err == nil {
 		return T(v)
 	}
@@ -137,7 +137,7 @@ func FormatFloatGroupEx[T FloatExt](v T, format string) string {
 
 // NumberFmtGroup separate decimal groups in the value string
 func NumberFmtGroup(num string, fractionSep, groupSep byte) string {
-	if len(num) < 4 { // nolint: gomnd
+	if len(num) < 4 { //nolint:mnd
 		return num
 	}
 	// Format as integer
@@ -168,13 +168,13 @@ func numberPartFmtGroup(s string, groupSep byte) string {
 	if groupSep == 0 || !stringIsNumeric(s, true) {
 		return s
 	}
-	buf := make([]byte, 0, len(s)+5) // nolint: gomnd
+	buf := make([]byte, 0, len(s)+5) //nolint:mnd
 	ch := s[0]
 	if ch == '-' {
 		buf = append(buf, ch)
 		s = s[1:]
 	}
-	start := len(s) % 3
+	start := len(s) % 3 //nolint:mnd
 	if start == 0 {
 		start = 3
 	}

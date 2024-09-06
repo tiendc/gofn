@@ -23,7 +23,7 @@ func PartitionN[T any, S ~[]T](s S, numPartitions uint, partitionFunc func(T, in
 	for i := range partitions {
 		partitions[i] = S{}
 	}
-	lastIndex := int(numPartitions) - 1
+	lastIndex := int(numPartitions) - 1 //nolint:gosec
 	for i, v := range s {
 		pIndex := partitionFunc(v, i)
 		if pIndex < 0 || pIndex > lastIndex {
