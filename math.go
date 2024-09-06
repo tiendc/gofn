@@ -4,6 +4,6 @@ package gofn
 // Ref: http://cavaliercoder.com/blog/optimized-abs-for-int64-in-go.html.
 // Note: if inputs MinInt64, the result is negative.
 func Abs(n int64) int64 {
-	y := n >> 63
+	y := n >> 63 //nolint:mnd
 	return (n ^ y) - y
 }
