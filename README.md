@@ -21,6 +21,7 @@ Try related libs:
   - [Functions for strings](#functions-for-strings)
   - [Functions for numbers](#functions-for-numbers)
   - [Functions for concurrency](#functions-for-concurrency)
+  - [Iteration functions](#iteration-functions)
   - [Transformation functions](#transformation-functions)
   - [Conversion functions](#conversion-functions)
   - [Bind functions](#bind-functions)
@@ -679,6 +680,40 @@ if err != nil {
 // Result is: evens has [2, 4], odds has [1, 3, 5] (with undetermined order of items)
 ```
 
+### Iteration functions
+
+---
+
+#### ForEach / ForEachReverse
+
+Iterates over slice content.
+
+```go
+ForEach([]int{1, 2, 3}, func (i, v int) {
+    fmt.Printf("%d ", v)
+}) // prints 1 2 3
+
+ForEachReverse([]int{1, 2, 3}, func (i, v int) {
+    fmt.Printf("%d ", v)
+}) // prints 3 2 1
+```
+
+#### Iter / IterReverse
+
+Iterates over one or multiple slices with ability to stop.
+
+```go
+Iter(func (i, v int) bool {
+    fmt.Printf("%d ", v)
+    return i < 3
+}, []int{1, 2, 3}, []int{4, 5}) // prints 1 2 3 4
+
+IterReverse(func (i, v int) bool {
+    fmt.Printf("%d ", v)
+    return true
+}, []int{1, 2, 3}, []int{4, 5}) // prints 5 4 3 2 1
+```
+
 ### Transformation functions
 
 ---
@@ -691,7 +726,6 @@ Filters a slice with condition.
 Filter([]int{1, 2, 3, 4}, func (i int) bool {
     return i % 2 == 0
 }) // []int{2, 4}
-
 
 FilterLT([]int{1, 2, 3, 4}, 3)        // []int{1, 2}
 FilterLTE([]int{1, 2, 3, 4}, 3)       // []int{1, 2, 3}
@@ -855,26 +889,6 @@ err := myQuickCalc()
 ### Common functions
 
 ---
-
-#### ForEach
-
-Iterates over slice content.
-
-```go
-ForEach([]int{1, 2, 3}, func (i, v int) {
-    fmt.Printf("%d ", v)
-}) // prints 1 2 3
-```
-
-#### ForEachReverse
-
-Iterates over slice content from the end.
-
-```go
-ForEachReverse([]int{1, 2, 3}, func (i, v int) {
-    fmt.Printf("%d ", v)
-}) // prints 3 2 1
-```
 
 #### All
 
