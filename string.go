@@ -3,7 +3,11 @@ package gofn
 import (
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
+
+// RuneLength alias of utf8.RuneCountInString
+var RuneLength = utf8.RuneCountInString
 
 // StringJoin join elements from a slice of any type.
 // This function calls fmt.Sprintf("%v", elem) to format every element.
