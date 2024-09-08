@@ -25,9 +25,9 @@ func ForEachReverse[T any, S ~[]T](s S, pred func(i int, t T)) {
 	}
 }
 
-// ForEachReversePtr iterates over pointers to slice items from the end.
-// For more advanced requirements, see IterReversePtr.
-func ForEachReversePtr[T any, S ~[]T](s S, pred func(i int, t *T)) {
+// ForEachPtrReverse iterates over pointers to slice items from the end.
+// For more advanced requirements, see IterPtrReverse.
+func ForEachPtrReverse[T any, S ~[]T](s S, pred func(i int, t *T)) {
 	for i := len(s) - 1; i >= 0; i-- {
 		pred(i, &s[i])
 	}

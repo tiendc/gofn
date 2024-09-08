@@ -114,21 +114,21 @@ func Test_IterReverse(t *testing.T) {
 	assert.Equal(t, []int{4, 3}, index5)
 }
 
-func Test_IterReversePtr(t *testing.T) {
+func Test_IterPtrReverse(t *testing.T) {
 	// No slice input
 	copy1 := []int{}
-	IterReversePtr[int, []int](func(i int, t *int) bool { copy1 = append(copy1, *t); return true })
+	IterPtrReverse[int, []int](func(i int, t *int) bool { copy1 = append(copy1, *t); return true })
 	assert.Equal(t, []int{}, copy1)
 
 	// Empty slice input
 	copy2 := []int{}
-	IterReversePtr(func(i int, t *int) bool { copy2 = append(copy2, *t); return true }, []int{})
+	IterPtrReverse(func(i int, t *int) bool { copy2 = append(copy2, *t); return true }, []int{})
 	assert.Equal(t, []int{}, copy2)
 
 	// Single slice
 	copy3 := []int{}
 	index3 := []int{}
-	IterReversePtr(func(i int, t *int) bool { copy3 = append(copy3, *t); index3 = append(index3, i); return true },
+	IterPtrReverse(func(i int, t *int) bool { copy3 = append(copy3, *t); index3 = append(index3, i); return true },
 		[]int{1, 2, 3})
 	assert.Equal(t, []int{3, 2, 1}, copy3)
 	assert.Equal(t, []int{2, 1, 0}, index3)
@@ -136,7 +136,7 @@ func Test_IterReversePtr(t *testing.T) {
 	// Multiple slices
 	copy4 := []int32{}
 	index4 := []int{}
-	IterReversePtr(func(i int, t *int32) bool { copy4 = append(copy4, *t); index4 = append(index4, i); return true },
+	IterPtrReverse(func(i int, t *int32) bool { copy4 = append(copy4, *t); index4 = append(index4, i); return true },
 		[]int32{1, 2, 3}, []int32{}, []int32{4, 5})
 	assert.Equal(t, []int32{5, 4, 3, 2, 1}, copy4)
 	assert.Equal(t, []int{4, 3, 2, 1, 0}, index4)
@@ -144,7 +144,7 @@ func Test_IterReversePtr(t *testing.T) {
 	// With stop
 	copy5 := []string{}
 	index5 := []int{}
-	IterReversePtr(func(i int, t *string) bool { copy5 = append(copy5, *t); index5 = append(index5, i); return i > 3 },
+	IterPtrReverse(func(i int, t *string) bool { copy5 = append(copy5, *t); index5 = append(index5, i); return i > 3 },
 		[]string{"1", "2", "3"}, []string{}, []string{"4", "5"})
 	assert.Equal(t, []string{"5", "4"}, copy5)
 	assert.Equal(t, []int{4, 3}, index5)

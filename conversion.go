@@ -1,12 +1,17 @@
 package gofn
 
-// ToIntfSlice convert a slice to a slice of interface
-func ToIntfSlice[T any, S ~[]T](s S) []any {
+// ToIfaceSlice convert a slice to a slice of interface
+func ToIfaceSlice[T any, S ~[]T](s S) []any {
 	result := make([]any, len(s))
 	for i := range s {
 		result[i] = s[i]
 	}
 	return result
+}
+
+// Deprecated: use
+func ToIntfSlice[T any, S ~[]T](s S) []any {
+	return ToIfaceSlice(s)
 }
 
 // ToStringSlice converts str-approximate slice to string slice

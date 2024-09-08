@@ -21,22 +21,31 @@ func Test_StringJoin(t *testing.T) {
 	}, ", "))
 }
 
-func Test_StringJoinPred(t *testing.T) {
-	assert.Equal(t, "", StringJoinPred[int]([]int(nil), ",", func(v int) string {
+func Test_StringJoinBy(t *testing.T) {
+	assert.Equal(t, "", StringJoinBy[int]([]int(nil), ",", func(v int) string {
 		return fmt.Sprintf("%d", v)
 	}))
+	assert.Equal(t, "1", StringJoinBy[int]([]int{1}, ",", func(v int) string {
+		return fmt.Sprintf("%d", v)
+	}))
+	assert.Equal(t, "1,2,3", StringJoinBy[int64]([]int64{1, 2, 3}, ",", func(v int64) string {
+		return fmt.Sprintf("%d", v)
+	}))
+	// Slice has nil element
+	assert.Equal(t, "1,nil,3", StringJoinBy[any]([]any{1, nil, "3"}, ",", func(v any) string {
+		if v == nil {
+			return "nil"
+		}
+		return fmt.Sprintf("%v", v)
+	}))
+}
+
+func Test_StringJoinPred_Deprecated(t *testing.T) {
 	assert.Equal(t, "1", StringJoinPred[int]([]int{1}, ",", func(v int) string {
 		return fmt.Sprintf("%d", v)
 	}))
 	assert.Equal(t, "1,2,3", StringJoinPred[int64]([]int64{1, 2, 3}, ",", func(v int64) string {
 		return fmt.Sprintf("%d", v)
-	}))
-	// Slice has nil element
-	assert.Equal(t, "1,nil,3", StringJoinPred[any]([]any{1, nil, "3"}, ",", func(v any) string {
-		if v == nil {
-			return "nil"
-		}
-		return fmt.Sprintf("%v", v)
 	}))
 }
 

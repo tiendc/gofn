@@ -35,80 +35,95 @@ func Test_Equal(t *testing.T) {
 }
 
 // nolint: forcetypeassert
-func Test_EqualPred(t *testing.T) {
-	assert.True(t, EqualPred([]any{}, []any{},
+func Test_EqualBy(t *testing.T) {
+	assert.True(t, EqualBy([]any{}, []any{},
 		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.True(t, EqualPred([]any{}, nil,
+	assert.True(t, EqualBy([]any{}, nil,
 		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.True(t, EqualPred(nil, []any{},
+	assert.True(t, EqualBy(nil, []any{},
 		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.True(t, EqualPred([]any{1, 2, 3}, []any{1, 2, 3},
+	assert.True(t, EqualBy([]any{1, 2, 3}, []any{1, 2, 3},
 		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.True(t, EqualPred([]any{"3", "1", "2"}, []any{"3", "1", "2"},
+	assert.True(t, EqualBy([]any{"3", "1", "2"}, []any{"3", "1", "2"},
 		func(a, b any) bool { return a.(string) == b.(string) }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.True(t, EqualPred(
+	assert.True(t, EqualBy(
 		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(a, b any) bool { return a.(St) == b.(St) }))
 
-	assert.False(t, EqualPred([]any{}, []any{1},
+	assert.False(t, EqualBy([]any{}, []any{1},
 		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]any{1}, nil,
+	assert.False(t, EqualBy([]any{1}, nil,
 		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]any{1, 2, 3}, []any{1, 2, 3, 4},
+	assert.False(t, EqualBy([]any{1, 2, 3}, []any{1, 2, 3, 4},
 		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]any{1, 2, 3}, []any{3, 2, 1},
+	assert.False(t, EqualBy([]any{1, 2, 3}, []any{3, 2, 1},
 		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]any{"3", "1", "2"}, []any{"1", "2", "3"},
+	assert.False(t, EqualBy([]any{"3", "1", "2"}, []any{"1", "2", "3"},
 		func(a, b any) bool { return a.(string) == b.(string) }))
-	assert.False(t, EqualPred(
+	assert.False(t, EqualBy(
 		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{1, "1"}, St{2, "2"}},
 		func(a, b any) bool { return a.(St) == b.(St) }))
-	assert.False(t, EqualPred(
+	assert.False(t, EqualBy(
 		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{3, "3"}, St{2, "2"}, St{1, "1"}},
 		func(a, b any) bool { return a.(St) == b.(St) }))
 }
 
-func Test_EqualPredPtr(t *testing.T) {
-	assert.True(t, EqualPredPtr([]int{}, []int{},
+// nolint: forcetypeassert
+func Test_EqualPred_Deprecated(t *testing.T) {
+	assert.True(t, EqualPred([]any{1, 2, 3}, []any{1, 2, 3},
+		func(a, b any) bool { return a.(int) == b.(int) }))
+	assert.False(t, EqualPred([]any{1, 2, 3}, []any{3, 2, 1},
+		func(a, b any) bool { return a.(int) == b.(int) }))
+}
+
+func Test_EqualByPtr(t *testing.T) {
+	assert.True(t, EqualByPtr([]int{}, []int{},
 		func(a, b *int) bool { return *a == *b }))
-	assert.True(t, EqualPredPtr([]int{}, nil,
+	assert.True(t, EqualByPtr([]int{}, nil,
 		func(a, b *int) bool { return *a == *b }))
-	assert.True(t, EqualPredPtr(nil, []int{},
+	assert.True(t, EqualByPtr(nil, []int{},
 		func(a, b *int) bool { return *a == *b }))
-	assert.True(t, EqualPredPtr([]int{1, 2, 3}, []int{1, 2, 3},
+	assert.True(t, EqualByPtr([]int{1, 2, 3}, []int{1, 2, 3},
 		func(a, b *int) bool { return *a == *b }))
-	assert.True(t, EqualPredPtr([]string{"3", "1", "2"}, []string{"3", "1", "2"},
+	assert.True(t, EqualByPtr([]string{"3", "1", "2"}, []string{"3", "1", "2"},
 		func(a, b *string) bool { return *a == *b }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.True(t, EqualPredPtr(
+	assert.True(t, EqualByPtr(
 		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(a, b *St) bool { return *a == *b }))
 
-	assert.False(t, EqualPredPtr([]int{}, []int{1},
+	assert.False(t, EqualByPtr([]int{}, []int{1},
 		func(a, b *int) bool { return *a == *b }))
-	assert.False(t, EqualPredPtr([]int{1}, nil,
+	assert.False(t, EqualByPtr([]int{1}, nil,
 		func(a, b *int) bool { return *a == *b }))
-	assert.False(t, EqualPredPtr([]int{1, 2, 3}, []int{1, 2, 3, 4},
+	assert.False(t, EqualByPtr([]int{1, 2, 3}, []int{1, 2, 3, 4},
+		func(a, b *int) bool { return *a == *b }))
+	assert.False(t, EqualByPtr([]int{1, 2, 3}, []int{3, 2, 1},
+		func(a, b *int) bool { return *a == *b }))
+	assert.False(t, EqualByPtr([]string{"3", "1", "2"}, []string{"1", "2", "3"},
+		func(a, b *string) bool { return *a == *b }))
+	assert.False(t, EqualByPtr(
+		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{1, "1"}, {2, "2"}},
+		func(a, b *St) bool { return *a == *b }))
+	assert.False(t, EqualByPtr(
+		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{3, "3"}, {2, "2"}, {1, "1"}},
+		func(a, b *St) bool { return *a == *b }))
+}
+
+func Test_EqualPredPtr_Deprecated(t *testing.T) {
+	assert.True(t, EqualPredPtr([]int{1, 2, 3}, []int{1, 2, 3},
 		func(a, b *int) bool { return *a == *b }))
 	assert.False(t, EqualPredPtr([]int{1, 2, 3}, []int{3, 2, 1},
 		func(a, b *int) bool { return *a == *b }))
-	assert.False(t, EqualPredPtr([]string{"3", "1", "2"}, []string{"1", "2", "3"},
-		func(a, b *string) bool { return *a == *b }))
-	assert.False(t, EqualPredPtr(
-		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{1, "1"}, {2, "2"}},
-		func(a, b *St) bool { return *a == *b }))
-	assert.False(t, EqualPredPtr(
-		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{3, "3"}, {2, "2"}, {1, "1"}},
-		func(a, b *St) bool { return *a == *b }))
 }
 
 func Test_ContentEqual(t *testing.T) {
@@ -135,37 +150,45 @@ func Test_ContentEqual(t *testing.T) {
 }
 
 // nolint: forcetypeassert
-func Test_ContentEqualPred(t *testing.T) {
-	assert.True(t, ContentEqualPred([]any{}, []any{},
+func Test_ContentEqualBy(t *testing.T) {
+	assert.True(t, ContentEqualBy([]any{}, []any{},
 		func(t any) int { return t.(int) }))
-	assert.True(t, ContentEqualPred([]any{}, nil,
+	assert.True(t, ContentEqualBy([]any{}, nil,
 		func(t any) int { return t.(int) }))
-	assert.True(t, ContentEqualPred(nil, []any{},
+	assert.True(t, ContentEqualBy(nil, []any{},
 		func(t any) int { return t.(int) }))
-	assert.True(t, ContentEqualPred([]any{1, 2, 3}, []any{1, 2, 3},
+	assert.True(t, ContentEqualBy([]any{1, 2, 3}, []any{1, 2, 3},
 		func(t any) int { return t.(int) }))
-	assert.True(t, ContentEqualPred([]any{3, 1, 2}, []any{1, 2, 3},
+	assert.True(t, ContentEqualBy([]any{3, 1, 2}, []any{1, 2, 3},
 		func(t any) int { return t.(int) }))
-	assert.True(t, ContentEqualPred([]any{"3", "1", "2"}, []any{"1", "2", "3"},
+	assert.True(t, ContentEqualBy([]any{"3", "1", "2"}, []any{"1", "2", "3"},
 		func(t any) string { return t.(string) }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.True(t, ContentEqualPred(
+	assert.True(t, ContentEqualBy(
 		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{3, "3"}, St{1, "1"}, St{2, "2"}},
 		func(t any) St { return t.(St) }))
 
-	assert.False(t, ContentEqualPred([]any{}, []any{1},
+	assert.False(t, ContentEqualBy([]any{}, []any{1},
 		func(t any) int { return t.(int) }))
-	assert.False(t, ContentEqualPred([]any{1}, nil,
+	assert.False(t, ContentEqualBy([]any{1}, nil,
+		func(t any) int { return t.(int) }))
+	assert.False(t, ContentEqualBy([]any{1, 2, 3}, []any{1, 2, 3, 4},
+		func(t any) int { return t.(int) }))
+	assert.False(t, ContentEqualBy(
+		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{3, "3"}, St{1, "1"}, St{3, "3"}},
+		func(t any) St { return t.(St) }))
+}
+
+// nolint: forcetypeassert
+func Test_ContentEqualPred_Deprecated(t *testing.T) {
+	assert.True(t, ContentEqualPred([]any{1, 2, 3}, []any{1, 2, 3},
 		func(t any) int { return t.(int) }))
 	assert.False(t, ContentEqualPred([]any{1, 2, 3}, []any{1, 2, 3, 4},
 		func(t any) int { return t.(int) }))
-	assert.False(t, ContentEqualPred(
-		[]any{St{1, "1"}, St{2, "2"}, St{3, "3"}}, []any{St{3, "3"}, St{1, "1"}, St{3, "3"}},
-		func(t any) St { return t.(St) }))
 }
 
 func Test_ContentEqualPtr(t *testing.T) {
@@ -217,70 +240,85 @@ func Test_Contain(t *testing.T) {
 }
 
 // nolint: goconst, forcetypeassert
-func Test_ContainPred(t *testing.T) {
-	assert.False(t, ContainPred([]any{},
+func Test_ContainBy(t *testing.T) {
+	assert.False(t, ContainBy([]any{},
 		func(i any) bool { return i.(int) == 1 }))
-	assert.False(t, ContainPred([]any{"one"},
+	assert.False(t, ContainBy([]any{"one"},
 		func(i any) bool { return i == "One" }))
-	assert.False(t, ContainPred([]any{"one", "two"},
+	assert.False(t, ContainBy([]any{"one", "two"},
 		func(i any) bool { return i == "" }))
-	assert.False(t, ContainPred([]any{1, 2, 3},
+	assert.False(t, ContainBy([]any{1, 2, 3},
 		func(i any) bool { return i == 4 }))
-	assert.False(t, ContainPred([]any{1.1, 2.2, 3.3},
+	assert.False(t, ContainBy([]any{1.1, 2.2, 3.3},
 		func(i any) bool { return i == 3.35 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.False(t, ContainPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+	assert.False(t, ContainBy([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(i any) bool { return i == St{3, "4"} }))
 
-	assert.True(t, ContainPred([]any{1},
+	assert.True(t, ContainBy([]any{1},
 		func(i any) bool { return i == 1 }))
-	assert.True(t, ContainPred([]any{1, 2, 3, 1, 2, 3},
+	assert.True(t, ContainBy([]any{1, 2, 3, 1, 2, 3},
 		func(i any) bool { return i == 2 }))
-	assert.True(t, ContainPred([]any{"one", "two"},
+	assert.True(t, ContainBy([]any{"one", "two"},
 		func(i any) bool { return i == "two" }))
-	assert.True(t, ContainPred([]any{"one", "two", ""},
+	assert.True(t, ContainBy([]any{"one", "two", ""},
 		func(i any) bool { return i == "" }))
-	assert.True(t, ContainPred([]any{1.1, 2.2, 3.3},
+	assert.True(t, ContainBy([]any{1.1, 2.2, 3.3},
 		func(i any) bool { return i == 2.2 }))
-	assert.True(t, ContainPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+	assert.True(t, ContainBy([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(i any) bool { return i == St{3, "3"} }))
 }
 
-func Test_ContainPredPtr(t *testing.T) {
-	assert.False(t, ContainPredPtr([]int{},
+// nolint: goconst, forcetypeassert
+func Test_ContainPred_Deprecated(t *testing.T) {
+	assert.False(t, ContainPred([]any{1, 2, 3},
+		func(i any) bool { return i == 4 }))
+	assert.True(t, ContainPred([]any{1, 2, 3, 1, 2, 3},
+		func(i any) bool { return i == 2 }))
+}
+
+func Test_ContainByPtr(t *testing.T) {
+	assert.False(t, ContainByPtr([]int{},
 		func(i *int) bool { return *i == 1 }))
-	assert.False(t, ContainPredPtr([]string{"one"},
+	assert.False(t, ContainByPtr([]string{"one"},
 		func(i *string) bool { return *i == "One" }))
-	assert.False(t, ContainPredPtr([]string{"one", "two"},
+	assert.False(t, ContainByPtr([]string{"one", "two"},
 		func(i *string) bool { return *i == "" }))
-	assert.False(t, ContainPredPtr([]int{1, 2, 3},
+	assert.False(t, ContainByPtr([]int{1, 2, 3},
 		func(i *int) bool { return *i == 4 }))
-	assert.False(t, ContainPredPtr([]float32{1.1, 2.2, 3.3},
+	assert.False(t, ContainByPtr([]float32{1.1, 2.2, 3.3},
 		func(i *float32) bool { return *i == 3.35 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.False(t, ContainPredPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	assert.False(t, ContainByPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i *St) bool { return *i == St{3, "4"} }))
 
-	assert.True(t, ContainPredPtr([]int{1},
+	assert.True(t, ContainByPtr([]int{1},
 		func(i *int) bool { return *i == 1 }))
+	assert.True(t, ContainByPtr([]int{1, 2, 3, 1, 2, 3},
+		func(i *int) bool { return *i == 2 }))
+	assert.True(t, ContainByPtr([]string{"one", "two"},
+		func(i *string) bool { return *i == "two" }))
+	assert.True(t, ContainByPtr([]string{"one", "two", ""},
+		func(i *string) bool { return *i == "" }))
+	assert.True(t, ContainByPtr([]float32{1.1, 2.2, 3.3},
+		func(i *float32) bool { return *i == 2.2 }))
+	assert.True(t, ContainByPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+		func(i *St) bool { return *i == St{3, "3"} }))
+}
+
+func Test_ContainPredPtr_Deprecated(t *testing.T) {
+	assert.False(t, ContainPredPtr([]int{1, 2, 3},
+		func(i *int) bool { return *i == 4 }))
 	assert.True(t, ContainPredPtr([]int{1, 2, 3, 1, 2, 3},
 		func(i *int) bool { return *i == 2 }))
-	assert.True(t, ContainPredPtr([]string{"one", "two"},
-		func(i *string) bool { return *i == "two" }))
-	assert.True(t, ContainPredPtr([]string{"one", "two", ""},
-		func(i *string) bool { return *i == "" }))
-	assert.True(t, ContainPredPtr([]float32{1.1, 2.2, 3.3},
-		func(i *float32) bool { return *i == 2.2 }))
-	assert.True(t, ContainPredPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
-		func(i *St) bool { return *i == St{3, "3"} }))
 }
 
 func Test_ContainAll(t *testing.T) {
@@ -348,190 +386,234 @@ func Test_IsUnique(t *testing.T) {
 }
 
 // nolint: forcetypeassert
-func Test_IsUniquePred(t *testing.T) {
-	assert.True(t, IsUniquePred[int, int, []int](nil, nil))
-	assert.True(t, IsUniquePred([]int{}, func(v int) int { return v }))
-	assert.True(t, IsUniquePred([]any{"one"},
+func Test_IsUniqueBy(t *testing.T) {
+	assert.True(t, IsUniqueBy[int, int, []int](nil, nil))
+	assert.True(t, IsUniqueBy([]int{}, func(v int) int { return v }))
+	assert.True(t, IsUniqueBy([]any{"one"},
 		func(v any) string { return v.(string) }))
-	assert.True(t, IsUniquePred([]any{"one", "two", "One", "Two"},
+	assert.True(t, IsUniqueBy([]any{"one", "two", "One", "Two"},
 		func(v any) string { return v.(string) }))
-	assert.True(t, IsUniquePred([]any{1.1, 2.2, 3.3, 1.11},
+	assert.True(t, IsUniqueBy([]any{1.1, 2.2, 3.3, 1.11},
 		func(v any) float64 { return v.(float64) }))
 
-	assert.False(t, IsUniquePred([]any{1, 2, 3, 1, 2},
+	assert.False(t, IsUniqueBy([]any{1, 2, 3, 1, 2},
 		func(v any) int { return v.(int) }))
-	assert.False(t, IsUniquePred([]any{"one", "two", "one"},
+	assert.False(t, IsUniqueBy([]any{"one", "two", "one"},
 		func(v any) string { return v.(string) }))
-	assert.False(t, IsUniquePred([]any{1.1, 2.2, 1.100},
+	assert.False(t, IsUniqueBy([]any{1.1, 2.2, 1.100},
 		func(v any) float64 { return v.(float64) }))
 
 	type st struct {
 		I int
 		S string
 	}
-	assert.True(t, IsUniquePred([]st{{1, "one"}, {2, "two"}, {3, "three"}}, func(v st) int { return v.I }))
-	assert.False(t, IsUniquePred([]st{{1, "one"}, {1, "One"}}, func(v st) int { return v.I }))
-	assert.False(t, IsUniquePred([]st{{1, "one"}, {2, "two"}, {1, "one"}}, func(v st) int { return v.I }))
+	assert.True(t, IsUniqueBy([]st{{1, "one"}, {2, "two"}, {3, "three"}}, func(v st) int { return v.I }))
+	assert.False(t, IsUniqueBy([]st{{1, "one"}, {1, "One"}}, func(v st) int { return v.I }))
+	assert.False(t, IsUniqueBy([]st{{1, "one"}, {2, "two"}, {1, "one"}}, func(v st) int { return v.I }))
 }
 
-func Test_FindPred(t *testing.T) {
-	_, found := FindPred([]any{}, func(i any) bool { return i == 1 })
+// nolint: forcetypeassert
+func Test_IsUniquePred_Deprecated(t *testing.T) {
+	assert.True(t, IsUniquePred([]any{1.1, 2.2, 3.3, 1.11},
+		func(v any) float64 { return v.(float64) }))
+	assert.False(t, IsUniquePred([]any{1, 2, 3, 1, 2},
+		func(v any) int { return v.(int) }))
+}
+
+func Test_Find(t *testing.T) {
+	_, found := Find([]any{}, func(i any) bool { return i == 1 })
 	assert.False(t, found)
-	_, found = FindPred([]any{"one"}, func(i any) bool { return i == "One" })
+	_, found = Find([]any{"one"}, func(i any) bool { return i == "One" })
 	assert.False(t, found)
-	_, found = FindPred([]any{"one", "two"}, func(i any) bool { return i == "" })
+	_, found = Find([]any{"one", "two"}, func(i any) bool { return i == "" })
 	assert.False(t, found)
-	_, found = FindPred([]any{1, 2, 3}, func(i any) bool { return i == 4 })
+	_, found = Find([]any{1, 2, 3}, func(i any) bool { return i == 4 })
 	assert.False(t, found)
-	_, found = FindPred([]any{1.1, 2.2, 3.3}, func(i any) bool { return i == 3.35 })
+	_, found = Find([]any{1.1, 2.2, 3.3}, func(i any) bool { return i == 3.35 })
 	assert.False(t, found)
 
 	type St struct {
 		Int int
 		Str string
 	}
-	_, found = FindPred([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	_, found = Find([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i St) bool { return i.Int == 4 })
 	assert.False(t, found)
 
-	v1, found := FindPred([]any{1}, func(i any) bool { return i == 1 })
+	v1, found := Find([]any{1}, func(i any) bool { return i == 1 })
 	assert.True(t, found)
 	assert.Equal(t, 1, v1)
-	v2, found := FindPred([]any{1, 2, 3, 1, 2, 3}, func(i any) bool { return i == 2 })
+	v2, found := Find([]any{1, 2, 3, 1, 2, 3}, func(i any) bool { return i == 2 })
 	assert.True(t, found)
 	assert.Equal(t, 2, v2)
-	v3, found := FindPred([]any{"one", "two"}, func(i any) bool { return i == "two" })
+	v3, found := Find([]any{"one", "two"}, func(i any) bool { return i == "two" })
 	assert.True(t, found)
 	assert.Equal(t, "two", v3)
-	v4, found := FindPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+	v4, found := Find([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(i any) bool { return i == St{3, "3"} })
 	assert.True(t, found)
 	assert.Equal(t, St{3, "3"}, v4)
-	v5, found := FindPred([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	v5, found := Find([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i St) bool { return i.Int == 2 })
 	assert.True(t, found)
 	assert.Equal(t, St{2, "2"}, v5)
 }
 
-func Test_FindPredPtr(t *testing.T) {
-	_, found := FindPredPtr([]any{}, func(i *any) bool { return *i == 1 })
+func Test_FindPred_Deprecated(t *testing.T) {
+	_, found := FindPred([]any{1.1, 2.2, 3.3}, func(i any) bool { return i == 3.35 })
 	assert.False(t, found)
-	_, found = FindPredPtr([]any{"one"}, func(i *any) bool { return *i == "One" })
+
+	v2, found := FindPred([]any{1, 2, 3, 1, 2, 3}, func(i any) bool { return i == 2 })
+	assert.True(t, found)
+	assert.Equal(t, 2, v2)
+}
+
+func Test_FindPtr(t *testing.T) {
+	_, found := FindPtr([]any{}, func(i *any) bool { return *i == 1 })
 	assert.False(t, found)
-	_, found = FindPredPtr([]any{"one", "two"}, func(i *any) bool { return *i == "" })
+	_, found = FindPtr([]any{"one"}, func(i *any) bool { return *i == "One" })
 	assert.False(t, found)
-	_, found = FindPredPtr([]any{1, 2, 3}, func(i *any) bool { return *i == 4 })
+	_, found = FindPtr([]any{"one", "two"}, func(i *any) bool { return *i == "" })
 	assert.False(t, found)
-	_, found = FindPredPtr([]any{1.1, 2.2, 3.3}, func(i *any) bool { return *i == 3.35 })
+	_, found = FindPtr([]any{1, 2, 3}, func(i *any) bool { return *i == 4 })
+	assert.False(t, found)
+	_, found = FindPtr([]any{1.1, 2.2, 3.3}, func(i *any) bool { return *i == 3.35 })
 	assert.False(t, found)
 
 	type St struct {
 		Int int
 		Str string
 	}
-	_, found = FindPredPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	_, found = FindPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i *St) bool { return i.Int == 4 })
 	assert.False(t, found)
 
-	v1, found := FindPredPtr([]any{1}, func(i *any) bool { return *i == 1 })
+	v1, found := FindPtr([]any{1}, func(i *any) bool { return *i == 1 })
 	assert.True(t, found)
 	assert.Equal(t, 1, v1)
-	v2, found := FindPredPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
+	v2, found := FindPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
 	assert.True(t, found)
 	assert.Equal(t, 2, v2)
-	v3, found := FindPredPtr([]any{"one", "two"}, func(i *any) bool { return *i == "two" })
+	v3, found := FindPtr([]any{"one", "two"}, func(i *any) bool { return *i == "two" })
 	assert.True(t, found)
 	assert.Equal(t, "two", v3)
-	v4, found := FindPredPtr([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+	v4, found := FindPtr([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(i *any) bool { return *i == St{3, "3"} })
 	assert.True(t, found)
 	assert.Equal(t, St{3, "3"}, v4)
-	v5, found := FindPredPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	v5, found := FindPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i *St) bool { return i.Int == 2 })
 	assert.True(t, found)
 	assert.Equal(t, St{2, "2"}, v5)
 }
 
-func Test_FindLastPred(t *testing.T) {
-	_, found := FindLastPred([]any{}, func(i any) bool { return i == 1 })
+func Test_FindPredPtr_Deprecated(t *testing.T) {
+	_, found := FindPredPtr([]any{1.1, 2.2, 3.3}, func(i *any) bool { return *i == 3.35 })
 	assert.False(t, found)
-	_, found = FindLastPred([]any{"one"}, func(i any) bool { return i == "One" })
+
+	v2, found := FindPredPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
+	assert.True(t, found)
+	assert.Equal(t, 2, v2)
+}
+
+func Test_FindLast(t *testing.T) {
+	_, found := FindLast([]any{}, func(i any) bool { return i == 1 })
 	assert.False(t, found)
-	_, found = FindLastPred([]any{"one", "two"}, func(i any) bool { return i == "" })
+	_, found = FindLast([]any{"one"}, func(i any) bool { return i == "One" })
 	assert.False(t, found)
-	_, found = FindLastPred([]any{1, 2, 3}, func(i any) bool { return i == 4 })
+	_, found = FindLast([]any{"one", "two"}, func(i any) bool { return i == "" })
 	assert.False(t, found)
-	_, found = FindLastPred([]any{1.1, 2.2, 3.3}, func(i any) bool { return i == 3.35 })
+	_, found = FindLast([]any{1, 2, 3}, func(i any) bool { return i == 4 })
+	assert.False(t, found)
+	_, found = FindLast([]any{1.1, 2.2, 3.3}, func(i any) bool { return i == 3.35 })
 	assert.False(t, found)
 
 	type St struct {
 		Int int
 		Str string
 	}
-	_, found = FindLastPred([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	_, found = FindLast([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i St) bool { return i.Int == 4 })
 	assert.False(t, found)
 
-	v1, found := FindLastPred([]any{1}, func(i any) bool { return i == 1 })
+	v1, found := FindLast([]any{1}, func(i any) bool { return i == 1 })
 	assert.True(t, found)
 	assert.Equal(t, 1, v1)
-	v2, found := FindLastPred([]any{1, 2, 3, 1, 2, 3}, func(i any) bool { return i == 2 })
+	v2, found := FindLast([]any{1, 2, 3, 1, 2, 3}, func(i any) bool { return i == 2 })
 	assert.True(t, found)
 	assert.Equal(t, 2, v2)
-	v3, found := FindLastPred([]any{"one", "two"}, func(i any) bool { return i == "two" })
+	v3, found := FindLast([]any{"one", "two"}, func(i any) bool { return i == "two" })
 	assert.True(t, found)
 	assert.Equal(t, "two", v3)
-	v4, found := FindLastPred([]any{"one", "", "two", ""}, func(i any) bool { return i == "" })
+	v4, found := FindLast([]any{"one", "", "two", ""}, func(i any) bool { return i == "" })
 	assert.True(t, found)
 	assert.Equal(t, "", v4)
-	v5, found := FindLastPred([]any{1.1, 1.1, 2.2, 3.3}, func(i any) bool { return i == 1.1 })
+	v5, found := FindLast([]any{1.1, 1.1, 2.2, 3.3}, func(i any) bool { return i == 1.1 })
 	assert.True(t, found)
 	assert.Equal(t, 1.1, v5)
-	v6, found := FindLastPred([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	v6, found := FindLast([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i St) bool { return i.Int == 3 })
 	assert.True(t, found)
 	assert.Equal(t, St{3, "3"}, v6)
 }
 
-func Test_FindLastPredPtr(t *testing.T) {
-	_, found := FindLastPredPtr([]any{}, func(i *any) bool { return *i == 1 })
+func Test_FindLastPred_Deprecated(t *testing.T) {
+	_, found := FindLastPred([]any{1, 2, 3}, func(i any) bool { return i == 4 })
 	assert.False(t, found)
-	_, found = FindLastPredPtr([]any{"one"}, func(i *any) bool { return *i == "One" })
+
+	v2, found := FindLastPred([]any{1, 2, 3, 1, 2, 3}, func(i any) bool { return i == 2 })
+	assert.True(t, found)
+	assert.Equal(t, 2, v2)
+}
+
+func Test_FindLastPtr(t *testing.T) {
+	_, found := FindLastPtr([]any{}, func(i *any) bool { return *i == 1 })
 	assert.False(t, found)
-	_, found = FindLastPredPtr([]any{"one", "two"}, func(i *any) bool { return *i == "" })
+	_, found = FindLastPtr([]any{"one"}, func(i *any) bool { return *i == "One" })
 	assert.False(t, found)
-	_, found = FindLastPredPtr([]any{1, 2, 3}, func(i *any) bool { return *i == 4 })
+	_, found = FindLastPtr([]any{"one", "two"}, func(i *any) bool { return *i == "" })
 	assert.False(t, found)
-	_, found = FindLastPredPtr([]any{1.1, 2.2, 3.3}, func(i *any) bool { return *i == 3.35 })
+	_, found = FindLastPtr([]any{1, 2, 3}, func(i *any) bool { return *i == 4 })
+	assert.False(t, found)
+	_, found = FindLastPtr([]any{1.1, 2.2, 3.3}, func(i *any) bool { return *i == 3.35 })
 	assert.False(t, found)
 
 	type St struct {
 		Int int
 		Str string
 	}
-	_, found = FindLastPredPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	_, found = FindLastPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i *St) bool { return i.Int == 4 })
 	assert.False(t, found)
 
-	v1, found := FindLastPredPtr([]any{1}, func(i *any) bool { return *i == 1 })
+	v1, found := FindLastPtr([]any{1}, func(i *any) bool { return *i == 1 })
 	assert.True(t, found)
 	assert.Equal(t, 1, v1)
-	v2, found := FindLastPredPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
+	v2, found := FindLastPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
 	assert.True(t, found)
 	assert.Equal(t, 2, v2)
-	v3, found := FindLastPredPtr([]any{"one", "two"}, func(i *any) bool { return *i == "two" })
+	v3, found := FindLastPtr([]any{"one", "two"}, func(i *any) bool { return *i == "two" })
 	assert.True(t, found)
 	assert.Equal(t, "two", v3)
-	v4, found := FindLastPredPtr([]any{"one", "", "two", ""}, func(i *any) bool { return *i == "" })
+	v4, found := FindLastPtr([]any{"one", "", "two", ""}, func(i *any) bool { return *i == "" })
 	assert.True(t, found)
 	assert.Equal(t, "", v4)
-	v5, found := FindLastPredPtr([]any{1.1, 1.1, 2.2, 3.3}, func(i *any) bool { return *i == 1.1 })
+	v5, found := FindLastPtr([]any{1.1, 1.1, 2.2, 3.3}, func(i *any) bool { return *i == 1.1 })
 	assert.True(t, found)
 	assert.Equal(t, 1.1, v5)
-	v6, found := FindLastPredPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
+	v6, found := FindLastPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i *St) bool { return i.Int == 3 })
 	assert.True(t, found)
 	assert.Equal(t, St{3, "3"}, v6)
+}
+
+func Test_FindLastPredPtr(t *testing.T) {
+	_, found := FindLastPredPtr([]any{1.1, 2.2, 3.3}, func(i *any) bool { return *i == 3.35 })
+	assert.False(t, found)
+
+	v2, found := FindLastPredPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
+	assert.True(t, found)
+	assert.Equal(t, 2, v2)
 }
 
 func Test_IndexOf(t *testing.T) {
@@ -555,37 +637,44 @@ func Test_IndexOf(t *testing.T) {
 	assert.Equal(t, 2, IndexOf([]St{{1, "1"}, {2, "2"}, {3, "3"}}, St{3, "3"}))
 }
 
-func Test_IndexOfPred(t *testing.T) {
-	assert.Equal(t, -1, IndexOfPred([]any{},
+func Test_IndexOfBy(t *testing.T) {
+	assert.Equal(t, -1, IndexOfBy([]any{},
 		func(i any) bool { return i == 1 }))
-	assert.Equal(t, -1, IndexOfPred([]any{"one"},
+	assert.Equal(t, -1, IndexOfBy([]any{"one"},
 		func(i any) bool { return i == "One" }))
-	assert.Equal(t, -1, IndexOfPred([]any{"one", "two"},
+	assert.Equal(t, -1, IndexOfBy([]any{"one", "two"},
 		func(i any) bool { return i == "" }))
-	assert.Equal(t, -1, IndexOfPred([]any{1, 2, 3},
+	assert.Equal(t, -1, IndexOfBy([]any{1, 2, 3},
 		func(i any) bool { return i == 4 }))
-	assert.Equal(t, -1, IndexOfPred([]any{1.1, 2.2, 3.3},
+	assert.Equal(t, -1, IndexOfBy([]any{1.1, 2.2, 3.3},
 		func(i any) bool { return i == 3.35 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.Equal(t, -1, IndexOfPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+	assert.Equal(t, -1, IndexOfBy([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(i any) bool { return i == St{3, "4"} }))
 
-	assert.Equal(t, 0, IndexOfPred([]any{1},
+	assert.Equal(t, 0, IndexOfBy([]any{1},
 		func(i any) bool { return i == 1 }))
-	assert.Equal(t, 1, IndexOfPred([]any{1, 2, 3, 1, 2, 3},
+	assert.Equal(t, 1, IndexOfBy([]any{1, 2, 3, 1, 2, 3},
 		func(i any) bool { return i == 2 }))
-	assert.Equal(t, 1, IndexOfPred([]any{"one", "two"},
+	assert.Equal(t, 1, IndexOfBy([]any{"one", "two"},
 		func(i any) bool { return i == "two" }))
-	assert.Equal(t, 2, IndexOfPred([]any{"one", "two", ""},
+	assert.Equal(t, 2, IndexOfBy([]any{"one", "two", ""},
 		func(i any) bool { return i == "" }))
+	assert.Equal(t, 2, IndexOfBy([]any{1.1, 2.2, 3.3},
+		func(i any) bool { return i == 3.3 }))
+	assert.Equal(t, 2, IndexOfBy([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(i any) bool { return i == St{3, "3"} }))
+}
+
+func Test_IndexOfPred_Deprecated(t *testing.T) {
+	assert.Equal(t, -1, IndexOfPred([]any{1, 2, 3},
+		func(i any) bool { return i == 4 }))
 	assert.Equal(t, 2, IndexOfPred([]any{1.1, 2.2, 3.3},
 		func(i any) bool { return i == 3.3 }))
-	assert.Equal(t, 2, IndexOfPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(i any) bool { return i == St{3, "3"} }))
 }
 
 func Test_LastIndexOf(t *testing.T) {
@@ -609,37 +698,44 @@ func Test_LastIndexOf(t *testing.T) {
 	assert.Equal(t, 2, LastIndexOf([]St{{1, "1"}, {2, "2"}, {3, "3"}}, St{3, "3"}))
 }
 
-func Test_LastIndexOfPred(t *testing.T) {
-	assert.Equal(t, -1, LastIndexOfPred([]any{},
+func Test_LastIndexOfBy(t *testing.T) {
+	assert.Equal(t, -1, LastIndexOfBy([]any{},
 		func(i any) bool { return i == 1 }))
-	assert.Equal(t, -1, LastIndexOfPred([]any{"one"},
+	assert.Equal(t, -1, LastIndexOfBy([]any{"one"},
 		func(i any) bool { return i == "One" }))
-	assert.Equal(t, -1, LastIndexOfPred([]any{"one", "two"},
+	assert.Equal(t, -1, LastIndexOfBy([]any{"one", "two"},
 		func(i any) bool { return i == "" }))
-	assert.Equal(t, -1, LastIndexOfPred([]any{1, 2, 3},
+	assert.Equal(t, -1, LastIndexOfBy([]any{1, 2, 3},
 		func(i any) bool { return i == 4 }))
-	assert.Equal(t, -1, LastIndexOfPred([]any{1.1, 2.2, 3.3},
+	assert.Equal(t, -1, LastIndexOfBy([]any{1.1, 2.2, 3.3},
 		func(i any) bool { return i == 3.35 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.Equal(t, -1, LastIndexOfPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+	assert.Equal(t, -1, LastIndexOfBy([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(i any) bool { return i == St{3, "4"} }))
 
-	assert.Equal(t, 0, LastIndexOfPred([]any{1},
+	assert.Equal(t, 0, LastIndexOfBy([]any{1},
 		func(i any) bool { return i == 1 }))
-	assert.Equal(t, 4, LastIndexOfPred([]any{1, 2, 3, 1, 2, 3},
+	assert.Equal(t, 4, LastIndexOfBy([]any{1, 2, 3, 1, 2, 3},
 		func(i any) bool { return i == 2 }))
-	assert.Equal(t, 1, LastIndexOfPred([]any{"one", "two"},
+	assert.Equal(t, 1, LastIndexOfBy([]any{"one", "two"},
 		func(i any) bool { return i == "two" }))
-	assert.Equal(t, 3, LastIndexOfPred([]any{"one", "", "two", ""},
+	assert.Equal(t, 3, LastIndexOfBy([]any{"one", "", "two", ""},
 		func(i any) bool { return i == "" }))
+	assert.Equal(t, 1, LastIndexOfBy([]any{1.1, 1.1, 2.2, 3.3},
+		func(i any) bool { return i == 1.1 }))
+	assert.Equal(t, 2, LastIndexOfBy([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
+		func(i any) bool { return i == St{3, "3"} }))
+}
+
+func Test_LastIndexOfPred_Deprecated(t *testing.T) {
+	assert.Equal(t, -1, LastIndexOfPred([]any{1.1, 2.2, 3.3},
+		func(i any) bool { return i == 3.35 }))
 	assert.Equal(t, 1, LastIndexOfPred([]any{1.1, 1.1, 2.2, 3.3},
 		func(i any) bool { return i == 1.1 }))
-	assert.Equal(t, 2, LastIndexOfPred([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
-		func(i any) bool { return i == St{3, "3"} }))
 }
 
 func Test_RemoveAt(t *testing.T) {
@@ -926,24 +1022,31 @@ func Test_CountValue(t *testing.T) {
 	assert.Equal(t, 0, CountValue([]St{{1, "1"}, {2, "2"}, {1, "1"}}, St{1, "2"}))
 }
 
-func Test_CountValuePred(t *testing.T) {
-	assert.Equal(t, 0, CountValuePred([]any{1, 2, 3},
+func Test_CountValueBy(t *testing.T) {
+	assert.Equal(t, 0, CountValueBy([]any{1, 2, 3},
 		func(t any) bool { return t == 4 }))
-	assert.Equal(t, 1, CountValuePred([]any{1, 2, 3},
+	assert.Equal(t, 1, CountValueBy([]any{1, 2, 3},
 		func(t any) bool { return t == 2 }))
-	assert.Equal(t, 2, CountValuePred([]any{1, 2, 3, 2},
+	assert.Equal(t, 2, CountValueBy([]any{1, 2, 3, 2},
 		func(t any) bool { return t == 2 }))
-	assert.Equal(t, 2, CountValuePred([]any{1.1, 2.2, 3.3, 1.100001, 1.1},
+	assert.Equal(t, 2, CountValueBy([]any{1.1, 2.2, 3.3, 1.100001, 1.1},
 		func(t any) bool { return t == 1.1 }))
 
 	type St struct {
 		Int int
 		Str string
 	}
-	assert.Equal(t, 2, CountValuePred([]any{St{1, "1"}, St{2, "2"}, St{1, "1"}},
+	assert.Equal(t, 2, CountValueBy([]any{St{1, "1"}, St{2, "2"}, St{1, "1"}},
 		func(t any) bool { return t == St{1, "1"} }))
-	assert.Equal(t, 0, CountValuePred([]any{St{1, "1"}, St{2, "2"}, St{1, "1"}},
+	assert.Equal(t, 0, CountValueBy([]any{St{1, "1"}, St{2, "2"}, St{1, "1"}},
 		func(t any) bool { return t == St{1, "2"} }))
+}
+
+func Test_CountValuePred_Deprecated(t *testing.T) {
+	assert.Equal(t, 2, CountValuePred([]any{1, 2, 3, 2},
+		func(t any) bool { return t == 2 }))
+	assert.Equal(t, 2, CountValuePred([]any{1.1, 2.2, 3.3, 1.100001, 1.1},
+		func(t any) bool { return t == 1.1 }))
 }
 
 func Test_Drop(t *testing.T) {

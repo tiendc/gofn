@@ -29,40 +29,50 @@ func Test_MapEqual(t *testing.T) {
 }
 
 // nolint: gocritic
-func Test_MapEqualPred(t *testing.T) {
+func Test_MapEqualBy(t *testing.T) {
 	// Empty maps
-	assert.True(t, MapEqualPred(map[int]bool{}, map[int]bool{},
+	assert.True(t, MapEqualBy(map[int]bool{}, map[int]bool{},
 		func(v1, v2 bool) bool { return v1 == v2 }))
 
 	// One is nil, one is empty
-	assert.True(t, MapEqualPred(nil, map[int]int{},
+	assert.True(t, MapEqualBy(nil, map[int]int{},
 		func(v1, v2 int) bool { return v1 == v2 }))
-	assert.False(t, MapEqualPred(map[int]bool{}, map[int]bool{1: false},
+	assert.False(t, MapEqualBy(map[int]bool{}, map[int]bool{1: false},
 		func(v1, v2 bool) bool { return v1 == v2 }))
 
-	assert.True(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 1},
+	assert.True(t, MapEqualBy(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 1},
 		func(v1, v2 int) bool { return v1 == v2 }))
-	assert.False(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 1, 3: 3},
+	assert.False(t, MapEqualBy(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 1, 3: 3},
 		func(v1, v2 int) bool { return v1 == v2 }))
-	assert.False(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 11},
+	assert.False(t, MapEqualBy(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 11},
 		func(v1, v2 int) bool { return v1 == v2 }))
 
 	type st struct {
 		Int int
 		Str string
 	}
-	assert.True(t, MapEqualPred(map[int]st{1: {1, "1"}, 2: {2, "2"}}, map[int]st{2: {2, "2"}, 1: {1, "1"}},
+	assert.True(t, MapEqualBy(map[int]st{1: {1, "1"}, 2: {2, "2"}}, map[int]st{2: {2, "2"}, 1: {1, "1"}},
 		func(v1, v2 st) bool { return v1 == v2 }))
-	assert.False(t, MapEqualPred(map[int]st{1: {1, "1"}, 2: {2, "2"}}, map[int]st{2: {2, "2"}, 1: {1, "1"}, 3: {3, "3"}},
+	assert.False(t, MapEqualBy(map[int]st{1: {1, "1"}, 2: {2, "2"}}, map[int]st{2: {2, "2"}, 1: {1, "1"}, 3: {3, "3"}},
 		func(v1, v2 st) bool { return v1 == v2 }))
 
 	// Value is also a map
-	assert.True(t, MapEqualPred(map[int]map[int]int{1: {1: 1}, 2: {2: 2}},
+	assert.True(t, MapEqualBy(map[int]map[int]int{1: {1: 1}, 2: {2: 2}},
 		map[int]map[int]int{1: {1: 1}, 2: {2: 2}},
 		func(v1, v2 map[int]int) bool { return MapEqual(v1, v2) }))
-	assert.False(t, MapEqualPred(map[int]map[int]int{1: {1: 1}, 2: {2: 2}},
+	assert.False(t, MapEqualBy(map[int]map[int]int{1: {1: 1}, 2: {2: 2}},
 		map[int]map[int]int{1: {1: 1}, 2: {2: 2}, 3: {3: 3}},
 		func(v1, v2 map[int]int) bool { return MapEqual(v1, v2) }))
+}
+
+// nolint: gocritic
+func Test_MapEqualPred_Deprecated(t *testing.T) {
+	assert.True(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 1},
+		func(v1, v2 int) bool { return v1 == v2 }))
+	assert.False(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 1, 3: 3},
+		func(v1, v2 int) bool { return v1 == v2 }))
+	assert.False(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 11},
+		func(v1, v2 int) bool { return v1 == v2 }))
 }
 
 func Test_MapContainKeys(t *testing.T) {

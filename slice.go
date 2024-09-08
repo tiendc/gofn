@@ -13,30 +13,40 @@ func Equal[T comparable, S ~[]T](a, b S) bool {
 	return true
 }
 
-// EqualPred compares 2 slices with preserving order
-func EqualPred[T any, S ~[]T](a, b S, equalFunc func(a, b T) bool) bool {
+// EqualBy compares 2 slices with preserving order
+func EqualBy[T any, S ~[]T](a, b S, equalCmp func(a, b T) bool) bool {
 	if len(a) != len(b) {
 		return false
 	}
 	for i := range a {
-		if !equalFunc(a[i], b[i]) {
+		if !equalCmp(a[i], b[i]) {
 			return false
 		}
 	}
 	return true
 }
 
-// EqualPredPtr compares 2 slices with preserving order
-func EqualPredPtr[T any, S ~[]T](a, b S, equalFunc func(a, b *T) bool) bool {
+// Deprecated: use EqualBy instead
+func EqualPred[T any, S ~[]T](a, b S, equalFunc func(a, b T) bool) bool {
+	return EqualBy(a, b, equalFunc)
+}
+
+// EqualByPtr compares 2 slices with preserving order
+func EqualByPtr[T any, S ~[]T](a, b S, equalCmp func(a, b *T) bool) bool {
 	if len(a) != len(b) {
 		return false
 	}
 	for i := range a {
-		if !equalFunc(&a[i], &b[i]) {
+		if !equalCmp(&a[i], &b[i]) {
 			return false
 		}
 	}
 	return true
+}
+
+// Deprecated: use EqualByPtr instead
+func EqualPredPtr[T any, S ~[]T](a, b S, equalCmp func(a, b *T) bool) bool {
+	return EqualByPtr(a, b, equalCmp)
 }
 
 // ContentEqual compares 2 slices without caring about order.
@@ -104,8 +114,8 @@ func ContentEqualPtr[T comparable, S ~[]*T](a, b S) bool {
 	return len(mapA) == 0
 }
 
-// ContentEqualPred compares 2 slices without preserving order
-func ContentEqualPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) bool {
+// ContentEqualBy compares 2 slices without preserving order
+func ContentEqualBy[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -136,6 +146,11 @@ func ContentEqualPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) 
 	return len(mapA) == 0
 }
 
+// Deprecated: use ContentEqualBy instead
+func ContentEqualPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) bool {
+	return ContentEqualBy(a, b, keyFunc)
+}
+
 // Concat concatenates slices
 func Concat[T any, S ~[]T](slices ...S) S {
 	capacity := 0
@@ -159,8 +174,8 @@ func Contain[T comparable, S ~[]T](a S, t T) bool {
 	return false
 }
 
-// ContainPred tests if a slice contains an item by predicate
-func ContainPred[T any, S ~[]T](a S, pred func(t T) bool) bool {
+// ContainBy tests if a slice contains an item by predicate
+func ContainBy[T any, S ~[]T](a S, pred func(t T) bool) bool {
 	for i := range a {
 		if pred(a[i]) {
 			return true
@@ -169,14 +184,24 @@ func ContainPred[T any, S ~[]T](a S, pred func(t T) bool) bool {
 	return false
 }
 
-// ContainPredPtr tests if a slice contains an item by predicate
-func ContainPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) bool {
+// Deprecated: use ContainBy instead
+func ContainPred[T any, S ~[]T](a S, pred func(t T) bool) bool {
+	return ContainBy(a, pred)
+}
+
+// ContainByPtr tests if a slice contains an item by predicate
+func ContainByPtr[T any, S ~[]T](a S, pred func(t *T) bool) bool {
 	for i := range a {
 		if pred(&a[i]) {
 			return true
 		}
 	}
 	return false
+}
+
+// Deprecated: use ContainByPtr instead
+func ContainPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) bool {
+	return ContainByPtr(a, pred)
 }
 
 // ContainAll tests if a slice contains all given values
@@ -252,8 +277,8 @@ func IsUnique[T comparable, S ~[]T](s S) bool {
 	return true
 }
 
-// IsUniquePred checks a slice for uniqueness using key function
-func IsUniquePred[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
+// IsUniqueBy checks a slice for uniqueness using key function
+func IsUniqueBy[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
 	length := len(s)
 	if length <= 1 {
 		return true
@@ -269,28 +294,43 @@ func IsUniquePred[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
 	return true
 }
 
-// FindPred finds value in slice by predicate
+// Deprecated: use IsUniqueBy instead
+func IsUniquePred[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
+	return IsUniqueBy(s, keyFunc)
+}
+
+// Find finds value in slice by predicate
+func Find[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
+	for i := range a {
+		if pred(a[i]) {
+			return a[i], true
+		}
+	}
+	return t, false
+}
+
+// Deprecated: use Find instead
 func FindPred[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
+	return Find(a, pred)
+}
+
+// FindPtr finds value in slice by predicate
+func FindPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 	for i := range a {
-		if pred(a[i]) {
+		if pred(&a[i]) {
 			return a[i], true
 		}
 	}
 	return t, false
 }
 
-// FindPredPtr finds value in slice by predicate
+// Deprecated: use FindPtr instead
 func FindPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
-	for i := range a {
-		if pred(&a[i]) {
-			return a[i], true
-		}
-	}
-	return t, false
+	return FindPtr(a, pred)
 }
 
-// FindLastPred finds value in slice from the end by predicate
-func FindLastPred[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
+// FindLast finds value in slice from the end by predicate
+func FindLast[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
 	for i := len(a) - 1; i >= 0; i-- {
 		if pred(a[i]) {
 			return a[i], true
@@ -299,14 +339,24 @@ func FindLastPred[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
 	return t, false
 }
 
-// FindLastPredPtr finds value in slice from the end by predicate
-func FindLastPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
+// Deprecated: use FindLast instead
+func FindLastPred[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
+	return FindLast(a, pred)
+}
+
+// FindLastPtr finds value in slice from the end by predicate
+func FindLastPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 	for i := len(a) - 1; i >= 0; i-- {
 		if pred(&a[i]) {
 			return a[i], true
 		}
 	}
 	return t, false
+}
+
+// Deprecated: use FindLastPtr instead
+func FindLastPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
+	return FindLastPtr(a, pred)
 }
 
 // IndexOf gets index of item in slice.
@@ -320,15 +370,20 @@ func IndexOf[T comparable, S ~[]T](a S, t T) int {
 	return -1
 }
 
-// IndexOfPred gets index of item in slice by predicate.
+// IndexOfBy gets index of item in slice by predicate.
 // Returns -1 if not found.
-func IndexOfPred[T any, S ~[]T](a S, pred func(t T) bool) int {
+func IndexOfBy[T any, S ~[]T](a S, pred func(t T) bool) int {
 	for i := range a {
 		if pred(a[i]) {
 			return i
 		}
 	}
 	return -1
+}
+
+// Deprecated: use IndexOfBy instead
+func IndexOfPred[T any, S ~[]T](a S, pred func(t T) bool) int {
+	return IndexOfBy(a, pred)
 }
 
 // LastIndexOf gets index of item from the end in slice.
@@ -342,15 +397,20 @@ func LastIndexOf[T comparable, S ~[]T](a S, t T) int {
 	return -1
 }
 
-// LastIndexOfPred gets index of item from the end in slice.
+// LastIndexOfBy gets index of item from the end in slice.
 // Returns -1 if not found.
-func LastIndexOfPred[T any, S ~[]T](a S, pred func(t T) bool) int {
+func LastIndexOfBy[T any, S ~[]T](a S, pred func(t T) bool) int {
 	for i := len(a) - 1; i >= 0; i-- {
 		if pred(a[i]) {
 			return i
 		}
 	}
 	return -1
+}
+
+// Deprecated: use LastIndexOfBy instead
+func LastIndexOfPred[T any, S ~[]T](a S, pred func(t T) bool) int {
+	return LastIndexOfBy(a, pred)
 }
 
 // RemoveAt removes element at the specified index
@@ -492,8 +552,8 @@ func CountValue[T comparable, S ~[]T](a S, val T) int {
 	return count
 }
 
-// CountValuePred counts number of occurrences of an item in the slice
-func CountValuePred[T any, S ~[]T](a S, pred func(t T) bool) int {
+// CountValueBy counts number of occurrences of an item in the slice
+func CountValueBy[T any, S ~[]T](a S, pred func(t T) bool) int {
 	count := 0
 	for i := range a {
 		if pred(a[i]) {
@@ -501,6 +561,11 @@ func CountValuePred[T any, S ~[]T](a S, pred func(t T) bool) int {
 		}
 	}
 	return count
+}
+
+// Deprecated: use CountValueBy instead
+func CountValuePred[T any, S ~[]T](a S, pred func(t T) bool) int {
+	return CountValueBy(a, pred)
 }
 
 // Drop returns a copied slice with dropping items in the list

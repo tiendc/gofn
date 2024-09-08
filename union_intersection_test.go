@@ -17,18 +17,26 @@ func Test_Union(t *testing.T) {
 }
 
 // nolint: forcetypeassert
-func Test_UnionPred(t *testing.T) {
-	assert.Equal(t, []any{}, UnionPred[any]([]any(nil), nil, func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{}, UnionPred(nil, []any{}, func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{1}, UnionPred([]any{1}, nil, func(t any) int { return t.(int) }))
+func Test_UnionBy(t *testing.T) {
+	assert.Equal(t, []any{}, UnionBy[any]([]any(nil), nil, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, UnionBy(nil, []any{}, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{1}, UnionBy([]any{1}, nil, func(t any) int { return t.(int) }))
 
+	assert.Equal(t, []any{1, 2, 3, 4}, UnionBy([]any{1, 2}, []any{3, 4},
+		func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{1, 2, 3, 4}, UnionBy([]any{1, 2, 3, 2}, []any{1, 2, 4, 3},
+		func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{"1", "2", "3", "4"},
+		UnionBy([]any{"1", "2", "3", "2"}, []any{"1", "2", "4", "3"},
+			func(t any) string { return t.(string) }))
+}
+
+// nolint: forcetypeassert
+func Test_UnionPred_Deprecated(t *testing.T) {
 	assert.Equal(t, []any{1, 2, 3, 4}, UnionPred([]any{1, 2}, []any{3, 4},
 		func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{1, 2, 3, 4}, UnionPred([]any{1, 2, 3, 2}, []any{1, 2, 4, 3},
 		func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{"1", "2", "3", "4"},
-		UnionPred([]any{"1", "2", "3", "2"}, []any{"1", "2", "4", "3"},
-			func(t any) string { return t.(string) }))
 }
 
 func Test_Intersection(t *testing.T) {
@@ -43,19 +51,27 @@ func Test_Intersection(t *testing.T) {
 }
 
 // nolint: forcetypeassert
-func Test_IntersectionPred(t *testing.T) {
-	assert.Equal(t, []any{}, IntersectionPred[any]([]any(nil), nil, func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{}, IntersectionPred(nil, []any{}, func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{}, IntersectionPred([]any{1}, nil, func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{}, IntersectionPred(nil, []any{1}, func(t any) int { return t.(int) }))
+func Test_IntersectionBy(t *testing.T) {
+	assert.Equal(t, []any{}, IntersectionBy[any]([]any(nil), nil, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, IntersectionBy(nil, []any{}, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, IntersectionBy([]any{1}, nil, func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{}, IntersectionBy(nil, []any{1}, func(t any) int { return t.(int) }))
 
+	assert.Equal(t, []any{}, IntersectionBy([]any{1, 2}, []any{3, 4},
+		func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{1, 2, 3}, IntersectionBy([]any{1, 2, 3, 2}, []any{1, 2, 4, 3},
+		func(t any) int { return t.(int) }))
+	assert.Equal(t, []any{"1", "2", "3"},
+		IntersectionBy([]any{"1", "2", "3", "2"}, []any{"1", "2", "4", "3"},
+			func(t any) string { return t.(string) }))
+}
+
+// nolint: forcetypeassert
+func Test_IntersectionPred_Deprecated(t *testing.T) {
 	assert.Equal(t, []any{}, IntersectionPred([]any{1, 2}, []any{3, 4},
 		func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{1, 2, 3}, IntersectionPred([]any{1, 2, 3, 2}, []any{1, 2, 4, 3},
 		func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{"1", "2", "3"},
-		IntersectionPred([]any{"1", "2", "3", "2"}, []any{"1", "2", "4", "3"},
-			func(t any) string { return t.(string) }))
 }
 
 func Test_Difference(t *testing.T) {
@@ -80,24 +96,35 @@ func Test_Difference(t *testing.T) {
 }
 
 // nolint: forcetypeassert
-func Test_DifferencePred(t *testing.T) {
-	l, r := DifferencePred[any]([]any(nil), nil, func(t any) int { return t.(int) })
+func Test_DifferenceBy(t *testing.T) {
+	l, r := DifferenceBy[any]([]any(nil), nil, func(t any) int { return t.(int) })
 	assert.Equal(t, []any{}, l)
 	assert.Equal(t, []any{}, r)
-	l, r = DifferencePred([]any{}, nil, func(t any) int { return t.(int) })
+	l, r = DifferenceBy([]any{}, nil, func(t any) int { return t.(int) })
 	assert.Equal(t, []any{}, l)
 	assert.Equal(t, []any{}, r)
 
-	l, r = DifferencePred([]any{1, 2}, []any{3, 4}, func(t any) int { return t.(int) })
+	l, r = DifferenceBy([]any{1, 2}, []any{3, 4}, func(t any) int { return t.(int) })
+	assert.Equal(t, []any{1, 2}, l)
+	assert.Equal(t, []any{3, 4}, r)
+
+	l, r = DifferenceBy([]any{1, 2, 3, 2}, []any{1, 4, 4, 3}, func(t any) int { return t.(int) })
+	assert.Equal(t, []any{2, 2}, l)
+	assert.Equal(t, []any{4, 4}, r)
+
+	l, r = DifferenceBy([]any{"1", "2", "3", "2"}, []any{"1", "4", "2", "", "3"},
+		func(t any) string { return t.(string) })
+	assert.Equal(t, []any{}, l)
+	assert.Equal(t, []any{"4", ""}, r)
+}
+
+// nolint: forcetypeassert
+func Test_DifferencePred_Deprecated(t *testing.T) {
+	l, r := DifferencePred([]any{1, 2}, []any{3, 4}, func(t any) int { return t.(int) })
 	assert.Equal(t, []any{1, 2}, l)
 	assert.Equal(t, []any{3, 4}, r)
 
 	l, r = DifferencePred([]any{1, 2, 3, 2}, []any{1, 4, 4, 3}, func(t any) int { return t.(int) })
 	assert.Equal(t, []any{2, 2}, l)
 	assert.Equal(t, []any{4, 4}, r)
-
-	l, r = DifferencePred([]any{"1", "2", "3", "2"}, []any{"1", "4", "2", "", "3"},
-		func(t any) string { return t.(string) })
-	assert.Equal(t, []any{}, l)
-	assert.Equal(t, []any{"4", ""}, r)
 }
