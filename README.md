@@ -55,8 +55,8 @@ This function is equivalent to `reflect.DeepEqual()`, but faster (for how much f
 Equal([]int{1, 2, 3}, []int{1, 2, 3}) // true
 Equal([]int{1, 2, 3}, []int{3, 2, 1}) // false
 
-// Use EqualPred for custom equal comparison
-EqualPred([]string{"one", "TWO"}, []string{"ONE", "two"}, strings.EqualFold) // true
+// Use EqualBy for custom equal comparison
+EqualBy([]string{"one", "TWO"}, []string{"ONE", "two"}, strings.EqualFold) // true
 ```
 
 #### ContentEqual
@@ -69,8 +69,8 @@ ContentEqual([]int{1, 2, 2, 3}, []int{2, 1, 3})    // false
 ContentEqual([]int{1, 2, 2, 3}, []int{2, 1, 2, 3}) // true
 ContentEqual([]int{1, 2, 2, 3}, []int{1, 1, 2, 3}) // false
 
-// Use ContentEqualPred for custom key function
-ContentEqualPred([]string{"one", "TWO"}, []string{"two", "ONE"}, strings.ToLower) // true
+// Use ContentEqualBy for custom key function
+ContentEqualBy([]string{"one", "TWO"}, []string{"two", "ONE"}, strings.ToLower) // true
 ```
 
 #### Concat
@@ -89,8 +89,8 @@ Returns true if a slice contains a value.
 Contain([]int{1, 2, 3}, 2) // true
 Contain([]int{1, 2, 3}, 0) // false
 
-// Use ContainPred for custom function
-ContainPred([]string{"one", "TWO"}, func(elem string) bool {
+// Use ContainBy for custom function
+ContainBy([]string{"one", "TWO"}, func(elem string) bool {
     return strings.ToLower(elem) == "two"
 }) // true
 ```
@@ -121,26 +121,26 @@ Returns true if a slice contains unique values.
 IsUnique([]int{1, 2, 3}) // true
 IsUnique([]int{1, 2, 1}) // false
 
-// Use IsUniquePred for custom function
-IsUniquePred([]string{"one", "ONE"}, strings.ToLower) // false
+// Use IsUniqueBy for custom function
+IsUniqueBy([]string{"one", "ONE"}, strings.ToLower) // false
 ```
 
-#### FindPred
+#### Find
 
-Finds a value in a slice by predicate.
+Finds a value in a slice.
 
 ```go
-v, found := FindPred([]string{"one", "TWO"}, func(elem string) bool {
+v, found := Find([]string{"one", "TWO"}, func(elem string) bool {
     return strings.ToLower(elem) == "two"
 }) // v == "TWO", found == true
 ```
 
-#### FindLastPred
+#### FindLast
 
-Finds a value in a slice from the end by predicate.
+Finds a value in a slice from the end.
 
 ```go
-v, found := FindLastPred([]string{"one", "TWO", "ONe"}, func(elem string) bool {
+v, found := FindLast([]string{"one", "TWO", "ONe"}, func(elem string) bool {
     return strings.ToLower(elem) == "one"
 }) // v == "ONe", found == true
 ```
@@ -153,8 +153,8 @@ Finds the index of a value in a slice, returns -1 if not found.
 IndexOf([]int{1, 2, 3}, 4) // -1
 IndexOf([]int{1, 2, 3}, 2) // 1
 
-// Use IndexOfPred for custom function
-IndexOfPred([]string{"one", "TWO"}, func(elem string) bool {
+// Use IndexOfBy for custom function
+IndexOfBy([]string{"one", "TWO"}, func(elem string) bool {
     return strings.ToLower(elem) == "two"
 }) // 1
 ```
@@ -498,7 +498,7 @@ RandString(10)                         // Generates a string of 10 characters fr
 RandStringEx(10, []rune("0123456789")) // Generates a string of 10 characters from the specified ones
 ```
 
-#### StringJoin / StringJoinPred
+#### StringJoin / StringJoinBy
 
 Joins a slice of any element type.
 
@@ -509,7 +509,7 @@ type Struct struct {
     I int
     S string
 }
-s := StringJoinPred([]Struct{{I:1, s:"a"}, {I:2, s:"b"}}, ", ", func (v Struct) string {
+s := StringJoinBy([]Struct{{I:1, s:"a"}, {I:2, s:"b"}}, ", ", func (v Struct) string {
     return fmt.Sprintf("%d:%s", v.I, v.S)
 }) // s == "1:a, 2:b"
 ```
@@ -746,12 +746,12 @@ Calculates unique values of a slice.
 ToSet([]int{1, 2, 3, 1, 2})        // []int{1, 2, 3}
 ToSet([]string{"one", "2", "one"}) // []string{"one", "2"}
 
-// Use ToSetPred for custom key function
-ToSetPred([]string{"one", "TWO", "two", "One"}, strings.ToLower) // []string{"one", "TWO"}
+// Use ToSetBy for custom key function
+ToSetBy([]string{"one", "TWO", "two", "One"}, strings.ToLower) // []string{"one", "TWO"}
 
 
-// Use ToSetPredReverse for iterating items from the end of the list
-ToSetPredReverse([]string{"one", "TWO", "two", "One"}, strings.ToLower) // []string{"One", "two"}
+// Use ToSetByReverse for iterating items from the end of the list
+ToSetByReverse([]string{"one", "TWO", "two", "One"}, strings.ToLower) // []string{"One", "two"}
 ```
 
 #### MapSlice/MapSliceEx

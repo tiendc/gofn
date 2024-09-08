@@ -22,8 +22,8 @@ func ToSet[T comparable, S ~[]T](s S) S {
 	return result
 }
 
-// ToSetPred calculates unique values of a slice with custom key function
-func ToSetPred[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
+// ToSetBy calculates unique values of a slice with custom key function
+func ToSetBy[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	length := len(s)
 	if length <= 1 {
 		return append(S{}, s...)
@@ -45,9 +45,14 @@ func ToSetPred[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	return result
 }
 
-// ToSetPredReverse calculates unique values of a slice with custom key function.
-// Unlike ToSetPred, this function iterates over the slice from the end.
-func ToSetPredReverse[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
+// Deprecated: use ToSetBy instead
+func ToSetPred[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
+	return ToSetBy(s, keyFunc)
+}
+
+// ToSetByReverse calculates unique values of a slice with custom key function.
+// Unlike ToSetBy, this function iterates over the slice from the end.
+func ToSetByReverse[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	length := len(s)
 	if length <= 1 {
 		return append(S{}, s...)
@@ -67,4 +72,9 @@ func ToSetPredReverse[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	}
 
 	return result
+}
+
+// Deprecated: use ToSetByReverse instead
+func ToSetPredReverse[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
+	return ToSetByReverse(s, keyFunc)
 }

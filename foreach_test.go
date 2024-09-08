@@ -36,12 +36,12 @@ func Test_ForEachReverse(t *testing.T) {
 	assert.Equal(t, []int64{3, 2, 1}, copy2)
 }
 
-func Test_ForEachReversePtr(t *testing.T) {
+func Test_ForEachPtrReverse(t *testing.T) {
 	copy1 := []int{}
-	ForEachReversePtr[int]([]int(nil), func(i int, t *int) { copy1 = append(copy1, *t) })
+	ForEachPtrReverse[int]([]int(nil), func(i int, t *int) { copy1 = append(copy1, *t) })
 	assert.Equal(t, []int{}, copy1)
 
 	copy2 := []int64{}
-	ForEachReversePtr([]int64{1, 2, 3}, func(i int, t *int64) { copy2 = append(copy2, *t) })
+	ForEachPtrReverse([]int64{1, 2, 3}, func(i int, t *int64) { copy2 = append(copy2, *t) })
 	assert.Equal(t, []int64{3, 2, 1}, copy2)
 }

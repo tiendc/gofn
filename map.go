@@ -13,17 +13,22 @@ func MapEqual[K comparable, V comparable, M ~map[K]V](m1, m2 M) bool {
 	return true
 }
 
-// MapEqualPred compares contents of 2 maps
-func MapEqualPred[K comparable, V any, M ~map[K]V](m1, m2 M, equalFunc func(v1, v2 V) bool) bool {
+// MapEqualBy compares contents of 2 maps
+func MapEqualBy[K comparable, V any, M ~map[K]V](m1, m2 M, equalCmp func(v1, v2 V) bool) bool {
 	if len(m1) != len(m2) {
 		return false
 	}
 	for k, v1 := range m1 {
-		if v2, ok := m2[k]; !ok || !equalFunc(v1, v2) {
+		if v2, ok := m2[k]; !ok || !equalCmp(v1, v2) {
 			return false
 		}
 	}
 	return true
+}
+
+// Deprecated: use MapEqualBy instead
+func MapEqualPred[K comparable, V any, M ~map[K]V](m1, m2 M, equalCmp func(v1, v2 V) bool) bool {
+	return MapEqualBy(m1, m2, equalCmp)
 }
 
 // MapContainKeys tests if a map contains one or more keys

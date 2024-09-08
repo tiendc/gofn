@@ -33,14 +33,14 @@ func Union[T comparable, S ~[]T](a, b S) S {
 	return result
 }
 
-// UnionPred returns all unique values from multiple slices with key function
-func UnionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
+// UnionBy returns all unique values from multiple slices with key function
+func UnionBy[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 {
-		return ToSetPred(b, keyFunc)
+		return ToSetBy(b, keyFunc)
 	}
 	if lenB == 0 {
-		return ToSetPred(a, keyFunc)
+		return ToSetBy(a, keyFunc)
 	}
 
 	seen := make(map[K]struct{}, lenA+lenB)
@@ -68,6 +68,11 @@ func UnionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	return result
 }
 
+// Deprecated: use UnionBy instead
+func UnionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
+	return UnionBy(a, b, keyFunc)
+}
+
 // Intersection returns all unique shared values from multiple slices
 func Intersection[T comparable, S ~[]T](a, b S) S {
 	lenA, lenB := len(a), len(b)
@@ -93,8 +98,8 @@ func Intersection[T comparable, S ~[]T](a, b S) S {
 	return result
 }
 
-// IntersectionPred returns all unique shared values from multiple slices with key function
-func IntersectionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
+// IntersectionBy returns all unique shared values from multiple slices with key function
+func IntersectionBy[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
 		return S{}
@@ -117,6 +122,11 @@ func IntersectionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) 
 	}
 
 	return result
+}
+
+// Deprecated: use IntersectionBy instead
+func IntersectionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
+	return IntersectionBy(a, b, keyFunc)
 }
 
 // Difference calculates the differences between two slices.
@@ -146,9 +156,9 @@ func Difference[T comparable, S ~[]T](a, b S) (S, S) {
 	return leftDiff, rightDiff
 }
 
-// DifferencePred calculates the differences between two slices using special key function.
+// DifferenceBy calculates the differences between two slices using special key function.
 // NOTE: this function does not return unique values.
-func DifferencePred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) (S, S) {
+func DifferenceBy[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) (S, S) {
 	lenA, lenB := len(a), len(b)
 	if lenA == 0 || lenB == 0 {
 		return append(S{}, a...), append(S{}, b...)
@@ -176,4 +186,9 @@ func DifferencePred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) (S
 	}
 
 	return leftDiff, rightDiff
+}
+
+// Deprecated: use DifferenceBy instead
+func DifferencePred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) (S, S) {
+	return DifferenceBy(a, b, keyFunc)
 }

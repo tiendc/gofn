@@ -46,9 +46,9 @@ func IterReverse[T any, S ~[]T](iterFunc func(index int, v T) bool, slices ...S)
 	}
 }
 
-// IterReversePtr iterates over pointers to items from multiple slices with ability to stop.
+// IterPtrReverse iterates over pointers to items from multiple slices with ability to stop.
 // When the `iterFunc` function returns false, the iteration stops.
-func IterReversePtr[T any, S ~[]T](iterFunc func(index int, v *T) bool, slices ...S) {
+func IterPtrReverse[T any, S ~[]T](iterFunc func(index int, v *T) bool, slices ...S) {
 	global := -1
 	for _, s := range slices {
 		global += len(s)

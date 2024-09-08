@@ -6,11 +6,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_ToIntfSlice(t *testing.T) {
-	assert.Equal(t, []any{}, ToIntfSlice([]int{}))
-	assert.Equal(t, []any{"one"}, ToIntfSlice([]string{"one"}))
+func Test_ToIfaceSlice(t *testing.T) {
+	assert.Equal(t, []any{}, ToIfaceSlice([]int{}))
+	assert.Equal(t, []any{"one"}, ToIfaceSlice([]string{"one"}))
+	assert.Equal(t, []any{1, 2, 3}, ToIfaceSlice([]int{1, 2, 3}))
+	assert.Equal(t, []any{float32(1.1), float32(2.2), float32(3.3)}, ToIfaceSlice([]float32{1.1, 2.2, 3.3}))
+	assert.Equal(t, []any{"one", 2, 3.3}, ToIfaceSlice([]any{"one", 2, 3.3}))
+}
+
+func Test_ToIntfSlice_Deprecated(t *testing.T) {
 	assert.Equal(t, []any{1, 2, 3}, ToIntfSlice([]int{1, 2, 3}))
-	assert.Equal(t, []any{float32(1.1), float32(2.2), float32(3.3)}, ToIntfSlice([]float32{1.1, 2.2, 3.3}))
 	assert.Equal(t, []any{"one", 2, 3.3}, ToIntfSlice([]any{"one", 2, 3.3}))
 }
 

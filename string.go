@@ -27,8 +27,8 @@ func StringJoinEx[T any, S ~[]T](s S, sep, format string) string {
 	return strings.Join(ss, sep)
 }
 
-// StringJoinPred join elements from a slice of any type with custom format function
-func StringJoinPred[T any, S ~[]T](s S, sep string, fmtFunc func(v T) string) string {
+// StringJoinBy join elements from a slice of any type with custom format function
+func StringJoinBy[T any, S ~[]T](s S, sep string, fmtFunc func(v T) string) string {
 	switch len(s) {
 	case 0:
 		return ""
@@ -41,6 +41,11 @@ func StringJoinPred[T any, S ~[]T](s S, sep string, fmtFunc func(v T) string) st
 		ss = append(ss, fmtFunc(s[i]))
 	}
 	return strings.Join(ss, sep)
+}
+
+// Deprecated: use StringJoinBy instead
+func StringJoinPred[T any, S ~[]T](s S, sep string, fmtFunc func(v T) string) string {
+	return StringJoinBy(s, sep, fmtFunc)
 }
 
 func stringFormat(format string, v any) string {
