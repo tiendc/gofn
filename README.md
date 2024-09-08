@@ -486,6 +486,15 @@ Parses struct tags. These functions are shortcuts to [rflutil.ParseTag](https://
 
 ---
 
+#### RuneLength
+
+Alias of `utf8.RuneCountInString`.
+
+```go
+len("café")        // 5
+RuneLength("café") // 4
+```
+
 #### RandString / RandStringEx
 
 Generates a random string.
