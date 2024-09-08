@@ -522,16 +522,27 @@ func Replace[T comparable, S ~[]T](s S, value, replacement T) bool {
 	return false
 }
 
-// ReplaceAll replaces a value in slice with another value
-func ReplaceAll[T comparable, S ~[]T](s S, value, replacement T) int {
+// ReplaceN replaces a value in slice for the first n-occurrences
+func ReplaceN[T comparable, S ~[]T](s S, value, replacement T, n int) int {
+	if n == 0 || n < -1 {
+		return 0
+	}
 	count := 0
 	for i := range s {
 		if s[i] == value {
 			s[i] = replacement
 			count++
+			if n != -1 && count == n {
+				return count
+			}
 		}
 	}
 	return count
+}
+
+// ReplaceAll replaces a value in slice with another value
+func ReplaceAll[T comparable, S ~[]T](s S, value, replacement T) int {
+	return ReplaceN(s, value, replacement, -1)
 }
 
 // Fill sets slice element values
