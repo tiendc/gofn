@@ -46,7 +46,7 @@ go get github.com/tiendc/gofn
 
 ---
 
-#### Equal
+#### Equal / EqualBy
 
 Returns true if 2 slices have the same size and all elements of them equal in the current order.
 This function is equivalent to `reflect.DeepEqual()`, but faster (for how much faster, see Benchmark section).
@@ -59,7 +59,7 @@ Equal([]int{1, 2, 3}, []int{3, 2, 1}) // false
 EqualBy([]string{"one", "TWO"}, []string{"ONE", "two"}, strings.EqualFold) // true
 ```
 
-#### ContentEqual
+#### ContentEqual / ContentEqualBy
 
 Returns true if 2 slices have the same size and contents equal regardless of the order of elements.
 
@@ -81,7 +81,7 @@ Concatenates two or more slices.
 Concat([]int{1}, []int{2}, []int{2, 3}) // []int{1, 2, 2, 3}
 ```
 
-#### Contain
+#### Contain / ContainBy
 
 Returns true if a slice contains a value.
 
@@ -113,7 +113,7 @@ ContainAny([]int{1, 2, 3, 4, 5}, 2, 4, 7) // true
 ContainAny([]int{1, 2, 3, 4, 5}, 7, 8, 9) // false
 ```
 
-#### IsUnique
+#### IsUnique / IsUniqueBy
 
 Returns true if a slice contains unique values.
 
@@ -145,7 +145,7 @@ v, found := FindLast([]string{"one", "TWO", "ONe"}, func(elem string) bool {
 }) // v == "ONe", found == true
 ```
 
-#### IndexOf
+#### IndexOf / IndexOfBy
 
 Finds the index of a value in a slice, returns -1 if not found.
 
@@ -269,7 +269,7 @@ NOTE: this function is just a call to `FilterNIN()`.
 Drop([]int{1, 2, 3, 4}, 3, 1) // []int{2, 4}
 ```
 
-#### CountValue
+#### CountValue / CountValueBy
 
 Counts the number of occurrences of a value in a slice.
 
@@ -348,7 +348,7 @@ s := SliceByRange(int32(5), 0, -2) // []int32{5, 3, 1}
 
 ---
 
-#### MapEqual
+#### MapEqual / MapEqualBy
 
 Returns true if 2 maps equal.
 This function is equivalent to `reflect.DeepEqual()`, but faster (for how much faster, see Benchmark section).
@@ -402,7 +402,7 @@ Gets all entries (key, value) of a map.
 MapEntries(map[int]int{1: 11, 2: 22}) // []*Tuple2[int,int]{{1,11}, {2,22}} (note: values may be in different order)
 ```
 
-#### MapUpdate/MapUpdateXX
+#### MapUpdate / MapUpdateXX
 
 Updates a map content with another map.
 
@@ -564,7 +564,7 @@ LinesTrimRight("line-1 b \n a line-2 ab", " ba") // "line-1\n a line2"
 
 ---
 
-#### ParseInt/ParseIntXX
+#### ParseInt / ParseIntXX
 
 Parses integer using **strconv.ParseInt** then converts the value to a specific type.
 
@@ -587,7 +587,7 @@ ParseIntUngroup[int]("1,234,567") // int(1234567)
 
 - **NOTE**: There are also **ParseUint** for unsigned integers and **ParseFloat** for floating numbers.
 
-#### FormatInt/FormatIntXX
+#### FormatInt / FormatIntXX
 
 Formats an integer.
 
@@ -738,7 +738,7 @@ FilterLIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "Abc")  // []string{"*Abc
 FilterILIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "Abc") // []string{"*Abc*", "*abc*", "abc*", "*abc"}
 ```
 
-#### ToSet
+#### ToSet / ToSetBy / ToSetByReverse
 
 Calculates unique values of a slice.
 
@@ -767,7 +767,7 @@ MapSliceEx([]string{"1","x","3"}, gofn.ParseInt[int])    // strconv.ErrSyntax
 MapSliceEx([]string{"1","200","3"}, gofn.ParseInt[int8]) // strconv.ErrRange
 ```
 
-#### MapSliceToMap/MapSliceToMapEx
+#### MapSliceToMap / MapSliceToMapEx
 
 Transforms a slice to a map.
 
@@ -834,13 +834,13 @@ Zip3([]int{1, 2, 3}, []string{"4", "5"}, []float32{6.0, 7.0}) // []*Tuple3{{1, "
 
 ---
 
-#### ToIntfSlice
+#### ToIfaceSlice
 
 Converts a slice of any type to a slice of interfaces.
 
 ```go
-ToIntfSlice([]int{1, 2, 3})         // []any{1, 2, 3}
-ToIntfSlice([]string{"foo", "bar"}) // []any{"foo", "bar"}
+ToIfaceSlice([]int{1, 2, 3})         // []any{1, 2, 3}
+ToIfaceSlice([]string{"foo", "bar"}) // []any{"foo", "bar"}
 ```
 
 #### ToStringSlice
@@ -994,7 +994,7 @@ IsSortedDesc([]int{3, 2, 1}) // true
 
 ---
 
-#### Union
+#### Union / UnionBy
 
 Finds all unique values from multiple slices.
 
@@ -1002,7 +1002,7 @@ Finds all unique values from multiple slices.
 Union([]int{1, 3, 2}, []int{1, 2, 2, 4}) // []int{1, 3, 2, 4}
 ```
 
-#### Intersection
+#### Intersection / IntersectionBy
 
 Finds all unique shared values from multiple slices.
 
@@ -1010,7 +1010,7 @@ Finds all unique shared values from multiple slices.
 Intersection([]int{1, 3, 2}, []int{1, 2, 2, 4}) // []int{1, 2}
 ```
 
-#### Difference
+#### Difference / DifferenceBy
 
 Finds all different values from 2 slices.
 
@@ -1058,7 +1058,7 @@ p0, p1 := Partition([]int{1, 2, 3, 4, 5}, func (v int, index int) bool {return v
 p := PartitionN([]int{1, 2, 3, 4, 5}, 3, func (v int, index int) int {return v%3})) // p == [[3], [1, 4], [2, 5]]
 ```
 
-#### Min / Max
+#### Min / MinIn / MinInBy / Max / MaxIn / MaxInBy / MinMax
 
 Finds minimum/maximum value in a slice.
 
@@ -1196,10 +1196,6 @@ Benchmark_Slice_Equal/IntSlice/DeepEqual-8        	15243183	         77.93 ns/op
 ## Contributing
 
 - You are welcome to make pull requests for new functions and bug fixes.
-
-## Authors
-
-- Dao Cong Tien ([tiendc](https://github.com/tiendc))
 
 ## License
 
