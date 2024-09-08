@@ -38,3 +38,31 @@ func MinMaxTime(t1 time.Time, s ...time.Time) (time.Time, time.Time) {
 	}
 	return minTime, maxTime
 }
+
+// ExecDuration measures time duration of running a function
+func ExecDuration(fn func()) time.Duration {
+	start := time.Now()
+	fn()
+	return time.Since(start)
+}
+
+// ExecDuration1 measures time duration of running a function
+func ExecDuration1[T any](fn func() T) (T, time.Duration) {
+	start := time.Now()
+	val := fn()
+	return val, time.Since(start)
+}
+
+// ExecDuration2 measures time duration of running a function
+func ExecDuration2[T1, T2 any](fn func() (T1, T2)) (T1, T2, time.Duration) {
+	start := time.Now()
+	val1, val2 := fn()
+	return val1, val2, time.Since(start)
+}
+
+// ExecDuration3 measures time duration of running a function
+func ExecDuration3[T1, T2, T3 any](fn func() (T1, T2, T3)) (T1, T2, T3, time.Duration) {
+	start := time.Now()
+	val1, val2, val3 := fn()
+	return val1, val2, val3, time.Since(start)
+}
