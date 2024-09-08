@@ -1072,6 +1072,18 @@ MinTime(t1, t2)     // t1
 MaxTime(t0, t1, t2) // t2
 ```
 
+#### ExecDuration / ExecDurationN (N from 1 to 3)
+
+Measures time executing a function.
+
+```go
+duration := ExecDuration(func() { // do somthing })
+// The given function returns a value
+outVal, duration := ExecDuration1(func() string { return "hello" })              // outVal == "hello"
+// The given function returns 2 values
+outVal1, err, duration := ExecDuration2(func() (int, error) { return 123, nil }) // outVal1 == 123, err == nil
+```
+
 ### Common functions
 
 ---
