@@ -232,20 +232,17 @@ s := []int{1, 2, 1, 3, 1}
 RemoveAll(&s, 1) // s == []int{2, 3}
 ```
 
-#### Replace
+#### Replace / ReplaceN / ReplaceAll
 
-Replaces first occurrence of a value with another value.
-
-```go
-Replace([]int{1, 2, 1, 3, 1}, 1, 11) // []int{11, 2, 1, 3, 1}
-```
-
-#### ReplaceAll
-
-Replaces all occurrences of a value with another value.
+Replaces a value with another value.
 
 ```go
-ReplaceAll([]int{1, 2, 1, 3, 1}, 1, 11) // []int{11, 2, 11, 3, 11}
+// Replaces first occurrence of the value
+Replace([]int{1, 2, 1, 3, 1}, 1, 11)     // []int{11, 2, 1, 3, 1}
+// Replaces first n occurrences of the value (use -1 to replace all)
+ReplaceN([]int{1, 2, 1, 3, 1}, 1, 11, 2) // []int{11, 2, 11, 3, 1}
+// Replaces all occurrences of the value
+ReplaceAll([]int{1, 2, 1, 3, 1}, 1, 11)  // []int{11, 2, 11, 3, 11}
 ```
 
 #### Fill

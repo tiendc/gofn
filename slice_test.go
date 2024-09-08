@@ -976,6 +976,28 @@ func Test_Replace(t *testing.T) {
 	assert.True(t, Replace(s2, "one", "1") == true && reflect.DeepEqual(s2, []string{"1", "two", "one"}))
 }
 
+func Test_ReplaceN(t *testing.T) {
+	// No replacement done
+	s := []int{}
+	assert.True(t, ReplaceN(s, 1, 11, 10) == 0 && reflect.DeepEqual(s, []int{}))
+	s = []int{0, 1, 2, 3, 4, 5}
+	assert.True(t, ReplaceN(s, 100, 1000, 10) == 0 && reflect.DeepEqual(s, []int{0, 1, 2, 3, 4, 5}))
+	assert.True(t, ReplaceN(s, 100, 1000, 0) == 0 && reflect.DeepEqual(s, []int{0, 1, 2, 3, 4, 5}))
+	assert.True(t, ReplaceN(s, 100, 1000, -2) == 0 && reflect.DeepEqual(s, []int{0, 1, 2, 3, 4, 5}))
+	s2 := []string{"one", "two"}
+	assert.True(t, ReplaceN(s2, "One", "ONE", 10) == 0 && reflect.DeepEqual(s2, []string{"one", "two"}))
+
+	// Has replacement
+	s = []int{0, 1, 2, 3, 0, 1, 2, 3}
+	assert.True(t, ReplaceN(s, 1, 11, 10) == 2 && reflect.DeepEqual(s, []int{0, 11, 2, 3, 0, 11, 2, 3}))
+	s = []int{0, 1, 2, 3, 0, 1, 2, 3}
+	assert.True(t, ReplaceN(s, 1, 11, 1) == 1 && reflect.DeepEqual(s, []int{0, 11, 2, 3, 0, 1, 2, 3}))
+	s2 = []string{"one", "two", "one"}
+	assert.True(t, ReplaceN(s2, "one", "1", -1) == 2 && reflect.DeepEqual(s2, []string{"1", "two", "1"}))
+	s2 = []string{"one", "two", "one"}
+	assert.True(t, ReplaceN(s2, "one", "1", 3) == 2 && reflect.DeepEqual(s2, []string{"1", "two", "1"}))
+}
+
 func Test_ReplaceAll(t *testing.T) {
 	// No replacement done
 	s := []int{}
