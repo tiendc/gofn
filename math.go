@@ -8,6 +8,20 @@ func Abs(n int64) int64 {
 	return (n ^ y) - y
 }
 
+// Clamp clamps number within the inclusive lower and upper bounds.
+func Clamp[T NumberExt | StringExt](value, min, max T) T {
+	if min > max {
+		min, max = max, min
+	}
+	if value < min {
+		return min
+	}
+	if value > max {
+		return max
+	}
+	return value
+}
+
 // Product calculates product value of slice elements
 func Product[T NumberExt | ComplexExt](s ...T) T {
 	if len(s) == 0 {

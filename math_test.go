@@ -20,6 +20,24 @@ func Test_Abs(t *testing.T) {
 	assert.Equal(t, int64(math.MinInt64), Abs(math.MinInt64))
 }
 
+func Test_Clamp(t *testing.T) {
+	assert.Equal(t, 3, Clamp(1, 3, 5))
+	assert.Equal(t, 5, Clamp(7, 3, 5))
+	assert.Equal(t, 3, Clamp(3, 3, 5))
+	assert.Equal(t, 5, Clamp(5, 3, 5))
+	assert.Equal(t, 4, Clamp(4, 3, 5))
+
+	// Incorrect position of min and max
+	assert.Equal(t, 4, Clamp(4, 5, 3))
+	// Negative numbers
+	assert.Equal(t, -5, Clamp(-7, -3, -5))
+
+	// Clamp string
+	assert.Equal(t, "g", Clamp("a", "g", "z"))
+	assert.Equal(t, "p", Clamp("p", "g", "z"))
+	assert.Equal(t, "p", Clamp("p", "z", "g"))
+}
+
 func Test_Product(t *testing.T) {
 	assert.Equal(t, 0, Product[int]())
 	assert.Equal(t, -6, Product(1, 2, 3, -1))

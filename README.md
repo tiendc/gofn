@@ -1045,6 +1045,16 @@ Abs(123)           // int64(123)
 Abs(math.MinInt64) // math.MinInt64 (special case)
 ```
 
+#### Clamp
+
+Clamps a value within a range (lower and upper bounds are inclusive).
+
+```go
+Clamp(3, 10, 20)  // 10
+Clamp(30, 10, 20) // 20
+Clamp(15, 10, 20) // 15
+```
+
 ### Time functions
 
 ---
