@@ -948,6 +948,27 @@ func Test_RemoveAll(t *testing.T) {
 	assert.Equal(t, []string{"one", "two", "three"}, s2)
 }
 
+func Test_Reverse(t *testing.T) {
+	assert.Equal(t, []int{}, Reverse([]int{}))
+	assert.Equal(t, []int64{1}, Reverse([]int64{1}))
+	assert.Equal(t, []int{3, 2, 1}, Reverse([]int{1, 2, 3}))
+
+	s := []int{-1, -2, 0, 1, 2}
+	Reverse(s)
+	assert.Equal(t, []int{2, 1, 0, -2, -1}, s)
+}
+
+func Test_ReverseCopy(t *testing.T) {
+	assert.Equal(t, []int{}, ReverseCopy([]int{}))
+	assert.Equal(t, []int64{1}, ReverseCopy([]int64{1}))
+	assert.Equal(t, []int{3, 2, 1}, ReverseCopy([]int{1, 2, 3}))
+
+	s := []int{-1, -2, 0, 1, 2}
+	s2 := ReverseCopy(s)
+	assert.Equal(t, []int{-1, -2, 0, 1, 2}, s)
+	assert.Equal(t, []int{2, 1, 0, -2, -1}, s2)
+}
+
 func Test_Compact(t *testing.T) {
 	assert.Equal(t, []int{1, -1}, Compact([]int{1, 0, -1}))
 	assert.Equal(t, []bool{true, true, true}, Compact([]bool{true, true, false, false, true}))
@@ -1028,6 +1049,54 @@ func Test_Fill(t *testing.T) {
 	s2 := []int{}
 	Fill(s2, 1)
 	assert.Equal(t, []int{}, s2)
+}
+
+func Test_Chunk(t *testing.T) {
+	// Empty input
+	chunks := Chunk([]int{}, 5)
+	assert.True(t, len(chunks) == 0)
+
+	// Nil input
+	chunks = Chunk[int]([]int(nil), 5)
+	assert.True(t, len(chunks) == 0)
+
+	// Chunk size greater than input size
+	chunks = Chunk([]int{1, 2, 3}, 5)
+	assert.True(t, len(chunks) == 1 && reflect.DeepEqual(chunks[0], []int{1, 2, 3}))
+
+	// Normal case
+	chunks = Chunk([]int{1, 2, 3, 4, 5}, 2)
+	assert.True(t, len(chunks) == 3 &&
+		len(chunks[0]) == 2 && reflect.DeepEqual(chunks[0], []int{1, 2}) &&
+		len(chunks[1]) == 2 && reflect.DeepEqual(chunks[1], []int{3, 4}) &&
+		len(chunks[2]) == 1 && reflect.DeepEqual(chunks[2], []int{5}))
+}
+
+func Test_ChunkByPieces(t *testing.T) {
+	// Empty input
+	chunks := ChunkByPieces([]int{}, 5)
+	assert.True(t, len(chunks) == 0)
+
+	// Nil input
+	chunks = ChunkByPieces[int]([]int(nil), 5)
+	assert.True(t, len(chunks) == 0)
+
+	// Chunk count is zero
+	chunks = ChunkByPieces([]int{1, 2, 3}, 0)
+	assert.Equal(t, [][]int{}, chunks)
+
+	// Chunk count greater than input size
+	chunks = ChunkByPieces([]int{1, 2, 3}, 5)
+	assert.True(t, len(chunks) == 3 &&
+		len(chunks[0]) == 1 && reflect.DeepEqual(chunks[0], []int{1}) &&
+		len(chunks[1]) == 1 && reflect.DeepEqual(chunks[1], []int{2}) &&
+		len(chunks[2]) == 1 && reflect.DeepEqual(chunks[2], []int{3}))
+
+	// Normal case
+	chunks = ChunkByPieces([]int{1, 2, 3, 4, 5}, 2)
+	assert.True(t, len(chunks) == 2 &&
+		len(chunks[0]) == 3 && reflect.DeepEqual(chunks[0], []int{1, 2, 3}) &&
+		len(chunks[1]) == 2 && reflect.DeepEqual(chunks[1], []int{4, 5}))
 }
 
 func Test_CountValue(t *testing.T) {

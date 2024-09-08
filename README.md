@@ -25,10 +25,10 @@ Try related libs:
   - [Transformation functions](#transformation-functions)
   - [Conversion functions](#conversion-functions)
   - [Bind functions](#bind-functions)
-  - [Common functions](#common-functions)
   - [Randomization functions](#randomization-functions)
-  - [Specific algo functions](#specific-algo-functions)
-  - [Other functions](#other-functions)
+  - [Math functions](#math-functions)
+  - [Time functions](#time-functions)
+  - [Common functions](#common-functions)
 - [Benchmarks](#benchmarks)
 - [Contributing](#contributing)
 - [Authors](#authors)
@@ -255,6 +255,15 @@ Fill(s, 1)  // s == []int{1, 1, 1, 1, 1}
 
 s2 := s[2:4]
 Fill(s2, 1) // s2 == []int{1, 1}, s == []int{0, 0, 1, 1, 0}
+```
+
+#### Chunk / ChunkByPieces
+
+Splits slice content into chunks.
+
+```go
+Chunk([]int{1, 2, 3, 4, 5}, 2)         // [][]int{[]int{1, 2}, []int{3, 4}, []int{5}}
+ChunkByPieces([]int{1, 2, 3, 4, 5}, 2) // [][]int{[]int{1, 2, 3}, []int{4, 5}}
 ```
 
 #### Drop
@@ -798,15 +807,6 @@ MapSliceToMapKeys([]int{1, 2, 3, 2}, "x")     // map[int]string{1: "x", 2: "x", 
 MapSliceToMapKeys([]int{1, 2, 1}, struct{}{}) // map[int]struct{}{1: struct{}{}, 2: struct{}{}}
 ```
 
-#### Chunk / ChunkByPieces
-
-Splits slice content into chunks.
-
-```go
-Chunk([]int{1, 2, 3, 4, 5}, 2)         // [][]int{[]int{1, 2}, []int{3, 4}, []int{5}}
-ChunkByPieces([]int{1, 2, 3, 4, 5}, 2) // [][]int{[]int{1, 2, 3}, []int{4, 5}}
-```
-
 #### Reverse
 
 Reverses slice content.
@@ -892,45 +892,6 @@ myQuickCalc := Bind2Arg1Ret(myCalc, 100, "hello")
 err := myQuickCalc()
 ```
 
-### Common functions
-
----
-
-#### All
-
-Returns `true` if all given values are evaluated `true`.
-
-```go
-All(1, "1", 0.5) // true
-All(1, "1", 0.0) // false
-All(1, "", -1)   // false
-All()            // true
-```
-
-#### Any
-
-Returns `true` if any of the given values is evaluated `true`.
-
-```go
-Any(1, "", 0.5)  // true
-Any(1, "1", 0.0) // true
-Any(0, "", 0.0)  // false
-Any()            // false
-```
-
-#### MustN (N is from 1 to 6)
-
-MustN functions accept a number of arguments with the last one is of `error` type.
-MustN functions return the first N-1 arguments if the error is `nil`, otherwise they panic.
-
-```go
-func CalculateAmount() (int, error) {}
-amount := Must(CalculateAmount()) // panic on error, otherwise returns the amount
-
-func CalculateData() (int, string, float64, error) {}
-v1, v2, v3 := Must4(CalculateData()) // panic on error, otherwise returns the 3 first values
-```
-
 ### Randomization functions
 
 **NOTE**: Should not use these functions for crypto purpose.
@@ -996,7 +957,7 @@ IsSorted([]int{1, 3, 2})     // false
 IsSortedDesc([]int{3, 2, 1}) // true
 ```
 
-### Specific Algo functions
+### Math functions
 
 ---
 
@@ -1074,6 +1035,20 @@ Max(1, 2, 3, -1)    // 3
 MinMax(1, 2, 3, -1) // -1, 3
 ```
 
+#### Abs
+
+Calculates absolute value of an integer.
+
+```go
+Abs(-123)          // int64(123)
+Abs(123)           // int64(123)
+Abs(math.MinInt64) // math.MinInt64 (special case)
+```
+
+### Time functions
+
+---
+
 #### MinTime / MaxTime
 
 Finds minimum/maximum time value in a slice.
@@ -1087,19 +1062,44 @@ MinTime(t1, t2)     // t1
 MaxTime(t0, t1, t2) // t2
 ```
 
-#### Abs
-
-Calculates absolute value of an integer.
-
-```go
-Abs(-123)          // int64(123)
-Abs(123)           // int64(123)
-Abs(math.MinInt64) // math.MinInt64 (special case)
-```
-
-### Other functions
+### Common functions
 
 ---
+
+#### All
+
+Returns `true` if all given values are evaluated `true`.
+
+```go
+All(1, "1", 0.5) // true
+All(1, "1", 0.0) // false
+All(1, "", -1)   // false
+All()            // true
+```
+
+#### Any
+
+Returns `true` if any of the given values is evaluated `true`.
+
+```go
+Any(1, "", 0.5)  // true
+Any(1, "1", 0.0) // true
+Any(0, "", 0.0)  // false
+Any()            // false
+```
+
+#### MustN (N is from 1 to 6)
+
+MustN functions accept a number of arguments with the last one is of `error` type.
+MustN functions return the first N-1 arguments if the error is `nil`, otherwise they panic.
+
+```go
+func CalculateAmount() (int, error) {}
+amount := Must(CalculateAmount()) // panic on error, otherwise returns the amount
+
+func CalculateData() (int, string, float64, error) {}
+v1, v2, v3 := Must4(CalculateData()) // panic on error, otherwise returns the 3 first values
+```
 
 #### If
 
