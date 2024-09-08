@@ -1,7 +1,7 @@
 package gofn
 
 // Product calculates product value of slice elements
-func Product[T NumberExt](s ...T) T {
+func Product[T NumberExt | ComplexExt](s ...T) T {
 	if len(s) == 0 {
 		return 0
 	}

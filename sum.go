@@ -1,7 +1,7 @@
 package gofn
 
 // Sum calculates sum of slice items
-func Sum[T NumberExt](s ...T) T {
+func Sum[T NumberExt | ComplexExt](s ...T) T {
 	var sum T
 	for _, v := range s {
 		sum += v
