@@ -13,15 +13,15 @@ type IntPtr interface {
 }
 
 type UInt interface {
-	uint | uint8 | uint16 | uint32 | uint64
+	uint | uint8 | uint16 | uint32 | uint64 | uintptr
 }
 
 type UIntExt interface {
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
+	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
 }
 
 type UIntPtr interface {
-	*uint | *uint8 | *uint16 | *uint32 | *uint64
+	*uint | *uint8 | *uint16 | *uint32 | *uint64 | *uintptr
 }
 
 type Float interface {
@@ -34,6 +34,18 @@ type FloatExt interface {
 
 type FloatPtr interface {
 	*float32 | *float64
+}
+
+type Complex interface {
+	complex64 | complex128
+}
+
+type ComplexExt interface {
+	~complex64 | ~complex128
+}
+
+type ComplexPtr interface {
+	*complex64 | *complex128
 }
 
 type Number interface {
