@@ -9,7 +9,7 @@ func ToIfaceSlice[T any, S ~[]T](s S) []any {
 	return result
 }
 
-// Deprecated: use
+// Deprecated: use ToIfaceSlice instead
 func ToIntfSlice[T any, S ~[]T](s S) []any {
 	return ToIfaceSlice(s)
 }
