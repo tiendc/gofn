@@ -49,6 +49,17 @@ func Test_StringJoinPred_Deprecated(t *testing.T) {
 	}))
 }
 
+func Test_StringLexJoin(t *testing.T) {
+	assert.Equal(t, "", StringLexJoin([]int{}, ", ", " and "))
+	assert.Equal(t, "123", StringLexJoin([]int32{123}, ", ", " and "))
+	assert.Equal(t, "1 or 2", StringLexJoin([]int64{1, 2}, ", ", " or "))
+	assert.Equal(t, "1, null and 3", StringLexJoin([]any{1, nil, "3"}, ", ", " and "))
+	assert.Equal(t, "1, null, true and finally 3",
+		StringLexJoin([]any{1, nil, true, "3"}, ", ", " and finally "))
+
+	assert.Equal(t, "0xfe or 0xff", StringLexJoinEx([]int64{254, 255}, ", ", " or ", "%#x"))
+}
+
 func Test_LinesTrimLeft(t *testing.T) {
 	assert.Equal(t, "", LinesTrimLeftSpace(""))
 	assert.Equal(t, "line-1\nline-2", LinesTrimLeftSpace(`line-1
