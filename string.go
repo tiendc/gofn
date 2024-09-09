@@ -17,18 +17,9 @@ func StringJoin[T any, S ~[]T](s S, sep string) string {
 
 // StringJoinEx join elements from a slice of any type with custom format string
 func StringJoinEx[T any, S ~[]T](s S, sep, format string) string {
-	switch len(s) {
-	case 0:
-		return ""
-	case 1:
-		return stringFormat(format, s[0])
-	}
-
-	ss := make([]string, 0, len(s))
-	for i := range s {
-		ss = append(ss, stringFormat(format, s[i]))
-	}
-	return strings.Join(ss, sep)
+	return StringJoinBy(s, sep, func(v T) string {
+		return stringFormat(format, v)
+	})
 }
 
 // StringJoinBy join elements from a slice of any type with custom format function
@@ -40,11 +31,14 @@ func StringJoinBy[T any, S ~[]T](s S, sep string, fmtFunc func(v T) string) stri
 		return fmtFunc(s[0])
 	}
 
-	ss := make([]string, 0, len(s))
+	var sb strings.Builder
 	for i := range s {
-		ss = append(ss, fmtFunc(s[i]))
+		if i > 0 {
+			sb.WriteString(sep)
+		}
+		sb.WriteString(fmtFunc(s[i]))
 	}
-	return strings.Join(ss, sep)
+	return sb.String()
 }
 
 // Deprecated: use StringJoinBy instead
@@ -60,6 +54,39 @@ func stringFormat(format string, v any) string {
 		return stringer.String()
 	}
 	return fmt.Sprintf(format, v)
+}
+
+// StringLexJoinEx lexical joins a list of items of any type. The input format will be
+// used with fmt.Sprintf() to render slice items as string.
+//
+// For example:
+//
+//	StringLexJoinEx(["grape", "apple", "orange"], ", ", " and ", "%v") -> grape, apple and orange
+//	StringLexJoinEx(["grape", "apple", "orange"], ", ", " or ", "%v") -> grape, apple or orange
+func StringLexJoinEx[T any, S ~[]T](s S, sep, lastSep, format string) string {
+	length := len(s)
+	if length == 0 {
+		return ""
+	}
+	if length == 1 {
+		return stringFormat(format, s[0])
+	}
+	var sb strings.Builder
+	for i := 0; i < length-1; i++ {
+		if i > 0 {
+			sb.WriteString(sep)
+		}
+		sb.WriteString(stringFormat(format, s[i]))
+	}
+	sb.WriteString(lastSep)
+	sb.WriteString(stringFormat(format, s[length-1]))
+
+	return sb.String()
+}
+
+// StringLexJoin lexical joins a list of items of any type.
+func StringLexJoin[T any, S ~[]T](s S, sep, lastSep string) string {
+	return StringLexJoinEx(s, sep, lastSep, "%v")
 }
 
 // LinesTrimLeft trim leading characters for every line in the given string

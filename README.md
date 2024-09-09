@@ -529,6 +529,17 @@ s := StringJoinBy([]Struct{{I:1, s:"a"}, {I:2, s:"b"}}, ", ", func (v Struct) st
 }) // s == "1:a, 2:b"
 ```
 
+#### StringLexJoin / StringLexJoinEx
+
+Joins a slice of any element type in lexical manner.
+
+```go
+StringLexJoin([]int{1,2,3}, ", ", " and ")              // return "1, 2 and 3"
+
+// Use a custom format string
+StringLexJoinEx([]int64{254, 255}, ", ", " or ", "%#x") // returns "0xfe or 0xff"
+```
+
 #### MultilineString
 
 Removes all leading spaces from every line in the given string. This function is useful to declare a string with a neat multiline-style.
