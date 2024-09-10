@@ -365,61 +365,6 @@ func Test_ContainAny(t *testing.T) {
 	assert.True(t, ContainAny([]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"}, "100", "0", "1", "2"))
 }
 
-func Test_IsUnique(t *testing.T) {
-	assert.True(t, IsUnique[int, []int](nil))
-	assert.True(t, IsUnique([]int{}))
-	assert.True(t, IsUnique([]string{"one"}))
-	assert.True(t, IsUnique([]string{"one", "two", "One", "Two"}))
-	assert.True(t, IsUnique([]float32{1.1, 2.2, 3.3, 1.11}))
-
-	assert.False(t, IsUnique([]int{1, 2, 3, 1, 2}))
-	assert.False(t, IsUnique([]string{"one", "two", "one"}))
-	assert.False(t, IsUnique([]float32{1.1, 2.2, 1.100}))
-
-	type st struct {
-		I int
-		S string
-	}
-	assert.True(t, IsUnique([]st{{1, "one"}, {2, "two"}, {3, "three"}}))
-	assert.True(t, IsUnique([]st{{1, "one"}, {1, "One"}}))
-	assert.False(t, IsUnique([]st{{1, "one"}, {2, "two"}, {1, "one"}}))
-}
-
-// nolint: forcetypeassert
-func Test_IsUniqueBy(t *testing.T) {
-	assert.True(t, IsUniqueBy[int, int, []int](nil, nil))
-	assert.True(t, IsUniqueBy([]int{}, func(v int) int { return v }))
-	assert.True(t, IsUniqueBy([]any{"one"},
-		func(v any) string { return v.(string) }))
-	assert.True(t, IsUniqueBy([]any{"one", "two", "One", "Two"},
-		func(v any) string { return v.(string) }))
-	assert.True(t, IsUniqueBy([]any{1.1, 2.2, 3.3, 1.11},
-		func(v any) float64 { return v.(float64) }))
-
-	assert.False(t, IsUniqueBy([]any{1, 2, 3, 1, 2},
-		func(v any) int { return v.(int) }))
-	assert.False(t, IsUniqueBy([]any{"one", "two", "one"},
-		func(v any) string { return v.(string) }))
-	assert.False(t, IsUniqueBy([]any{1.1, 2.2, 1.100},
-		func(v any) float64 { return v.(float64) }))
-
-	type st struct {
-		I int
-		S string
-	}
-	assert.True(t, IsUniqueBy([]st{{1, "one"}, {2, "two"}, {3, "three"}}, func(v st) int { return v.I }))
-	assert.False(t, IsUniqueBy([]st{{1, "one"}, {1, "One"}}, func(v st) int { return v.I }))
-	assert.False(t, IsUniqueBy([]st{{1, "one"}, {2, "two"}, {1, "one"}}, func(v st) int { return v.I }))
-}
-
-// nolint: forcetypeassert
-func Test_IsUniquePred_Deprecated(t *testing.T) {
-	assert.True(t, IsUniquePred([]any{1.1, 2.2, 3.3, 1.11},
-		func(v any) float64 { return v.(float64) }))
-	assert.False(t, IsUniquePred([]any{1, 2, 3, 1, 2},
-		func(v any) int { return v.(int) }))
-}
-
 func Test_Find(t *testing.T) {
 	_, found := Find([]any{}, func(i any) bool { return i == 1 })
 	assert.False(t, found)
@@ -948,39 +893,6 @@ func Test_RemoveAll(t *testing.T) {
 	assert.Equal(t, []string{"one", "two", "three"}, s2)
 }
 
-func Test_Reverse(t *testing.T) {
-	assert.Equal(t, []int{}, Reverse([]int{}))
-	assert.Equal(t, []int64{1}, Reverse([]int64{1}))
-	assert.Equal(t, []int{3, 2, 1}, Reverse([]int{1, 2, 3}))
-
-	s := []int{-1, -2, 0, 1, 2}
-	Reverse(s)
-	assert.Equal(t, []int{2, 1, 0, -2, -1}, s)
-}
-
-func Test_ReverseCopy(t *testing.T) {
-	assert.Equal(t, []int{}, ReverseCopy([]int{}))
-	assert.Equal(t, []int64{1}, ReverseCopy([]int64{1}))
-	assert.Equal(t, []int{3, 2, 1}, ReverseCopy([]int{1, 2, 3}))
-
-	s := []int{-1, -2, 0, 1, 2}
-	s2 := ReverseCopy(s)
-	assert.Equal(t, []int{-1, -2, 0, 1, 2}, s)
-	assert.Equal(t, []int{2, 1, 0, -2, -1}, s2)
-}
-
-func Test_Compact(t *testing.T) {
-	assert.Equal(t, []int{1, -1}, Compact([]int{1, 0, -1}))
-	assert.Equal(t, []bool{true, true, true}, Compact([]bool{true, true, false, false, true}))
-	assert.Equal(t, []string{"1", "2"}, Compact([]string{"1", "", "2"}))
-
-	type St struct {
-		Int int
-		Str string
-	}
-	assert.Equal(t, []St{{1, "1"}, {2, "2"}}, Compact([]St{{1, "1"}, {}, {2, "2"}}))
-}
-
 func Test_Replace(t *testing.T) {
 	// No replacement done
 	s := []int{}
@@ -1051,54 +963,6 @@ func Test_Fill(t *testing.T) {
 	assert.Equal(t, []int{}, s2)
 }
 
-func Test_Chunk(t *testing.T) {
-	// Empty input
-	chunks := Chunk([]int{}, 5)
-	assert.True(t, len(chunks) == 0)
-
-	// Nil input
-	chunks = Chunk[int]([]int(nil), 5)
-	assert.True(t, len(chunks) == 0)
-
-	// Chunk size greater than input size
-	chunks = Chunk([]int{1, 2, 3}, 5)
-	assert.True(t, len(chunks) == 1 && reflect.DeepEqual(chunks[0], []int{1, 2, 3}))
-
-	// Normal case
-	chunks = Chunk([]int{1, 2, 3, 4, 5}, 2)
-	assert.True(t, len(chunks) == 3 &&
-		len(chunks[0]) == 2 && reflect.DeepEqual(chunks[0], []int{1, 2}) &&
-		len(chunks[1]) == 2 && reflect.DeepEqual(chunks[1], []int{3, 4}) &&
-		len(chunks[2]) == 1 && reflect.DeepEqual(chunks[2], []int{5}))
-}
-
-func Test_ChunkByPieces(t *testing.T) {
-	// Empty input
-	chunks := ChunkByPieces([]int{}, 5)
-	assert.True(t, len(chunks) == 0)
-
-	// Nil input
-	chunks = ChunkByPieces[int]([]int(nil), 5)
-	assert.True(t, len(chunks) == 0)
-
-	// Chunk count is zero
-	chunks = ChunkByPieces([]int{1, 2, 3}, 0)
-	assert.Equal(t, [][]int{}, chunks)
-
-	// Chunk count greater than input size
-	chunks = ChunkByPieces([]int{1, 2, 3}, 5)
-	assert.True(t, len(chunks) == 3 &&
-		len(chunks[0]) == 1 && reflect.DeepEqual(chunks[0], []int{1}) &&
-		len(chunks[1]) == 1 && reflect.DeepEqual(chunks[1], []int{2}) &&
-		len(chunks[2]) == 1 && reflect.DeepEqual(chunks[2], []int{3}))
-
-	// Normal case
-	chunks = ChunkByPieces([]int{1, 2, 3, 4, 5}, 2)
-	assert.True(t, len(chunks) == 2 &&
-		len(chunks[0]) == 3 && reflect.DeepEqual(chunks[0], []int{1, 2, 3}) &&
-		len(chunks[1]) == 2 && reflect.DeepEqual(chunks[1], []int{4, 5}))
-}
-
 func Test_CountValue(t *testing.T) {
 	assert.Equal(t, 0, CountValue([]int{1, 2, 3}, 4))
 	assert.Equal(t, 1, CountValue([]int{1, 2, 3}, 2))
@@ -1140,14 +1004,6 @@ func Test_CountValuePred_Deprecated(t *testing.T) {
 		func(t any) bool { return t == 1.1 }))
 }
 
-func Test_Drop(t *testing.T) {
-	// Nil/empty source slice
-	assert.Equal(t, []int{}, Drop([]int(nil)))
-	assert.Equal(t, []int{}, Drop([]int{}))
-
-	assert.Equal(t, []int{1, 4}, Drop([]int{1, 2, 3, 4, 5}, 5, 3, 2, 7))
-}
-
 func Test_GetFirst(t *testing.T) {
 	assert.Equal(t, 1, GetFirst([]int{1, 2, 3}, 4))
 	assert.Equal(t, 11, GetFirst([]int{}, 11))
@@ -1158,63 +1014,22 @@ func Test_GetLast(t *testing.T) {
 	assert.Equal(t, 11, GetLast([]int{}, 11))
 }
 
-func Test_ContainSlice(t *testing.T) {
-	assert.False(t, ContainSlice([]int{}, nil))
-	assert.False(t, ContainSlice([]string{"one"}, []string{}))
-	assert.False(t, ContainSlice([]string{"one", "two"}, []string{"Two"}))
-	assert.False(t, ContainSlice([]int64{1, 2, 3}, []int64{1, 2, 3, 4}))
-	assert.False(t, ContainSlice([]uint{0, 1, 2, 3, 4, 5}, []uint{3, 4, 5, 6}))
-	assert.False(t, ContainSlice([]float32{1.1, 2.2, 3.3}, []float32{2.2, 3.31}))
-
-	assert.True(t, ContainSlice([]int{1}, []int{1}))
-	assert.True(t, ContainSlice([]int{0, 1, 2}, []int{2}))
-	assert.True(t, ContainSlice([]int{0, 1, 2, 0, 1, 2, 3}, []int{0, 1, 2}))
-	assert.True(t, ContainSlice([]string{"one", ""}, []string{""}))
-	assert.True(t, ContainSlice([]string{"one", "two", "three"}, []string{"one", "two"}))
-	assert.True(t, ContainSlice([]int64{1, 2, 3}, []int64{1, 2, 3}))
-	assert.True(t, ContainSlice([]uint{0, 1, 1, 1, 1}, []uint{1}))
+func Test_HeadOf(t *testing.T) {
+	v1, f := HeadOf([]string{})
+	assert.True(t, v1 == "" && !f)
+	v2, f := HeadOf([]int(nil))
+	assert.True(t, v2 == 0 && !f)
+	v3, f := HeadOf([]int{1, 2, 3})
+	assert.True(t, v3 == 1 && f)
 }
 
-func Test_IndexOfSlice(t *testing.T) {
-	assert.Equal(t, -1, IndexOfSlice([]int{}, nil))
-	assert.Equal(t, -1, IndexOfSlice([]string{"one"}, []string{}))
-	assert.Equal(t, -1, IndexOfSlice([]string{"one", "two"}, []string{"Two"}))
-	assert.Equal(t, -1, IndexOfSlice([]int64{1, 2, 3}, []int64{1, 2, 3, 4}))
-	assert.Equal(t, -1, IndexOfSlice([]uint{0, 1, 2, 3, 4, 5}, []uint{3, 4, 5, 6}))
-	assert.Equal(t, -1, IndexOfSlice([]float32{1.1, 2.2, 3.3}, []float32{2.2, 3.31}))
-
-	assert.Equal(t, 0, IndexOfSlice([]int{1}, []int{1}))
-	assert.Equal(t, 2, IndexOfSlice([]int{0, 1, 2}, []int{2}))
-	assert.Equal(t, 0, IndexOfSlice([]int{0, 1, 2, 0, 1, 2, 3}, []int{0, 1, 2}))
-	assert.Equal(t, 1, IndexOfSlice([]string{"one", ""}, []string{""}))
-	assert.Equal(t, 0, IndexOfSlice([]string{"one", "two", "three"}, []string{"one", "two"}))
-	assert.Equal(t, 0, IndexOfSlice([]int64{1, 2, 3}, []int64{1, 2, 3}))
-	assert.Equal(t, 1, IndexOfSlice([]uint{0, 1, 1, 1, 1}, []uint{1}))
-}
-
-func Test_LastIndexOfSlice(t *testing.T) {
-	assert.Equal(t, -1, LastIndexOfSlice([]int{}, nil))
-	assert.Equal(t, -1, LastIndexOfSlice([]string{"one"}, []string{}))
-	assert.Equal(t, -1, LastIndexOfSlice([]string{"one", "two"}, []string{"Two"}))
-	assert.Equal(t, -1, LastIndexOfSlice([]int64{1, 2, 3}, []int64{1, 2, 3, 4}))
-	assert.Equal(t, -1, LastIndexOfSlice([]uint{0, 1, 2, 3, 4, 5}, []uint{3, 4, 5, 6}))
-	assert.Equal(t, -1, LastIndexOfSlice([]float32{1.1, 2.2, 3.3}, []float32{2.2, 3.31}))
-
-	assert.Equal(t, 0, LastIndexOfSlice([]int{1}, []int{1}))
-	assert.Equal(t, 2, LastIndexOfSlice([]int{0, 1, 2}, []int{2}))
-	assert.Equal(t, 3, LastIndexOfSlice([]int{0, 1, 2, 0, 1, 2, 3}, []int{0, 1, 2}))
-	assert.Equal(t, 2, LastIndexOfSlice([]string{"", "one", ""}, []string{""}))
-	assert.Equal(t, 0, LastIndexOfSlice([]string{"one", "two", "three"}, []string{"one", "two"}))
-	assert.Equal(t, 0, LastIndexOfSlice([]int64{1, 2, 3}, []int64{1, 2, 3}))
-	assert.Equal(t, 4, LastIndexOfSlice([]uint{0, 1, 1, 1, 1}, []uint{1}))
-}
-
-func Test_SubSlice(t *testing.T) {
-	assert.Equal(t, []int{}, SubSlice([]int{}, 0, 100))
-	assert.Equal(t, []int{}, SubSlice([]int{1, 2, 3}, 10, 100))
-	assert.Equal(t, []int{2, 3}, SubSlice([]int{1, 2, 3}, 1, 100))
-	assert.Equal(t, []int{3}, SubSlice([]int{1, 2, 3}, -1, 100))
-	assert.Equal(t, []int{2, 3}, SubSlice([]int{1, 2, 3}, -1, -3))
+func Test_TailOf(t *testing.T) {
+	v1, f := TailOf([]string{})
+	assert.True(t, v1 == "" && !f)
+	v2, f := TailOf([]int(nil))
+	assert.True(t, v2 == 0 && !f)
+	v3, f := TailOf([]int{1, 2, 3})
+	assert.True(t, v3 == 3 && f)
 }
 
 func Test_SliceByRange(t *testing.T) {

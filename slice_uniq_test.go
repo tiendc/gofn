@@ -1,11 +1,65 @@
 package gofn
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func Test_IsUnique(t *testing.T) {
+	assert.True(t, IsUnique[int, []int](nil))
+	assert.True(t, IsUnique([]int{}))
+	assert.True(t, IsUnique([]string{"one"}))
+	assert.True(t, IsUnique([]string{"one", "two", "One", "Two"}))
+	assert.True(t, IsUnique([]float32{1.1, 2.2, 3.3, 1.11}))
+
+	assert.False(t, IsUnique([]int{1, 2, 3, 1, 2}))
+	assert.False(t, IsUnique([]string{"one", "two", "one"}))
+	assert.False(t, IsUnique([]float32{1.1, 2.2, 1.100}))
+
+	type st struct {
+		I int
+		S string
+	}
+	assert.True(t, IsUnique([]st{{1, "one"}, {2, "two"}, {3, "three"}}))
+	assert.True(t, IsUnique([]st{{1, "one"}, {1, "One"}}))
+	assert.False(t, IsUnique([]st{{1, "one"}, {2, "two"}, {1, "one"}}))
+}
+
+// nolint: forcetypeassert
+func Test_IsUniqueBy(t *testing.T) {
+	assert.True(t, IsUniqueBy[int, int, []int](nil, nil))
+	assert.True(t, IsUniqueBy([]int{}, func(v int) int { return v }))
+	assert.True(t, IsUniqueBy([]any{"one"},
+		func(v any) string { return v.(string) }))
+	assert.True(t, IsUniqueBy([]any{"one", "two", "One", "Two"},
+		func(v any) string { return v.(string) }))
+	assert.True(t, IsUniqueBy([]any{1.1, 2.2, 3.3, 1.11},
+		func(v any) float64 { return v.(float64) }))
+
+	assert.False(t, IsUniqueBy([]any{1, 2, 3, 1, 2},
+		func(v any) int { return v.(int) }))
+	assert.False(t, IsUniqueBy([]any{"one", "two", "one"},
+		func(v any) string { return v.(string) }))
+	assert.False(t, IsUniqueBy([]any{1.1, 2.2, 1.100},
+		func(v any) float64 { return v.(float64) }))
+
+	type st struct {
+		I int
+		S string
+	}
+	assert.True(t, IsUniqueBy([]st{{1, "one"}, {2, "two"}, {3, "three"}}, func(v st) int { return v.I }))
+	assert.False(t, IsUniqueBy([]st{{1, "one"}, {1, "One"}}, func(v st) int { return v.I }))
+	assert.False(t, IsUniqueBy([]st{{1, "one"}, {2, "two"}, {1, "one"}}, func(v st) int { return v.I }))
+}
+
+// nolint: forcetypeassert
+func Test_IsUniquePred_Deprecated(t *testing.T) {
+	assert.True(t, IsUniquePred([]any{1.1, 2.2, 3.3, 1.11},
+		func(v any) float64 { return v.(float64) }))
+	assert.False(t, IsUniquePred([]any{1, 2, 3, 1, 2},
+		func(v any) int { return v.(int) }))
+}
 
 func Test_ToSet(t *testing.T) {
 	assert.Equal(t, []int{}, ToSet([]int{}))
@@ -105,78 +159,4 @@ func Test_ToSetPredReverse_Deprecated(t *testing.T) {
 		ToSetPredReverse([]any{1, 2, 3, 1, 2}, func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{1.11, 3.3, 2.2, 1.1},
 		ToSetPredReverse([]any{1.1, 1.1, 2.2, 3.3, 1.11}, func(t any) float64 { return t.(float64) }))
-}
-
-func Test_MapSlice(t *testing.T) {
-	// Nil/Empty maps
-	assert.Equal(t, []float32{}, MapSlice[int, float32]([]int(nil), func(v int) float32 { return float32(v) }))
-	assert.Equal(t, []float32{}, MapSlice([]int{}, func(v int) float32 { return float32(v) }))
-
-	// []int -> []int
-	assert.Equal(t, []int{2, 4, 6}, MapSlice([]int{1, 2, 3}, func(v int) int { return v * 2 }))
-	// []int -> []float32
-	assert.Equal(t, []float32{2, 4, 6}, MapSlice([]int{1, 2, 3}, func(v int) float32 { return float32(v * 2) }))
-}
-
-func Test_MapSliceEx(t *testing.T) {
-	// Nil/Empty maps
-	r1, e := MapSliceEx[int, float32]([]int(nil), func(v int) (float32, error) { return float32(v), nil })
-	assert.Nil(t, e)
-	assert.Equal(t, []float32{}, r1)
-	r2, e := MapSliceEx([]int{}, func(v int) (float32, error) { return float32(v), nil })
-	assert.Nil(t, e)
-	assert.Equal(t, []float32{}, r2)
-
-	// []string -> []int
-	r3, e := MapSliceEx([]string{"1", "2", "3"}, ParseInt[int])
-	assert.Nil(t, e)
-	assert.Equal(t, []int{1, 2, 3}, r3)
-
-	// []string -> []int with error
-	_, e = MapSliceEx([]string{"1", "a", "3"}, ParseInt[int])
-	assert.ErrorIs(t, e, strconv.ErrSyntax)
-}
-
-func Test_MapSliceToMap(t *testing.T) {
-	// Nil/Empty maps
-	assert.Equal(t, map[int]bool{}, MapSliceToMap[int, int, bool]([]int(nil), func(v int) (int, bool) { return v, v > 0 }))
-	assert.Equal(t, map[int]bool{}, MapSliceToMap([]int{}, func(v int) (int, bool) { return v, v > 0 }))
-
-	// []int -> map[int]string
-	assert.Equal(t, map[int]string{1: "2", 2: "4", 3: "6"}, MapSliceToMap([]int{1, 2, 3},
-		func(v int) (int, string) { return v, strconv.Itoa(v * 2) }))
-}
-
-func Test_MapSliceToMapEx(t *testing.T) {
-	// Nil/Empty maps
-	r1, e := MapSliceToMapEx[int, int, bool]([]int(nil), func(v int) (int, bool, error) { return v, v > 0, nil })
-	assert.Nil(t, e)
-	assert.Equal(t, map[int]bool{}, r1)
-	r2, e := MapSliceToMapEx([]int{}, func(v int) (int, bool, error) { return v, v > 0, nil })
-	assert.Nil(t, e)
-	assert.Equal(t, map[int]bool{}, r2)
-
-	// []string -> []int
-	r3, e := MapSliceToMapEx([]string{"1", "2", "3"}, func(v string) (string, int, error) {
-		u, e := ParseInt[int](v)
-		return v, u, e
-	})
-	assert.Nil(t, e)
-	assert.Equal(t, map[string]int{"1": 1, "2": 2, "3": 3}, r3)
-
-	// []string -> []int with error
-	_, e = MapSliceToMapEx([]string{"1", "x", "3"}, func(v string) (string, int, error) {
-		u, e := ParseInt[int](v)
-		return v, u, e
-	})
-	assert.ErrorIs(t, e, strconv.ErrSyntax)
-}
-
-func Test_MapSliceToMapKeys(t *testing.T) {
-	// Nil/Empty maps
-	assert.Equal(t, map[int]struct{}{}, MapSliceToMapKeys[int]([]int(nil), struct{}{}))
-	assert.Equal(t, map[int]int{}, MapSliceToMapKeys([]int{}, 0))
-
-	// []int -> map[int]string
-	assert.Equal(t, map[int]string{1: "x", 2: "x", 3: "x"}, MapSliceToMapKeys([]int{1, 2, 3, 2}, "x"))
 }

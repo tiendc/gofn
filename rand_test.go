@@ -2,7 +2,6 @@ package gofn
 
 import (
 	"math/rand"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -53,47 +52,4 @@ func Test_RandChoiceMaker_Next(t *testing.T) {
 	v3 := []string{v30, v31, v32, v33, v34}
 	Sort(v3)
 	assert.Equal(t, []string{"", "", "1", "2", "3"}, v3)
-}
-
-func Test_Shuffle(t *testing.T) {
-	// Empty input slice
-	s1 := Shuffle[int]([]int(nil))
-	assert.Equal(t, []int{}, s1)
-	// One item input
-	s2 := Shuffle([]float32{1.1})
-	assert.Equal(t, []float32{1.1}, s2)
-	// Multiple items input (with using custom rand function)
-	s3 := Shuffle([]string{"1", "2", "3"}, rand.Intn)
-	Sort(s3)
-	assert.Equal(t, []string{"1", "2", "3"}, s3)
-}
-
-func Test_RandString(t *testing.T) {
-	// Empty string
-	assert.Equal(t, "", RandString(0))
-
-	s := RandString(12)
-	assert.Equal(t, 12, len(s))
-	for _, ch := range s {
-		assert.True(t, strings.ContainsRune(string(StrDefaultChars), ch))
-	}
-}
-
-func Test_RandStringEx(t *testing.T) {
-	// Empty string
-	assert.Equal(t, "", RandStringEx(0, StrLowerAlpha))
-
-	// Only digits
-	s := RandStringEx(10, StrDigits)
-	assert.Equal(t, 10, len(s))
-	for _, ch := range s {
-		assert.True(t, strings.ContainsRune(string(StrDigits), ch))
-	}
-
-	// Only alphabet
-	s = RandStringEx(12, StrLowerAlpha)
-	assert.Equal(t, 12, len(s))
-	for _, ch := range s {
-		assert.True(t, strings.ContainsRune(string(StrLowerAlpha), ch))
-	}
 }

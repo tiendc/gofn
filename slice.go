@@ -260,45 +260,6 @@ func ContainAny[T comparable, S ~[]T](a S, b ...T) bool {
 	return false
 }
 
-// IsUnique checks a slice for uniqueness
-func IsUnique[T comparable, S ~[]T](s S) bool {
-	length := len(s)
-	if length <= 1 {
-		return true
-	}
-	seen := make(map[T]struct{}, length)
-	for i := 0; i < length; i++ {
-		v := s[i]
-		if _, ok := seen[v]; ok {
-			return false
-		}
-		seen[v] = struct{}{}
-	}
-	return true
-}
-
-// IsUniqueBy checks a slice for uniqueness using key function
-func IsUniqueBy[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
-	length := len(s)
-	if length <= 1 {
-		return true
-	}
-	seen := make(map[U]struct{}, length)
-	for i := 0; i < length; i++ {
-		v := keyFunc(s[i])
-		if _, ok := seen[v]; ok {
-			return false
-		}
-		seen[v] = struct{}{}
-	}
-	return true
-}
-
-// Deprecated: use IsUniqueBy instead
-func IsUniquePred[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
-	return IsUniqueBy(s, keyFunc)
-}
-
 // Find finds value in slice by predicate
 func Find[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
 	for i := range a {
@@ -498,40 +459,6 @@ func RemoveAll[T comparable, S ~[]T](ps *S, v T) int {
 	return count
 }
 
-// Reverse reverses slice content, this modifies the slice
-func Reverse[T any, S ~[]T](s S) S {
-	if len(s) == 0 {
-		return s
-	}
-	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		s[i], s[j] = s[j], s[i]
-	}
-	return s
-}
-
-// ReverseCopy returns a new slice which has content in reversed order
-func ReverseCopy[T any, S ~[]T](s S) S {
-	result := make(S, len(s))
-	for i, j := 0, len(s)-1; j >= 0; j-- {
-		result[i] = s[j]
-		i++
-	}
-	return result
-}
-
-// Compact excludes all zero items in a slice
-func Compact[T comparable, S ~[]T](s S) S {
-	result := make(S, 0, len(s))
-	var zeroT T
-	for _, v := range s {
-		if v == zeroT {
-			continue
-		}
-		result = append(result, v)
-	}
-	return result
-}
-
 // Replace replaces a value in slice with another value
 func Replace[T comparable, S ~[]T](s S, value, replacement T) bool {
 	for i := range s {
@@ -573,39 +500,6 @@ func Fill[T any, S ~[]T](a S, val T) {
 	}
 }
 
-// Chunk splits slice content into chunks by chunk size
-func Chunk[T any, S ~[]T](s S, chunkSize int) []S {
-	if chunkSize <= 0 {
-		return []S{}
-	}
-
-	chunks := make([]S, 0, len(s)/chunkSize+1)
-	for {
-		if len(s) == 0 {
-			break
-		}
-		if len(s) < chunkSize {
-			chunkSize = len(s)
-		}
-		chunks = append(chunks, s[0:chunkSize])
-		s = s[chunkSize:]
-	}
-	return chunks
-}
-
-// ChunkByPieces splits slice content into chunks by number of pieces
-func ChunkByPieces[T any, S ~[]T](s S, chunkCount int) []S {
-	if chunkCount <= 0 {
-		return []S{}
-	}
-	chunkSize := len(s) / chunkCount
-	if chunkSize*chunkCount < len(s) {
-		chunkSize++
-	}
-
-	return Chunk(s, chunkSize)
-}
-
 // CountValue counts number of occurrences of an item in the slice
 func CountValue[T comparable, S ~[]T](a S, val T) int {
 	count := 0
@@ -633,68 +527,6 @@ func CountValuePred[T any, S ~[]T](a S, pred func(t T) bool) int {
 	return CountValueBy(a, pred)
 }
 
-// Drop returns a copied slice with dropping items in the list
-func Drop[T comparable, S ~[]T](a S, values ...T) S {
-	return FilterNIN(a, values...)
-}
-
-// ContainSlice tests if a slice contains a slice
-func ContainSlice[T comparable, S ~[]T](a, b S) bool {
-	return IndexOfSlice(a, b) >= 0
-}
-
-// IndexOfSlice gets index of sub-slice in slice.
-// Returns -1 if not found.
-func IndexOfSlice[T comparable, S ~[]T](a, sub S) int {
-	lengthA := len(a)
-	lengthSub := len(sub)
-	if lengthSub == 0 || lengthA < lengthSub {
-		return -1
-	}
-	sub1st := sub[0]
-	for i, max := 0, lengthA-lengthSub; i <= max; i++ {
-		if a[i] == sub1st {
-			found := true
-			for j := 1; j < lengthSub; j++ {
-				if a[i+j] != sub[j] {
-					found = false
-					break
-				}
-			}
-			if found {
-				return i
-			}
-		}
-	}
-	return -1
-}
-
-// LastIndexOfSlice gets last index of sub-slice in slice
-// Returns -1 if not found
-func LastIndexOfSlice[T comparable, S ~[]T](a, sub S) int {
-	lengthA := len(a)
-	lengthSub := len(sub)
-	if lengthSub == 0 || lengthA < lengthSub {
-		return -1
-	}
-	sub1st := sub[0]
-	for i := lengthA - lengthSub; i >= 0; i-- {
-		if a[i] == sub1st {
-			found := true
-			for j := 1; j < lengthSub; j++ {
-				if a[i+j] != sub[j] {
-					found = false
-					break
-				}
-			}
-			if found {
-				return i
-			}
-		}
-	}
-	return -1
-}
-
 // GetFirst gets the first item in slice.
 // Returns the default value if slice is empty.
 func GetFirst[T any, S ~[]T](s S, defaultVal T) T {
@@ -713,34 +545,24 @@ func GetLast[T any, S ~[]T](s S, defaultVal T) T {
 	return defaultVal
 }
 
-// SubSlice gets sub slice from a slice.
-// Passing negative numbers to get items from the end of the slice.
-// For example, using start=-1, end=-2 to get the last item of the slice
-// end param is exclusive.
-func SubSlice[T any, S ~[]T](s S, start, end int) S {
-	length := len(s)
-	if length == 0 {
-		return S{}
+// HeadOf returns the first item in slice.
+// Returns zero value and `false` if the slice is empty.
+func HeadOf[T any, S ~[]T](s S) (T, bool) {
+	if len(s) > 0 {
+		return s[0], true
 	}
+	var zero T
+	return zero, false
+}
 
-	for start < 0 {
-		start += length
+// TailOf returns the last item in slice.
+// Returns zero value and `false` if the slice is empty.
+func TailOf[T any, S ~[]T](s S) (T, bool) {
+	if len(s) > 0 {
+		return s[len(s)-1], true
 	}
-	if start > length {
-		start = length
-	}
-	for end < 0 {
-		end += length
-	}
-	if end > length {
-		end = length
-	}
-
-	if start > end {
-		// NOTE: end is exclusive
-		return s[end+1 : start+1]
-	}
-	return s[start:end]
+	var zero T
+	return zero, false
 }
 
 // SliceByRange generates a slice by range.
