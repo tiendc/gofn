@@ -80,7 +80,7 @@ go get github.com/tiendc/gofn
   - [Intersection / IntersectionBy](#intersection--intersectionby)
   - [Difference / DifferenceBy](#difference--differenceby)
   - [Reduce / ReduceEx](#reduce--reduceex)
-  - [ReduceRight / ReduceRightEx](#reduceright--reducerightex)
+  - [ReduceReverse / ReduceReverseEx](#reducereverse--reducereverseex)
   - [Partition / PartitionN](#partition--partitionn)
   - [Flatten / Flatten3](#flatten--flatten3)
   - [Zip / Zip\<N\>](#zip--zipn)
@@ -640,16 +640,16 @@ ReduceEx([]int{1, 2, 3}, func (accumulator int, currentValue int, i index) int {
 }, 10) // 16
 ```
 
-#### ReduceRight / ReduceRightEx
+#### ReduceReverse / ReduceReverseEx
 
 Reduces a slice to a value with iterating from the end.
 
 ```go
-ReduceRight([]int{1, 2, 3}, func (accumulator int, currentValue int) int {
+ReduceReverse([]int{1, 2, 3}, func (accumulator int, currentValue int) int {
     return accumulator + currentValue
 }) // 6
 
-ReduceRightEx([]int{1, 2, 3}, func (accumulator int, currentValue int, i index) int {
+ReduceReverseEx([]int{1, 2, 3}, func (accumulator int, currentValue int, i index) int {
     return accumulator + currentValue
 }, 10) // 16
 ```
