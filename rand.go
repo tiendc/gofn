@@ -2,13 +2,6 @@ package gofn
 
 import "math/rand"
 
-var (
-	StrLowerAlpha   = []rune("abcdefghijklmnopqrstuvwxyz")
-	StrUpperAlpha   = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	StrDigits       = []rune("0123456789")
-	StrDefaultChars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-)
-
 // RandChoiceMaker a struct for picking up items randomly from a list of items
 type RandChoiceMaker[T any] struct {
 	source   []*T // Use pointers to slice items to gain more performance when item type is struct
@@ -62,36 +55,4 @@ func RandChoice[T any](s ...T) (T, bool) {
 		return defaultVal, false
 	}
 	return s[rand.Intn(len(s))], true //nolint:gosec
-}
-
-// Shuffle items of a slice and returns a new slice
-func Shuffle[T any, S ~[]T](s S, randFuncs ...func(n int) int) S {
-	if len(s) <= 1 {
-		return append(S{}, s...)
-	}
-	maker := NewRandChoiceMaker(s, randFuncs...)
-	result := make(S, 0, len(s))
-	for {
-		item, valid := maker.Next()
-		if !valid {
-			break
-		}
-		result = append(result, item)
-	}
-	return result
-}
-
-// RandString generates a random string
-func RandString(n int) string {
-	return RandStringEx(n, StrDefaultChars)
-}
-
-// RandStringEx generates a random string
-func RandStringEx[S ~[]rune](n int, allowedChars S) string {
-	b := make([]rune, n)
-	numChars := len(allowedChars)
-	for i := range b {
-		b[i] = allowedChars[rand.Intn(numChars)] // nolint: gosec
-	}
-	return string(b)
 }

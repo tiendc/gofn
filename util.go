@@ -118,16 +118,6 @@ func Head[T any](t T, s ...any) T {
 	return t
 }
 
-// HeadOf returns the first item in slice.
-// Returns zero value and `false` if the slice is empty.
-func HeadOf[T any, S ~[]T](s S) (T, bool) {
-	if len(s) > 0 {
-		return s[0], true
-	}
-	var zero T
-	return zero, false
-}
-
 // Tail returns the last argument
 func Tail[T any](t any, s ...any) (T, bool) {
 	v := t
@@ -136,14 +126,4 @@ func Tail[T any](t any, s ...any) (T, bool) {
 	}
 	ret, ok := v.(T)
 	return ret, ok
-}
-
-// TailOf returns the last item in slice.
-// Returns zero value and `false` if the slice is empty.
-func TailOf[T any, S ~[]T](s S) (T, bool) {
-	if len(s) > 0 {
-		return s[len(s)-1], true
-	}
-	var zero T
-	return zero, false
 }
