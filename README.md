@@ -35,8 +35,8 @@ go get github.com/tiendc/gofn
   - [Concat](#concat)
   - [Fill](#fill)
   - [SliceByRange](#slicebyrange)
-  - [GetFirst](#getfirst)
-  - [GetLast](#getlast)
+  - [First / FirstOr](#first--firstor)
+  - [Last / LastOr](#last--lastor)
 
 **Slice searching**
   - [Contain](#contain--containby)
@@ -302,28 +302,30 @@ s2 := s[2:4]
 Fill(s2, 1) // s2 == []int{1, 1}, s == []int{0, 0, 1, 1, 0}
 ```
 
-#### GetFirst
+#### First / FirstOr
 
-Returns the first element of slice if it is not empty, otherwise return the default value.
+Returns the first element of slice.
 
 ```go
-GetFirst([]int{1, 2, 3}, 4) // 1
-GetFirst([]int{}, 11)       // 11
+First([]int{1, 2, 3})      // 1, true
+First([]string{})          // "", false
 
-HeadOf([]int{1, 2, 3})      // 1, true
-HeadOf([]string{})          // "", false
+// Return the default value if slice is empty
+FirstOr([]int{1, 2, 3}, 4) // 1
+FirstOr([]int{}, 11)       // 11
 ```
 
-#### GetLast
+#### Last / LastOr
 
-Returns the last element of slice if it is not empty, otherwise return the default value.
+Returns the last element of slice.
 
 ```go
-GetLast([]int{1, 2, 3}, 4)  // 3
-GetLast([]int{}, 11)        // 11
+Last([]int{1, 2, 3})       // 3, true
+Last([]string{})           // "", false
 
-TailOf([]int{1, 2, 3})      // 3, true
-TailOf([]string{})          // "", false
+// Return the default value if slice is empty
+LastOr([]int{1, 2, 3}, 4)  // 3
+LastOr([]int{}, 11)        // 11
 ```
 
 #### SliceByRange

@@ -1004,31 +1004,41 @@ func Test_CountValuePred_Deprecated(t *testing.T) {
 		func(t any) bool { return t == 1.1 }))
 }
 
-func Test_GetFirst(t *testing.T) {
+func Test_FirstOr(t *testing.T) {
+	assert.Equal(t, 1, FirstOr([]int{1, 2, 3}, 4))
+	assert.Equal(t, 11, FirstOr([]int{}, 11))
+}
+
+func Test_GetFirst_Deprecated(t *testing.T) {
 	assert.Equal(t, 1, GetFirst([]int{1, 2, 3}, 4))
 	assert.Equal(t, 11, GetFirst([]int{}, 11))
 }
 
-func Test_GetLast(t *testing.T) {
+func Test_HeadOf(t *testing.T) {
+	v1, f := First([]string{})
+	assert.True(t, v1 == "" && !f)
+	v2, f := First([]int(nil))
+	assert.True(t, v2 == 0 && !f)
+	v3, f := First([]int{1, 2, 3})
+	assert.True(t, v3 == 1 && f)
+}
+
+func Test_LastOr(t *testing.T) {
+	assert.Equal(t, 3, LastOr([]int{1, 2, 3}, 4))
+	assert.Equal(t, 11, LastOr([]int{}, 11))
+}
+
+func Test_GetLast_Deprecated(t *testing.T) {
 	assert.Equal(t, 3, GetLast([]int{1, 2, 3}, 4))
 	assert.Equal(t, 11, GetLast([]int{}, 11))
 }
 
-func Test_HeadOf(t *testing.T) {
-	v1, f := HeadOf([]string{})
+func Test_Last(t *testing.T) {
+	v1, f := Last([]string{})
 	assert.True(t, v1 == "" && !f)
-	v2, f := HeadOf([]int(nil))
+	v2, f := Last([]int(nil))
 	assert.True(t, v2 == 0 && !f)
-	v3, f := HeadOf([]int{1, 2, 3})
-	assert.True(t, v3 == 1 && f)
-}
-
-func Test_TailOf(t *testing.T) {
-	v1, f := TailOf([]string{})
-	assert.True(t, v1 == "" && !f)
-	v2, f := TailOf([]int(nil))
-	assert.True(t, v2 == 0 && !f)
-	v3, f := TailOf([]int{1, 2, 3})
+	v3, f := Last([]int{1, 2, 3})
 	assert.True(t, v3 == 3 && f)
 }
 
