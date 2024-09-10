@@ -127,21 +127,21 @@ func Test_ReduceEx(t *testing.T) {
 	assert.Equal(t, 0, ReduceEx[int]([]int{1, 2, 0}, func(acc, v, i int) int { return acc * v }, 1))
 }
 
-func Test_ReduceRight(t *testing.T) {
+func Test_ReduceReverse(t *testing.T) {
 	// Empty slice
-	assert.Equal(t, 0, ReduceRight[int]([]int{}, func(acc, v int) int { return acc + v }))
+	assert.Equal(t, 0, ReduceReverse[int]([]int{}, func(acc, v int) int { return acc + v }))
 	// Slice has 1 element
-	assert.Equal(t, 1, ReduceRight[int]([]int{1}, func(acc, v int) int { return acc + v }))
+	assert.Equal(t, 1, ReduceReverse[int]([]int{1}, func(acc, v int) int { return acc + v }))
 
-	assert.Equal(t, 6, ReduceRight[int]([]int{1, 2, 3}, func(acc, v int) int { return acc + v }))
-	assert.Equal(t, 8, ReduceRight[int]([]int{1, 2, 4}, func(acc, v int) int { return acc * v }))
-	assert.Equal(t, 0, ReduceRight[int]([]int{1, 2, 0}, func(acc, v int) int { return acc * v }))
+	assert.Equal(t, 6, ReduceReverse[int]([]int{1, 2, 3}, func(acc, v int) int { return acc + v }))
+	assert.Equal(t, 8, ReduceReverse[int]([]int{1, 2, 4}, func(acc, v int) int { return acc * v }))
+	assert.Equal(t, 0, ReduceReverse[int]([]int{1, 2, 0}, func(acc, v int) int { return acc * v }))
 }
 
-func Test_ReduceRightEx(t *testing.T) {
-	assert.Equal(t, 7, ReduceRightEx[int]([]int{1, 2, 3}, func(acc, v, i int) int { return acc + v }, 1))
-	assert.Equal(t, 8, ReduceRightEx[int]([]int{1, 2, 4}, func(acc, v, i int) int { return acc * v }, 1))
-	assert.Equal(t, 0, ReduceRightEx[int]([]int{1, 2, 0}, func(acc, v, i int) int { return acc * v }, 1))
+func Test_ReduceReverseEx(t *testing.T) {
+	assert.Equal(t, 7, ReduceReverseEx[int]([]int{1, 2, 3}, func(acc, v, i int) int { return acc + v }, 1))
+	assert.Equal(t, 8, ReduceReverseEx[int]([]int{1, 2, 4}, func(acc, v, i int) int { return acc * v }, 1))
+	assert.Equal(t, 0, ReduceReverseEx[int]([]int{1, 2, 0}, func(acc, v, i int) int { return acc * v }, 1))
 }
 
 func Test_Partition(t *testing.T) {

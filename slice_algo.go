@@ -116,8 +116,8 @@ func ReduceEx[T any, U any, S ~[]T](
 	return accumulator
 }
 
-// ReduceRight reduces a slice to a value
-func ReduceRight[T any, S ~[]T](s S, reduceFunc func(accumulator, currentValue T) T) T {
+// ReduceReverse reduces a slice to a value
+func ReduceReverse[T any, S ~[]T](s S, reduceFunc func(accumulator, currentValue T) T) T {
 	length := len(s)
 	if length == 0 {
 		var zeroT T
@@ -130,8 +130,8 @@ func ReduceRight[T any, S ~[]T](s S, reduceFunc func(accumulator, currentValue T
 	return accumulator
 }
 
-// ReduceRightEx reduces a slice to a value with custom initial value
-func ReduceRightEx[T any, U any, S ~[]T](
+// ReduceReverseEx reduces a slice to a value with custom initial value
+func ReduceReverseEx[T any, U any, S ~[]T](
 	s S,
 	reduceFunc func(accumulator U, currentValue T, currentIndex int) U,
 	initVal U,
