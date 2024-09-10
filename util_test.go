@@ -152,7 +152,12 @@ func Test_Must6(t *testing.T) {
 	}())
 }
 
-func Test_New(t *testing.T) {
+func Test_ToPtr(t *testing.T) {
+	assert.Equal(t, 3, *ToPtr(3))
+	assert.Equal(t, "abc", *ToPtr("abc"))
+}
+
+func Test_New_Deprecated(t *testing.T) {
 	assert.Equal(t, 3, *New(3))
 	assert.Equal(t, "abc", *New("abc"))
 }

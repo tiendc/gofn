@@ -107,8 +107,12 @@ func Must6[T1, T2, T3, T4, T5 any](v1 T1, v2 T2, v3 T3, v4 T4, v5 T5, e error) (
 	return v1, v2, v3, v4, v5
 }
 
-// New returns pointer to the address of the input.
-// Helpful for unit testing when create a struct that has field requires pointer type.
+// ToPtr returns pointer to the address of the input
+func ToPtr[T any](t T) *T {
+	return &t
+}
+
+// Deprecated: Use ToPtr instead
 func New[T any](t T) *T {
 	return &t
 }
