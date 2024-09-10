@@ -14,48 +14,54 @@ func If[C bool, T any](cond C, v1 T, v2 T) T {
 	return v2
 }
 
-// Or logically selects the first value which is not zero value of type T.
-// This function is similar to `FirstTrue`, but it uses generic, not reflection.
-func Or[T NumberExt | NumberPtr | ComplexExt | ComplexPtr | StringExt | StringPtr | ~bool | *bool](args ...T) T {
-	var defaultVal T
-	for _, v := range args {
-		if v != defaultVal {
-			return v
-		}
-	}
-	return defaultVal
-}
-
-// FirstTrue returns the first "true" value in the given arguments if found.
-// True value must be not:
+// FirstNonEmpty returns the first non-empty value in the given arguments if found, otherwise
+// returns the zero value. This function use reflection.
+//
+// Non-empty value must be not:
 //   - zero value (0, "", nil, false)
 //   - empty slice, array, map, channel
 //   - pointer points to zero value
-func FirstTrue[T any](a0 T, args ...T) T {
-	a := a0
-	for i := -1; i < len(args); i++ {
-		if i >= 0 {
-			a = args[i]
-		}
-		if isTrueValue(reflect.ValueOf(a)) {
-			return a
+func FirstNonEmpty[T any](args ...T) (val T) {
+	for i := range args {
+		if isNonEmptyValue(reflect.ValueOf(args[i])) {
+			return args[i]
 		}
 	}
-	return a0
+	return
 }
 
-func isTrueValue(v reflect.Value) bool {
+func isNonEmptyValue(v reflect.Value) bool {
 	if !v.IsValid() || v.IsZero() {
 		return false
 	}
 	k := v.Kind()
 	if k == reflect.Pointer || k == reflect.Interface {
-		return isTrueValue(v.Elem())
+		return isNonEmptyValue(v.Elem())
 	}
 	if k == reflect.Slice || k == reflect.Array || k == reflect.Map || k == reflect.Chan {
 		return v.Len() > 0
 	}
 	return true
+}
+
+// Deprecated: use FirstNonEmpty instead
+func FirstTrue[T any](args ...T) T {
+	return FirstNonEmpty(args...)
+}
+
+// Coalesce returns the first non-zero value if found, otherwise returns zero.
+func Coalesce[T comparable](args ...T) (result T) {
+	for _, v := range args {
+		if v != result {
+			return v
+		}
+	}
+	return result
+}
+
+// Deprecated: use Coalesce instead
+func Or[T comparable](args ...T) (result T) {
+	return Coalesce(args...)
 }
 
 func Must1(e error) {

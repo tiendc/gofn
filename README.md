@@ -158,8 +158,8 @@ go get github.com/tiendc/gofn
   - [RandChoiceMaker](#randchoicemaker)
 
 **Utility**
-  - [FirstTrue](#firsttrue)
-  - [Or](#or)
+  - [FirstNonEmpty](#firstnonempty)
+  - [Coalesce](#coalesce)
   - [If](#if)
   - [Must\<N\>](#mustn)
   - [ToPtr](#toptr)
@@ -1289,33 +1289,34 @@ ProductAs[int]([]int8{5, 6, 7}) // 210 (Product() will fail as the result overfl
 ### Utility
 ---
 
-#### FirstTrue
+#### FirstNonEmpty
 
-Returns the first "true" value in the given arguments if found.
-Values considered "true" are:
+Returns the first non-zero value in the given arguments if found, otherwise returns the zero value.
+This function use `reflection`. Consider using `Coalesce` for generic types.
+
+Values considered "non-zero" are:
   - not zero values (0, empty string, false, nil, ...)
   - not empty containers (slice, array, map, channel)
   - not pointers that point to zero/empty values
 
 ```go
-FirstTrue(0, 0, -1, 2, 3)                       // -1
-FirstTrue("", "", " ", "b")                     // " "
-FirstTrue([]int{}, nil, []int{1}, []int{2, 3})  // []int{1}
-FirstTrue([]int{}, nil, &[]int{}, []int{2, 3})  // []int{2, 3}
-FirstTrue[any](nil, 0, 0.0, "", struct{}{})     // nil (the first zero value)
+FirstNonEmpty(0, -1, 2, 3)                          // -1
+FirstNonEmpty("", " ", "b")                         // " "
+FirstNonEmpty([]int{}, nil, []int{1}, []int{2, 3})  // []int{1}
+FirstNonEmpty([]int{}, nil, &[]int{}, []int{2, 3})  // []int{2, 3}
+FirstNonEmpty[any](nil, 0, 0.0, "", struct{}{})     // nil (the first zero value)
 ```
 
-#### Or
+#### Coalesce
 
-Logically selects the first value which is not zero value of type T.
-This function is similar to `FirstTrue`, but it uses generic, not reflection, and it accepts primitive types only.
+Returns the first non-zero argument. Input type must be comparable.
 
 ```go
-Or(0, -1, 2)         // -1
-Or("", " ", "s")     // " "
-Or[*int](ptr1, ptr2) // the first non-nil pointer
+Coalesce(0, -1, 2)         // -1
+Coalesce("", " ", "s")     // " "
+Coalesce[*int](ptr1, ptr2) // the first non-nil pointer
 ```
- 
+
 #### If
 
 A convenient function works like C ternary operator.
