@@ -1323,11 +1323,11 @@ ProductAs[int]([]int8{5, 6, 7}) // 210 (Product() will fail as the result overfl
 
 #### FirstNonEmpty
 
-Returns the first non-zero value in the given arguments if found, otherwise returns the zero value.
+Returns the first non-empty value in the given arguments if found, otherwise returns the zero value.
 This function use `reflection`. Consider using `Coalesce` for generic types.
 
-Values considered "non-zero" are:
-  - not zero values (0, empty string, false, nil, ...)
+Values considered "non-empty" are:
+  - not empty values (0, empty string, false, nil, ...)
   - not empty containers (slice, array, map, channel)
   - not pointers that point to zero/empty values
 
