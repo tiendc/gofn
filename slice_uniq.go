@@ -39,6 +39,83 @@ func IsUniquePred[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
 	return IsUniqueBy(s, keyFunc)
 }
 
+// FindUniques finds all elements that are unique in the given slice.
+func FindUniques[T comparable, S ~[]T](s S) S {
+	return FindUniquesBy(s, func(t T) T { return t })
+}
+
+// FindUniquesBy finds all elements that are unique in the given slice.
+func FindUniquesBy[T any, U comparable, S ~[]T](s S, keyFunc func(T) U) S {
+	length := len(s)
+	if length <= 1 {
+		return append(S{}, s...)
+	}
+
+	seen := make(map[U]int, length)  // Map to store elements and their first indexes
+	dupFlags := make([]bool, length) // Array to store flags of duplication of elements
+	uniqCount := length
+
+	for i := range s {
+		k := keyFunc(s[i])
+		if firstIndex, ok := seen[k]; ok {
+			dupFlags[firstIndex] = true
+			dupFlags[i] = true
+			uniqCount--
+			continue
+		}
+		seen[k] = i
+	}
+
+	if uniqCount == length {
+		return append(S{}, s...)
+	}
+	result := make(S, 0, uniqCount)
+	for i := 0; i < length; i++ {
+		if !dupFlags[i] {
+			result = append(result, s[i])
+		}
+	}
+	return result
+}
+
+// FindDuplicates finds all elements that are duplicated in the given slice.
+func FindDuplicates[T comparable, S ~[]T](s S) S {
+	return FindDuplicatesBy(s, func(t T) T { return t })
+}
+
+// FindDuplicatesBy finds all elements that are duplicated in the given slice.
+func FindDuplicatesBy[T any, U comparable, S ~[]T](s S, keyFunc func(T) U) S {
+	length := len(s)
+	if length <= 1 {
+		return S{}
+	}
+
+	seen := make(map[U]int, length)  // Map to store elements and their first indexes
+	dupFlags := make([]bool, length) // Array to store flags of duplication of elements
+	dupCount := 0
+
+	for i := range s {
+		k := keyFunc(s[i])
+		if firstIndex, ok := seen[k]; ok {
+			dupFlags[firstIndex] = true
+			dupCount++
+			continue
+		}
+		seen[k] = i
+	}
+
+	if dupCount == 0 {
+		return S{}
+	}
+	result := make(S, 0, dupCount)
+	for i := 0; i < length; i++ {
+		if dupFlags[i] {
+			result = append(result, s[i])
+		}
+	}
+	return result
+}
+
 // ToSet calculates unique values of a slice
 func ToSet[T comparable, S ~[]T](s S) S {
 	length := len(s)
