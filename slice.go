@@ -527,27 +527,23 @@ func CountValuePred[T any, S ~[]T](a S, pred func(t T) bool) int {
 	return CountValueBy(a, pred)
 }
 
-// GetFirst gets the first item in slice.
+// FirstOr gets the first item in slice.
 // Returns the default value if slice is empty.
-func GetFirst[T any, S ~[]T](s S, defaultVal T) T {
+func FirstOr[T any, S ~[]T](s S, defaultVal T) T {
 	if len(s) > 0 {
 		return s[0]
 	}
 	return defaultVal
 }
 
-// GetLast gets the last item in slice.
-// Returns the default value if slice is empty.
-func GetLast[T any, S ~[]T](s S, defaultVal T) T {
-	if len(s) > 0 {
-		return s[len(s)-1]
-	}
-	return defaultVal
+// Deprecated: use FirstOr instead
+func GetFirst[T any, S ~[]T](s S, defaultVal T) T {
+	return FirstOr(s, defaultVal)
 }
 
-// HeadOf returns the first item in slice.
+// First returns the first item in slice.
 // Returns zero value and `false` if the slice is empty.
-func HeadOf[T any, S ~[]T](s S) (T, bool) {
+func First[T any, S ~[]T](s S) (T, bool) {
 	if len(s) > 0 {
 		return s[0], true
 	}
@@ -555,9 +551,23 @@ func HeadOf[T any, S ~[]T](s S) (T, bool) {
 	return zero, false
 }
 
-// TailOf returns the last item in slice.
+// LastOr gets the last item in slice.
+// Returns the default value if slice is empty.
+func LastOr[T any, S ~[]T](s S, defaultVal T) T {
+	if len(s) > 0 {
+		return s[len(s)-1]
+	}
+	return defaultVal
+}
+
+// Deprecated: use LastOr instead
+func GetLast[T any, S ~[]T](s S, defaultVal T) T {
+	return LastOr(s, defaultVal)
+}
+
+// Last returns the last item in slice.
 // Returns zero value and `false` if the slice is empty.
-func TailOf[T any, S ~[]T](s S) (T, bool) {
+func Last[T any, S ~[]T](s S) (T, bool) {
 	if len(s) > 0 {
 		return s[len(s)-1], true
 	}
