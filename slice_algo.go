@@ -91,8 +91,13 @@ func ChunkByPieces[T any, S ~[]T](s S, chunkCount int) []S {
 
 // Reduce reduces a slice to a value
 func Reduce[T any, S ~[]T](s S, reduceFunc func(accumulator, currentValue T) T) T {
+	length := len(s)
+	if length == 0 {
+		var zeroT T
+		return zeroT
+	}
 	accumulator := s[0]
-	for i := 1; i < len(s); i++ {
+	for i := 1; i < length; i++ {
 		accumulator = reduceFunc(accumulator, s[i])
 	}
 	return accumulator
@@ -107,6 +112,33 @@ func ReduceEx[T any, U any, S ~[]T](
 	accumulator := initVal
 	for i, v := range s {
 		accumulator = reduceFunc(accumulator, v, i)
+	}
+	return accumulator
+}
+
+// ReduceRight reduces a slice to a value
+func ReduceRight[T any, S ~[]T](s S, reduceFunc func(accumulator, currentValue T) T) T {
+	length := len(s)
+	if length == 0 {
+		var zeroT T
+		return zeroT
+	}
+	accumulator := s[length-1]
+	for i := length - 2; i >= 0; i-- { //nolint:mnd
+		accumulator = reduceFunc(accumulator, s[i])
+	}
+	return accumulator
+}
+
+// ReduceRightEx reduces a slice to a value with custom initial value
+func ReduceRightEx[T any, U any, S ~[]T](
+	s S,
+	reduceFunc func(accumulator U, currentValue T, currentIndex int) U,
+	initVal U,
+) U {
+	accumulator := initVal
+	for i := len(s) - 1; i >= 0; i-- {
+		accumulator = reduceFunc(accumulator, s[i], i)
 	}
 	return accumulator
 }
