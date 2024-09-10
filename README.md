@@ -1224,9 +1224,19 @@ Clamp(15, 10, 20) // 15
 Finds minimum/maximum value in a slice.
 
 ```go
-Min(1, 2, 3, -1)    // -1
-Max(1, 2, 3, -1)    // 3
-MinMax(1, 2, 3, -1) // -1, 3
+Min(1, 2, 3, -1)             // -1
+MinIn([]int{1, 2, 3, -1})    // -1
+MinInBy([]string{"a", "B"}, func(a, b int) bool {
+    return strings.ToLower(a) < strings.ToLower(b)
+}) // "a"
+
+Max(1, 2, 3, -1)             // 3
+MaxIn([]int{1, 2, 3, -1})    // 3
+MaxInBy([]string{"a", "B"}, func(a, b int) bool {
+    return strings.ToLower(a) < strings.ToLower(b)
+}) // "B"
+
+MinMax(1, 2, 3, -1)          // -1, 3
 ```
 
 #### Sum / SumAs
