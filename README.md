@@ -161,7 +161,7 @@ go get github.com/tiendc/gofn
   - [Or](#or)
   - [If](#if)
   - [Must\<N\>](#mustn)
-  - [New](#new)
+  - [ToPtr](#toptr)
   - [Head](#head)
   - [Tail](#tail)
 
@@ -1332,19 +1332,15 @@ func CalculateData() (int, string, float64, error) {}
 v1, v2, v3 := Must4(CalculateData()) // panic on error, otherwise returns the 3 first values
 ```
 
-#### New
+#### ToPtr
 
-Creates a new variable and return the address of it. Very helpful in unit testing.
+Returns a pointer to the input argument.
 
 ```go
-func f(ptr *int) {}
+func aFunc(ptr *int) {}
 
-// Normally we need to declare a var before accessing its address
-val := 10
-f(&val)
-
-// With using New
-f(New(10))
+// Use ToPtr to pass a value inline
+aFunc(ToPtr(10))
 ```
 
 #### Head
