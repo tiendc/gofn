@@ -61,6 +61,41 @@ func Test_IsUniquePred_Deprecated(t *testing.T) {
 		func(v any) int { return v.(int) }))
 }
 
+func Test_FindUniques(t *testing.T) {
+	assert.Equal(t, []int{}, FindUniques([]int{}))
+	assert.Equal(t, []int{0}, FindUniques([]int{0}))
+	assert.Equal(t, []int{0, 1, 2, 3}, FindUniques([]int{0, 1, 2, 3}))
+	assert.Equal(t, []int{0, 3}, FindUniques([]int{0, 1, 2, 3, 2, 1, 1}))
+	assert.Equal(t, []int{}, FindUniques([]int{0, 1, 2, 3, 2, 1, 0, 0, 3}))
+}
+
+//nolint:forcetypeassert
+func Test_FindUniquesBy(t *testing.T) {
+	assert.Equal(t, []any{}, FindUniquesBy([]any{}, func(any) int { return 0 }))
+	assert.Equal(t, []any{0}, FindUniquesBy([]any{0}, func(v any) int { return v.(int) }))
+	assert.Equal(t, []any{0, 1, 2}, FindUniquesBy([]any{0, 1, 2}, func(v any) int { return v.(int) }))
+	assert.Equal(t, []any{0, 3}, FindUniquesBy([]any{0, 1, 2, 3, 2, 1, 1}, func(v any) int { return v.(int) }))
+	assert.Equal(t, []any{}, FindUniquesBy([]any{0, 1, 2, 3, 2, 1, 0, 0, 3}, func(v any) int { return v.(int) }))
+}
+
+func Test_FindDuplicates(t *testing.T) {
+	assert.Equal(t, []int{}, FindDuplicates([]int{}))
+	assert.Equal(t, []int{}, FindDuplicates([]int{0}))
+	assert.Equal(t, []int{}, FindDuplicates([]int{0, 1, 2, 3}))
+	assert.Equal(t, []int{1, 2}, FindDuplicates([]int{0, 1, 2, 3, 2, 1, 1}))
+	assert.Equal(t, []int{0, 1, 2, 3}, FindDuplicates([]int{0, 1, 2, 3, 2, 1, 0, 0, 3}))
+}
+
+//nolint:forcetypeassert
+func Test_FindDuplicatesBy(t *testing.T) {
+	assert.Equal(t, []any{}, FindDuplicatesBy([]any{}, func(any) int { return 0 }))
+	assert.Equal(t, []any{}, FindDuplicatesBy([]any{0}, func(v any) int { return v.(int) }))
+	assert.Equal(t, []any{}, FindDuplicatesBy([]any{0, 1, 2, 3}, func(v any) int { return v.(int) }))
+	assert.Equal(t, []any{1, 2}, FindDuplicatesBy([]any{0, 1, 2, 3, 2, 1, 1}, func(v any) int { return v.(int) }))
+	assert.Equal(t, []any{0, 1, 2, 3},
+		FindDuplicatesBy([]any{0, 1, 2, 3, 2, 1, 0, 0, 3}, func(v any) int { return v.(int) }))
+}
+
 func Test_ToSet(t *testing.T) {
 	assert.Equal(t, []int{}, ToSet([]int{}))
 	assert.Equal(t, []string{"one"}, ToSet([]string{"one"}))

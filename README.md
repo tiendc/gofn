@@ -63,6 +63,8 @@ go get github.com/tiendc/gofn
 
 **Slice uniqueness**
   - [IsUnique / IsUniqueBy](#isunique--isuniqueby)
+  - [FindUniques / FindUniquesBy](#finduniques--finduniquesby)
+  - [FindDuplicates / FindDuplicatesBy](#findduplicates--findduplicatesby)
   - [ToSet / ToSetBy / ToSetByReverse ](#toset--tosetby--tosetbyreverse)
 
 **Slice transformation**
@@ -497,7 +499,37 @@ IsUnique([]int{1, 2, 1}) // false
 // Use IsUniqueBy for custom function
 IsUniqueBy([]string{"one", "ONE"}, strings.ToLower) // false
 ```
- 
+
+#### FindUniques / FindUniquesBy
+
+Finds all unique elements in the given slice. The order of elements in the result is the same
+as they appear in the input.
+
+```go
+FindUniques([]int{1, 2, 3, 2})  // []int{1, 3}
+FindUniques([]int{1, 2, 2, 1})  // []int{}
+
+// FindUniquesBy supports custom key function
+FindUniquesBy([]string{"one", "ONE", "Two"}, func (s string) string {
+    return strings.ToLower(s)
+}) // []string{"Two"}
+```
+
+#### FindDuplicates / FindDuplicatesBy
+
+Finds all elements which are duplicated in the given slice. The order of elements in the result is the same
+as they appear in the input.
+
+```go
+FindDuplicates([]int{1, 2, 3, 2})  // []int{2}
+FindDuplicates([]int{1, 2, 3})     // []int{}
+
+// FindDuplicatesBy supports custom key function
+FindDuplicatesBy([]string{"one", "ONE", "Two"}, func (s string) string {
+    return strings.ToLower(s)
+}) // []string{"one"}
+```
+
 #### ToSet / ToSetBy / ToSetByReverse
 
 Calculates unique values of a slice.
