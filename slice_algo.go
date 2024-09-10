@@ -392,30 +392,48 @@ func Flatten3[T any, S ~[]T, SS ~[]S](s ...SS) S {
 }
 
 // Zip combines values from 2 slices by each position
-func Zip[T any, U any, S1 ~[]T, S2 ~[]U](slice1 S1, slice2 S2) []*Tuple2[T, U] {
+func Zip[T1, T2 any, S1 ~[]T1, S2 ~[]T2](slice1 S1, slice2 S2) []*Tuple2[T1, T2] {
 	minLen := len(slice1)
 	if minLen > len(slice2) {
 		minLen = len(slice2)
 	}
-	result := make([]*Tuple2[T, U], minLen)
+	result := make([]*Tuple2[T1, T2], minLen)
 	for i := 0; i < minLen; i++ {
-		result[i] = &Tuple2[T, U]{slice1[i], slice2[i]}
+		result[i] = &Tuple2[T1, T2]{slice1[i], slice2[i]}
 	}
 	return result
 }
 
 // Zip3 combines values from 3 slices by each position
-func Zip3[T any, U any, V any, S1 ~[]T, S2 ~[]U, S3 ~[]V](slice1 S1, slice2 S2, slice3 S3) []*Tuple3[T, U, V] {
-	minLen := len(slice1)
-	if minLen > len(slice2) {
-		minLen = len(slice2)
-	}
-	if minLen > len(slice3) {
-		minLen = len(slice3)
-	}
-	result := make([]*Tuple3[T, U, V], minLen)
+func Zip3[T1, T2, T3 any, S1 ~[]T1, S2 ~[]T2, S3 ~[]T3](slice1 S1, slice2 S2, slice3 S3) []*Tuple3[T1, T2, T3] {
+	minLen := Min(len(slice1), len(slice2), len(slice3))
+	result := make([]*Tuple3[T1, T2, T3], minLen)
 	for i := 0; i < minLen; i++ {
-		result[i] = &Tuple3[T, U, V]{slice1[i], slice2[i], slice3[i]}
+		result[i] = &Tuple3[T1, T2, T3]{slice1[i], slice2[i], slice3[i]}
+	}
+	return result
+}
+
+// Zip4 combines values from 4 slices by each position
+func Zip4[T1, T2, T3, T4 any, S1 ~[]T1, S2 ~[]T2, S3 ~[]T3, S4 ~[]T4](
+	slice1 S1, slice2 S2, slice3 S3, slice4 S4,
+) []*Tuple4[T1, T2, T3, T4] {
+	minLen := Min(len(slice1), len(slice2), len(slice3), len(slice4))
+	result := make([]*Tuple4[T1, T2, T3, T4], minLen)
+	for i := 0; i < minLen; i++ {
+		result[i] = &Tuple4[T1, T2, T3, T4]{slice1[i], slice2[i], slice3[i], slice4[i]}
+	}
+	return result
+}
+
+// Zip5 combines values from 4 slices by each position
+func Zip5[T1, T2, T3, T4, T5 any, S1 ~[]T1, S2 ~[]T2, S3 ~[]T3, S4 ~[]T4, S5 ~[]T5](
+	slice1 S1, slice2 S2, slice3 S3, slice4 S4, slice5 S5,
+) []*Tuple5[T1, T2, T3, T4, T5] {
+	minLen := Min(len(slice1), len(slice2), len(slice3), len(slice4), len(slice5))
+	result := make([]*Tuple5[T1, T2, T3, T4, T5], minLen)
+	for i := 0; i < minLen; i++ {
+		result[i] = &Tuple5[T1, T2, T3, T4, T5]{slice1[i], slice2[i], slice3[i], slice4[i], slice5[i]}
 	}
 	return result
 }

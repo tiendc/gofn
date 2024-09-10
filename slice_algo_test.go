@@ -338,3 +338,41 @@ func Test_Zip3(t *testing.T) {
 	assert.Equal(t, []*Tuple3[int, string, bool]{{1, "1", true}, {2, "2", false}},
 		Zip3([]int{1, 2, 3}, []string{"1", "2"}, []bool{true, false, false}))
 }
+
+func Test_Zip4(t *testing.T) {
+	assert.Equal(t,
+		[]*Tuple4[int, bool, int32, float32]{},
+		Zip4([]int{}, []bool{}, []int32{}, []float32{}))
+	assert.Equal(t,
+		[]*Tuple4[int, bool, int32, float32]{},
+		Zip4([]int{1, 2, 3}, []bool{}, []int32{4, 5}, []float32{1.1, 2.2}))
+	assert.Equal(t,
+		[]*Tuple4[int, int, int, int]{
+			{1, 11, 111, 1111}, {2, 22, 222, 2222},
+		},
+		Zip4([]int{1, 2, 3, 4}, []int{11, 22, 33}, []int{111, 222}, []int{1111, 2222, 3333}))
+	assert.Equal(t,
+		[]*Tuple4[int, string, bool, int]{
+			{1, "1", true, 11}, {2, "2", false, 22},
+		},
+		Zip4([]int{1, 2, 3}, []string{"1", "2"}, []bool{true, false, false}, []int{11, 22, 32}))
+}
+
+func Test_Zip5(t *testing.T) {
+	assert.Equal(t,
+		[]*Tuple5[int, bool, int32, float32, string]{},
+		Zip5([]int{}, []bool{}, []int32{}, []float32{}, []string{}))
+	assert.Equal(t,
+		[]*Tuple5[int, bool, int32, float32, string]{},
+		Zip5([]int{1, 2, 3}, []bool{}, []int32{4, 5}, []float32{1.1, 2.2}, []string{"1"}))
+	assert.Equal(t,
+		[]*Tuple5[int, int, int, int, int]{
+			{1, 11, 111, 1111, 11111}, {2, 22, 222, 2222, 22222},
+		},
+		Zip5([]int{1, 2, 3, 4}, []int{11, 22, 33}, []int{111, 222}, []int{1111, 2222, 3333}, []int{11111, 22222, 33333}))
+	assert.Equal(t,
+		[]*Tuple5[int, string, bool, int, int]{
+			{1, "1", true, 11, 111}, {2, "2", false, 22, 222},
+		},
+		Zip5([]int{1, 2, 3}, []string{"1", "2"}, []bool{true, false, false}, []int{11, 22, 33}, []int{111, 222, 333}))
+}

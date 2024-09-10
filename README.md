@@ -83,7 +83,7 @@ go get github.com/tiendc/gofn
   - [ReduceRight / ReduceRightEx](#reduceright--reducerightex)
   - [Partition / PartitionN](#partition--partitionn)
   - [Flatten / Flatten3](#flatten--flatten3)
-  - [Zip / Zip3](#zip--zip3)
+  - [Zip / Zip\<N\>](#zip--zipn)
 
 **Slice conversion**
   - [ToIfaceSlice](#toifaceslice)
@@ -675,9 +675,9 @@ Flatten([]int{1, 2, 3}, []int{4, 5})                    // []int{1, 2, 3, 4, 5}
 Flatten3([][]int{{1, 2}, {3, 4}, [][]int{{5, 6}, {7}}}) // []int{1, 2, 3, 4, 5, 6, 7}
 ```
 
-#### Zip / Zip3
+#### Zip / Zip\<N\>
 
-Combines values from multiple slices by each position.
+Combines values from multiple slices by each position (`N` is from 3 to 5).
 
 ```go
 Zip([]int{1, 2, 3}, []int{4, 5})                              // []*Tuple2{{1, 4), {2, 5}}
