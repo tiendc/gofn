@@ -39,3 +39,12 @@ func ToSlice[T any](s ...T) []T {
 	}
 	return s
 }
+
+// ToPtrSlice returns a slice of pointers point to the input slice's elements
+func ToPtrSlice[T any, S ~[]T](s S) []*T {
+	result := make([]*T, len(s))
+	for i := range s {
+		result[i] = &s[i]
+	}
+	return result
+}

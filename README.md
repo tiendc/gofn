@@ -90,6 +90,7 @@ go get github.com/tiendc/gofn
   - [ToStringSlice](#tostringslice)
   - [ToNumberSlice](#tonumberslice)
   - [ToSlice](#toslice)
+  - [ToPtrSlice](#toptrslice)
 
 **Slice subset**
   - [ContainSlice](#containslice)
@@ -723,7 +724,16 @@ Creates a slice for individual values.
 
 ```go
 ToSlice(1, 2, 3) // []int{1, 2, 3}
-``` 
+```
+
+#### ToPtrSlice
+
+Creates a slice of pointers point to the given elements.
+
+```go
+s1 := []int{1, 2, 3}
+s2 := ToPtrSlice(s1) // []*int{&s1[0], &s1[1], &s1[2]}
+```
 
 ### Slice subset
 ---

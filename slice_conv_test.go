@@ -37,3 +37,9 @@ func Test_ToSlice(t *testing.T) {
 	assert.Equal(t, []int{1}, ToSlice[int](1))
 	assert.Equal(t, []string{"1", "2", "3"}, ToSlice("1", "2", "3"))
 }
+
+func Test_ToPtrSlice(t *testing.T) {
+	assert.Equal(t, []*int{}, ToPtrSlice([]int(nil)))
+	s1 := []int{1, 2, 3}
+	assert.Equal(t, []*int{&s1[0], &s1[1], &s1[2]}, ToPtrSlice(s1))
+}
