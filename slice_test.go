@@ -1014,7 +1014,7 @@ func Test_GetFirst_Deprecated(t *testing.T) {
 	assert.Equal(t, 11, GetFirst([]int{}, 11))
 }
 
-func Test_HeadOf(t *testing.T) {
+func Test_First(t *testing.T) {
 	v1, f := First([]string{})
 	assert.True(t, v1 == "" && !f)
 	v2, f := First([]int(nil))
