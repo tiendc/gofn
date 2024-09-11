@@ -1324,7 +1324,7 @@ ProductAs[int]([]int8{5, 6, 7}) // 210 (Product() will fail as the result overfl
 #### FirstNonEmpty
 
 Returns the first non-empty value in the given arguments if found, otherwise returns the zero value.
-This function use `reflection`. Consider using `Coalesce` for generic types.
+This function uses `reflection`. You can connsider using `Coalesce` for generic types.
 
 Values considered "non-empty" are:
   - not empty values (0, empty string, false, nil, ...)
@@ -1353,10 +1353,10 @@ Coalesce[*int](ptr1, ptr2) // the first non-nil pointer
 
 A convenient function works like C ternary operator.
 
-**NOTE**: This function is deprecated as it has side effect of both expressions are evaluated
-and may cause the program to crash.
+**NOTE**: This function is deprecated as it may cause the program to crash on misuses due to both passing
+expressions are evaluated regardless of the condition.
 For example: `firstItem := If(len(slice) > 0, slice[0], defaultVal)` will crash if `slice` is empty as
-the expression `slice[0]` is evaluated before the function call. Use it at your own risk.
+the expression `slice[0]` is always evaluated. Use it at your own risk.
 
 ```go
 val := If(x > 100, val1, val2) // If x > 100, val == val1, otherwise val == val2
