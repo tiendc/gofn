@@ -117,7 +117,7 @@ go get github.com/tiendc/gofn
   - [MapOmitCopy](#mapomitcopy)
 
 **Struct**
-  - [StructToMap / StructToMapEx](#structtomap--structtomapex)
+  - [StructToMap](#structtomap)
   - [ParseTag / ParseTagOf / ParseTagsOf](#parsetag--parsetagof--parsetagsof)
 
 **String**
@@ -938,9 +938,9 @@ MapOmitCopy(map[int]int{1: 11, 2: 22, 3: 33}, 2, 3, 4) // map[int]int{1: 11}
 ### Struct
 ---
 
-#### StructToMap / StructToMapEx
+#### StructToMap
 
-Converts struct contents to a map. This function is a shortcut to [rflutil.StructToMap](https://github.com/tiendc/go-rflutil#structtomap--structtomapex).
+Converts struct contents to a map. This function is a shortcut to [rflutil.StructToMap](https://github.com/tiendc/go-rflutil#structtomap).
 
 #### ParseTag / ParseTagOf / ParseTagsOf
 
