@@ -3,8 +3,8 @@ module github.com/tiendc/gofn
 go 1.18
 
 require (
-	github.com/stretchr/testify v1.8.4
-	github.com/tiendc/go-rflutil v0.0.0-20231112145832-693b7b74d697
+	github.com/stretchr/testify v1.9.0
+	github.com/tiendc/go-rflutil v0.0.0-20240919184150-3c910c4770e2
 )
 
 require (
