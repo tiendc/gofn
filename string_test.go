@@ -170,3 +170,25 @@ line-1
     â  line-1  â  ê  
     line-2  ê  `, "a b\tê"))
 }
+
+func Test_StringWrap(t *testing.T) {
+	assert.Equal(t, "abc", StringWrap("abc", ""))
+	assert.Equal(t, "'abc'", StringWrap("abc", "'"))
+	assert.Equal(t, "'''abc'''", StringWrap("abc", "'''"))
+
+	assert.Equal(t, "abc", StringWrapLR("abc", "", ""))
+	assert.Equal(t, "'abc\"", StringWrapLR("abc", "'", "\""))
+	assert.Equal(t, "[abc]", StringWrapLR("abc", "[", "]"))
+}
+
+func Test_StringUnwrap(t *testing.T) {
+	assert.Equal(t, "abc", StringUnwrap("abc", ""))
+	assert.Equal(t, "abc", StringUnwrap("'abc'", "'"))
+	assert.Equal(t, "abc", StringUnwrap("'''abc'''", "'''"))
+	assert.Equal(t, " 'abc", StringUnwrap(" 'abc'", "'"))
+
+	assert.Equal(t, "abc", StringUnwrapLR("abc", "", ""))
+	assert.Equal(t, "abc", StringUnwrapLR("'abc\"", "'", "\""))
+	assert.Equal(t, "abc", StringUnwrapLR("[abc]", "[", "]"))
+	assert.Equal(t, " [abc", StringUnwrapLR(" [abc]", "[", "]"))
+}

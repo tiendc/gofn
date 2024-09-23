@@ -175,3 +175,23 @@ func LinesTrimSpace(s string) string {
 }
 
 var MultilineString = LinesTrimLeftSpace
+
+// StringWrap wraps a string with the given token
+func StringWrap(s string, token string) string {
+	return token + s + token
+}
+
+// StringUnwrap unwraps a string wrapped with the given token
+func StringUnwrap(s string, token string) string {
+	return strings.TrimSuffix(strings.TrimPrefix(s, token), token)
+}
+
+// StringWrapLR wraps a string with the given tokens for the left and right side
+func StringWrapLR(s string, tokenLeft, tokenRight string) string {
+	return tokenLeft + s + tokenRight
+}
+
+// StringUnwrapLR unwraps a string wrapped with the given tokens
+func StringUnwrapLR(s string, tokenLeft, tokenRight string) string {
+	return strings.TrimSuffix(strings.TrimPrefix(s, tokenLeft), tokenRight)
+}
