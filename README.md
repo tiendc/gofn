@@ -129,6 +129,7 @@ go get github.com/tiendc/gofn
   - [LinesTrim / LinesTrimSpace](#linestrim--linestrimspace)
   - [LinesTrimLeft / LinesTrimLeftSpace](#linestrimleft--linestrimleftspace)
   - [LinesTrimRight / LinesTrimRightSpace](#linestrimright--linestrimrightspace)
+  - [StringWrap / StringUnwrap](#stringwrap--stringunwrap)
 
 **Number**
   - [ParseInt / ParseUint / ParseFloat](#parseint--parseuint--parsefloat)
@@ -1038,6 +1039,18 @@ Removes all certain trailing characters from every line in the given string.
 ```go
 LinesTrimRightSpace("  line-1  \n  line-2  ")    // "  line-1\nline-2"
 LinesTrimRight("line-1 b \n a line-2 ab", " ba") // "line-1\n a line2"
+```
+
+#### StringWrap / StringUnwrap
+
+Wraps/Unwraps a string with the given tokens.
+
+```go
+StringWrap("abc", "*")            // "*abc*"
+StringWrapLR("abc", "[", "]")     // "[abc]"
+
+StringUnwrap("*abc*", "*")        // "abc"
+StringUnwrapLR("[abc]", "[", "]") // "abc"
 ```
 
 ### Number
