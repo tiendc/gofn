@@ -165,7 +165,7 @@ func NumberFmtUngroup(num string, groupSep byte) string {
 }
 
 func numberPartFmtGroup(s string, groupSep byte) string {
-	if groupSep == 0 || !stringIsNumeric(s, true) {
+	if groupSep == 0 || !stringIsInteger(s, true) {
 		return s
 	}
 	buf := make([]byte, 0, len(s)+5) //nolint:mnd
@@ -189,8 +189,15 @@ func numberPartFmtGroup(s string, groupSep byte) string {
 	return string(buf)
 }
 
-func stringIsNumeric(s string, allowSign bool) bool {
-	if allowSign && len(s) > 0 && s[0] == '-' {
+func stringIsInteger(s string, allowSign bool) bool {
+	length := len(s)
+	if length == 0 {
+		return false
+	}
+	if s[0] == '-' {
+		if !allowSign || length == 1 {
+			return false
+		}
 		s = s[1:]
 	}
 	for _, ch := range s {
