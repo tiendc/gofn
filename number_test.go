@@ -347,3 +347,15 @@ func Test_NumberGroups(t *testing.T) {
 		assert.Equal(t, tc.ungroup, NumberFmtUngroup(tc.grouped, groupSep), fmt.Sprintf("ungroup #%d", i))
 	}
 }
+
+func Test_stringIsInteger(t *testing.T) {
+	assert.False(t, stringIsInteger("", true))
+	assert.False(t, stringIsInteger("-", true))
+	assert.False(t, stringIsInteger("-123", false))
+	assert.False(t, stringIsInteger("1.23", false))
+	assert.False(t, stringIsInteger("1e3", false))
+
+	assert.True(t, stringIsInteger("123", true))
+	assert.True(t, stringIsInteger("123", false))
+	assert.True(t, stringIsInteger("-123", true))
+}
