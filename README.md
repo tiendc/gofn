@@ -125,10 +125,6 @@ go get github.com/tiendc/gofn
   - [RandString / RandStringEx](#randstring--randstringex)
   - [StringJoin / StringJoinEx / StringJoinBy](#stringjoin--stringjoinex--stringjoinby)
   - [StringLexJoin / StringLexJoinEx](#stringlexjoin--stringlexjoinex)
-  - [MultilineString](#multilinestring)
-  - [LinesTrim / LinesTrimSpace](#linestrim--linestrimspace)
-  - [LinesTrimLeft / LinesTrimLeftSpace](#linestrimleft--linestrimleftspace)
-  - [LinesTrimRight / LinesTrimRightSpace](#linestrimright--linestrimrightspace)
   - [StringWrap / StringUnwrap](#stringwrap--stringunwrap)
 
 **Number**
@@ -993,52 +989,6 @@ StringLexJoin([]int{1,2,3}, ", ", " and ")              // return "1, 2 and 3"
 
 // Use a custom format string
 StringLexJoinEx([]int64{254, 255}, ", ", " or ", "%#x") // returns "0xfe or 0xff"
-```
-
-#### MultilineString
-
-Removes all leading spaces from every line in the given string. This function is useful to declare a string with a neat multiline-style.
-
-```go
-func DoSomething() {
-    // Commonly you may use this style to create multiline string in Go (which looks ugly)
-    s := `
-line-1 abc xyz
-line-2 abc xyz
-`
-    // Use this function
-    s := MultilineString(
-        `line-1 abc xyz
-        line-2 abc xyz`
-    )
-}
-```
-
-#### LinesTrim / LinesTrimSpace
-
-Removes all certain leading and trailing characters from every line in the given string.
-
-```go
-LinesTrimSpace("  line-1  \n  line-2  ")      // "line-1\nline-2"
-LinesTrim("a line-1 b \n a line-2 ab", " ba") // "line-1\nline2"
-```
-
-#### LinesTrimLeft / LinesTrimLeftSpace
-
-Removes all certain leading characters from every line in the given string.
-
-```go
-LinesTrimLeftSpace("  line-1  \n  line-2  ")      // "line-1  \nline-2  "
-LinesTrimLeft("ab line-1  \n a line-2 ab", " ba") // "line-1  \nline2 ab"
-```
-
-#### LinesTrimRight / LinesTrimRightSpace
-
-Removes all certain trailing characters from every line in the given string.
-
-```go
-LinesTrimRightSpace("  line-1  \n  line-2  ")    // "  line-1\nline-2"
-LinesTrimRight("line-1 b \n a line-2 ab", " ba") // "line-1\n a line2"
 ```
 
 #### StringWrap / StringUnwrap

@@ -112,7 +112,8 @@ func StringLexJoin[T any, S ~[]T](s S, sep, lastSep string) string {
 	return StringLexJoinEx(s, sep, lastSep, "%v")
 }
 
-// LinesTrimLeft trim leading characters for every line in the given string
+// LinesTrimLeft trim leading characters for every line in the given string.
+// Deprecated
 func LinesTrimLeft(s string, cutset string) string {
 	if s == "" || cutset == "" {
 		return s
@@ -130,13 +131,15 @@ func LinesTrimLeft(s string, cutset string) string {
 	return string(ret)
 }
 
-// LinesTrimLeftSpace trim leading spaces for every line in the given string
+// LinesTrimLeftSpace trim leading spaces for every line in the given string.
+// Deprecated
 func LinesTrimLeftSpace(s string) string {
 	// See unicode.IsSpace for what are considered spaces
 	return LinesTrimLeft(s, string([]rune{' ', '\t', '\v', '\f', 0x85, 0xA0}))
 }
 
-// LinesTrimRight trim trailing characters for every line in the given string
+// LinesTrimRight trim trailing characters for every line in the given string.
+// Deprecated
 func LinesTrimRight(s string, cutset string) string {
 	if s == "" || cutset == "" {
 		return s
@@ -158,22 +161,26 @@ func LinesTrimRight(s string, cutset string) string {
 	return string(ret[j+1:])
 }
 
-// LinesTrimRightSpace trim trailing characters for every line in the given string
+// LinesTrimRightSpace trim trailing characters for every line in the given string.
+// Deprecated
 func LinesTrimRightSpace(s string) string {
 	// See unicode.IsSpace for what are considered spaces
 	return LinesTrimRight(s, string([]rune{' ', '\t', '\v', '\f', 0x85, 0xA0}))
 }
 
-// LinesTrim trim leading and trailing characters for every line in the given string
+// LinesTrim trim leading and trailing characters for every line in the given string.
+// Deprecated
 func LinesTrim(s string, cutset string) string {
 	return LinesTrimLeft(LinesTrimRight(s, cutset), cutset)
 }
 
-// LinesTrimSpace trim leading and trailing spaces for every line in the given string
+// LinesTrimSpace trim leading and trailing spaces for every line in the given string.
+// Deprecated
 func LinesTrimSpace(s string) string {
 	return LinesTrim(s, string([]rune{' ', '\t', '\v', '\f', 0x85, 0xA0}))
 }
 
+// Deprecated
 var MultilineString = LinesTrimLeftSpace
 
 // StringWrap wraps a string with the given token
