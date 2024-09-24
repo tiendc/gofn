@@ -464,6 +464,10 @@ ForEach([]int{1, 2, 3}, func (i, v int) {
 ForEachReverse([]int{1, 2, 3}, func (i, v int) {
     fmt.Printf("%d ", v)
 }) // prints 3 2 1
+
+// ForEachPtr can be faster if you iterate over a slice of big structs
+ForEachPtr([]BigStruct{...}, func (i, v *BigStruct) { ... })
+ForEachPtrReverse([]BigStruct{...}, func (i, v *BigStruct) { ... })
 ```
 
 #### Iter / IterReverse
@@ -480,6 +484,10 @@ IterReverse(func (i, v int) bool {
     fmt.Printf("%d ", v)
     return true
 }, []int{1, 2, 3}, []int{4, 5}) // prints 5 4 3 2 1
+
+// IterPtr can be faster if you iterate over a slice of big structs
+IterPtr(func (i, v *BigStruct) bool { ... }, []BigStruct{...})
+IterPtrReverse(func (i, v *BigStruct) bool { ... }, []BigStruct{...})
 ```
 
 ### Slice uniqueness
