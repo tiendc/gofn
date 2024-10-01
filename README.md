@@ -131,6 +131,7 @@ go get github.com/tiendc/gofn
   - [ParseInt / ParseUint / ParseFloat](#parseint--parseuint--parsefloat)
   - [FormatInt / FormatUint / FormatFloat](#formatint--formatuint--formatfloat)
   - [NumberFmtGroup](#numberfmtgroup)
+  - [ToSafeInt\<N\> / ToSafeUint\<N\>](#tosafeintn--tosafeuintn)
 
 **Time**
   - [MinTime / MaxTime / MinMaxTime](#mintime--maxtime--minmaxtime)
@@ -1061,6 +1062,22 @@ Groups digits of a number. Input number is of type string.
 NumberFmtGroup("1234567", '.', ',')         // "1,234,567"
 NumberFmtGroup("1234567", ',', '.')         // "1.234.567"
 NumberFmtGroup("1234567.12345", '.', ',')   // "1,234,567.12345"
+```
+
+#### ToSafeInt\<N\> / ToSafeUint\<N\>
+
+Safely casts an integer of any type to a specific type.
+
+```go
+v, err := ToSafeInt8(-129)                     // err is ErrOverflow
+v, err := ToSafeInt16(math.MaxUint16)          // err is ErrOverflow
+v, err := ToSafeUint32(math.MaxUint64)         // err is ErrOverflow
+v, err := ToSafeUint64(-1)                     // err is ErrOverflow
+
+v, err := ToSafeInt8(127)                      // err == nil, v == int8(127)
+v, err := ToSafeUint16(math.MaxInt16)          // err == nil, v == uint16(math.MaxInt16)
+v, err := ToSafeInt32(math.MaxInt32)           // err == nil, v == int32(math.MaxInt32)
+v, err := ToSafeUint64(uint64(math.MaxUint64)) // err == nil, v == uint64(math.MaxUint64)
 ```
 
 ### Concurrency
