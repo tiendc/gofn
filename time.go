@@ -66,3 +66,6 @@ func ExecDuration3[T1, T2, T3 any](fn func() (T1, T2, T3)) (T1, T2, T3, time.Dur
 	val1, val2, val3 := fn()
 	return val1, val2, val3, time.Since(start)
 }
+
+// ExecDelay is an alias of time.AfterFunc
+var ExecDelay = time.AfterFunc
