@@ -136,6 +136,7 @@ go get github.com/tiendc/gofn
 **Time**
   - [MinTime / MaxTime / MinMaxTime](#mintime--maxtime--minmaxtime)
   - [ExecDuration / ExecDurationN](#execduration--execdurationn)
+  - [ExecDelay](#execdelay)
 
 **Math**
   - [All](#all)
@@ -1216,11 +1217,21 @@ MinMaxTime(t0, t1, t2)  // t0, t2
 Measures time executing a function.
 
 ```go
-duration := ExecDuration(func() { // do somthing })
+duration := ExecDuration(func() { // do something })
 // The given function returns a value
 outVal, duration := ExecDuration1(func() string { return "hello" })              // outVal == "hello"
 // The given function returns 2 values
 outVal1, err, duration := ExecDuration2(func() (int, error) { return 123, nil }) // outVal1 == 123, err == nil
+```
+
+#### ExecDelay
+
+Executes a function after a time duration. This function is just an alias of `time.AfterFunc`.
+
+```go
+timer := ExecDelay(3*time.Second, func() {
+    // do something after waiting 3 seconds
+})
 ```
 
 ### Math 
