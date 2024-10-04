@@ -947,6 +947,71 @@ func Test_ReplaceAll(t *testing.T) {
 	assert.True(t, ReplaceAll(s2, "one", "1") == 2 && reflect.DeepEqual(s2, []string{"1", "two", "1"}))
 }
 
+func Test_Splice_SpliceEx(t *testing.T) {
+	// No removing
+
+	// Empty source slice
+	s1, s2 := SpliceEx([]int{}, 1, 2, 4, 5)
+	assert.Equal(t, []int{4, 5}, s1)
+	assert.Equal(t, []int{}, s2)
+
+	// deleteCount <= 0
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 0, 0, 4, 5)
+	assert.Equal(t, []int{4, 5, 1, 2, 3}, s1)
+	assert.Equal(t, []int{}, s2)
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 2, -1, 4, 5)
+	assert.Equal(t, []int{1, 2, 4, 5, 3}, s1)
+	assert.Equal(t, []int{}, s2)
+
+	// start => length
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 3, 0, 4, 5)
+	assert.Equal(t, []int{1, 2, 3, 4, 5}, s1)
+	assert.Equal(t, []int{}, s2)
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 5, 2, 4, 5)
+	assert.Equal(t, []int{1, 2, 3, 4, 5}, s1)
+	assert.Equal(t, []int{}, s2)
+
+	// Has removing
+
+	// start < -length (treats start = 0)
+	s1, s2 = SpliceEx([]int{1, 2, 3}, -4, 2, 4, 5)
+	assert.Equal(t, []int{4, 5, 3}, s1)
+	assert.Equal(t, []int{1, 2}, s2)
+
+	// -length <= start < 0 (roll from the end)
+	s1, s2 = SpliceEx([]int{1, 2, 3}, -1, 2, 4, 5)
+	assert.Equal(t, []int{1, 2, 4, 5}, s1)
+	assert.Equal(t, []int{3}, s2)
+	s1, s2 = SpliceEx([]int{1, 2, 3}, -3, 2, 4, 5)
+	assert.Equal(t, []int{4, 5, 3}, s1)
+	assert.Equal(t, []int{1, 2}, s2)
+
+	// 0 <= start < length
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 1, 2, 4, 5)
+	assert.Equal(t, []int{1, 4, 5}, s1)
+	assert.Equal(t, []int{2, 3}, s2)
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 2, 2, 4, 5)
+	assert.Equal(t, []int{1, 2, 4, 5}, s1)
+	assert.Equal(t, []int{3}, s2)
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 1, 10, 4, 5)
+	assert.Equal(t, []int{1, 4, 5}, s1)
+	assert.Equal(t, []int{2, 3}, s2)
+
+	// start >= length
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 3, 2, 4, 5)
+	assert.Equal(t, []int{1, 2, 3, 4, 5}, s1)
+	assert.Equal(t, []int{}, s2)
+	s1, s2 = SpliceEx([]int{1, 2, 3}, 4, 2, 4, 5)
+	assert.Equal(t, []int{1, 2, 3, 4, 5}, s1)
+	assert.Equal(t, []int{}, s2)
+
+	// Splice calls spliceEx(), so just need a simple test for Splice
+	s1 = Splice([]int{1, 2, 3}, 2, 0, 4, 5)
+	assert.Equal(t, []int{1, 2, 4, 5, 3}, s1)
+	s1 = Splice([]int{1, 2, 3}, 2, 2, 4, 5)
+	assert.Equal(t, []int{1, 2, 4, 5}, s1)
+}
+
 func Test_Fill(t *testing.T) {
 	s := make([]int, 5)
 	Fill(s, 1)
