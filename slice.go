@@ -493,6 +493,60 @@ func ReplaceAll[T comparable, S ~[]T](s S, value, replacement T) int {
 	return ReplaceN(s, value, replacement, -1)
 }
 
+// Splice removes a portion of the given slice and inserts elements of another slice into that position.
+func Splice[T any, S ~[]T](s S, start, deleteCount int, newItems ...T) S {
+	result, _ := spliceEx(s, start, deleteCount, newItems, false)
+	return result
+}
+
+// SpliceEx removes a portion of the given slice and inserts elements of another slice into that position.
+// This function returns a new slice at the 1st place, the 2nd is the deleted elements.
+func SpliceEx[T any, S ~[]T](s S, start, deleteCount int, newItems ...T) (S, S) {
+	return spliceEx(s, start, deleteCount, newItems, true)
+}
+
+// Splice removes a portion of the given slice and inserts elements of another slice into that position.
+// This function returns a new slice at the 1st place, the 2nd is the deleted elements if required.
+//
+// This function works similarly to the JS Array.splice() function.
+// See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+//
+// If -len(s) <= start < 0, start + len(s) is used.
+// If start < -len(s), 0 is used.
+// If start >= len(s), no element will be deleted, but the new elements are still added to the end.
+//
+// If deleteCount <= 0, no elements will be removed.
+// newItems slice can be empty.
+func spliceEx[T any, S ~[]T](s S, start, deleteCount int, newItems S, returnDeletedItems bool) (S, S) {
+	length := len(s)
+	switch {
+	case start > length:
+		start = length
+	case start < -length:
+		start = 0
+	case start < 0:
+		start += length
+	}
+
+	switch {
+	case deleteCount <= 0:
+		deleteCount = 0
+	case start+deleteCount > length:
+		deleteCount = length - start
+	}
+
+	var deletedItems S
+	if returnDeletedItems {
+		if deleteCount > 0 {
+			deletedItems = append(deletedItems, s[start:start+deleteCount]...)
+		} else {
+			deletedItems = S{}
+		}
+	}
+
+	return append(s[0:start], append(newItems, s[start+deleteCount:]...)...), deletedItems
+}
+
 // Fill sets slice element values
 func Fill[T any, S ~[]T](a S, val T) {
 	for i := range a {
