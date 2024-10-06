@@ -155,6 +155,7 @@ go get github.com/tiendc/gofn
 
 **Function**
   - [Bind\<N\>Arg\<M\>Ret ](#bindnargmret)
+  - [Partial\<N\>Arg\<M\>Ret ](#partialnargmret)
 
 **Randomization**
   - [RandChoice](#randchoice)
@@ -1188,6 +1189,16 @@ Fully binds a function with returning a function which requires no argument.
 func myCalc(a1 int, a2 string) error { ... }
 myQuickCalc := Bind2Arg1Ret(myCalc, 100, "hello")
 err := myQuickCalc()
+```
+
+#### Partial\<N\>Arg\<M\>Ret
+
+Partially binds the first argument of a function.
+
+```go
+func myCalc(a1 int, a2 string) error { ... }
+myQuickCalc := Partial2Arg1Ret(myCalc, 100)
+err := myQuickCalc("hello")
 ```
 
 ### Randomization
