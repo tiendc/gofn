@@ -287,3 +287,28 @@ func Test_MapCopyExcludeKeys(t *testing.T) {
 	m := MapCopyExcludeKeys(map[int]int{1: 11, 2: 22}, 2, 3)
 	assert.True(t, MapEqual(map[int]int{1: 11}, m))
 }
+
+func Test_MapReverse(t *testing.T) {
+	// Nil/Empty map
+	m, dupKeys := MapReverse((map[int]int)(nil))
+	assert.Equal(t, map[int]int{}, m)
+	assert.Equal(t, []int{}, dupKeys)
+	m, dupKeys = MapReverse(map[int]int{})
+	assert.Equal(t, map[int]int{}, m)
+	assert.Equal(t, []int{}, dupKeys)
+
+	// No value duplications in the input
+	m, dupKeys = MapReverse(map[int]int{1: 11, 2: 22, 3: 33})
+	assert.Equal(t, map[int]int{11: 1, 22: 2, 33: 3}, m)
+	assert.Equal(t, []int{}, dupKeys)
+
+	// Has value duplications in the input
+	m, dupKeys = MapReverse(map[int]int{1: 11, 2: 11, 3: 33})
+	assert.True(t, m[11] == 1 || m[11] == 2)
+	assert.True(t, ContentEqual([]int{1, 2}, dupKeys))
+	m, dupKeys = MapReverse(map[int]int{1: 11, 2: 11, 3: 33, 4: 33, 5: 55})
+	assert.True(t, m[11] == 1 || m[11] == 2)
+	assert.True(t, m[33] == 3 || m[33] == 4)
+	assert.True(t, m[55] == 5)
+	assert.True(t, ContentEqual([]int{1, 2, 3, 4}, dupKeys))
+}

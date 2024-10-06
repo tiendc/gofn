@@ -242,3 +242,18 @@ func MapOmitCopy[K comparable, V any, M ~map[K]V](m M, keys ...K) M {
 func MapCopyExcludeKeys[K comparable, V any, M ~map[K]V](m M, keys ...K) M {
 	return MapOmitCopy(m, keys...)
 }
+
+// MapReverse reverses a map by exchanging its keys and values.
+func MapReverse[K comparable, V comparable, M ~map[K]V, M2 map[V]K](m M) (M2, []K) {
+	result := make(M2, len(m))
+	valDupKeys := map[K]struct{}{}
+	for k, v := range m {
+		if k2, exists := result[v]; exists {
+			valDupKeys[k] = struct{}{}
+			valDupKeys[k2] = struct{}{}
+		} else {
+			result[v] = k
+		}
+	}
+	return result, MapKeys(valDupKeys)
+}

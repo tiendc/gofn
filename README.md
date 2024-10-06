@@ -116,6 +116,7 @@ go get github.com/tiendc/gofn
   - [MapPick](#mappick)
   - [MapOmit](#mapomit)
   - [MapOmitCopy](#mapomitcopy)
+  - [MapReverse](#mapreverse)
 
 **Struct**
   - [StructToMap](#structtomap)
@@ -958,6 +959,15 @@ Copies map content with omitting specified keys.
 
 ```go
 MapOmitCopy(map[int]int{1: 11, 2: 22, 3: 33}, 2, 3, 4) // map[int]int{1: 11}
+```
+
+#### MapReverse
+
+Returns a new map with exchanging keys and values of the given map.
+
+```go
+m, dupKeys := MapReverse(map[int]int{1: 11, 2: 22, 3: 33}) // m == map[int]int{11: 1, 22: 2, 33: 3} and dupKeys == []int{}
+m, dupKeys := MapReverse(map[int]int{1: 11, 2: 11, 3: 33}) // m == map[int]int{11: <1 or 2>, 33: 3} and dupKeys == []int{1, 2}
 ```
 
 ### Struct
