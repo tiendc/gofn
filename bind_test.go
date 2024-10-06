@@ -135,3 +135,107 @@ func Test_Bind5Arg(t *testing.T) {
 	r1, r2, r3 := Bind5Arg3Ret(fn5Arg3Ret, 1, 2, 3, 4, 5)()
 	assert.True(t, r1 == 1 && r2 == 2 && r3 == 3)
 }
+
+func Test_Partial2Arg(t *testing.T) {
+	fn2Arg0Ret := func(a1 int, a2 int) {
+		assert.True(t, a1 == 1 && a2 == 2)
+	}
+	fn2Arg1Ret := func(a1 int, a2 int) int {
+		assert.True(t, a1 == 1 && a2 == 2)
+		return 1
+	}
+	fn2Arg2Ret := func(a1 int, a2 int) (int, int) {
+		assert.True(t, a1 == 1 && a2 == 2)
+		return 1, 2
+	}
+	fn2Arg3Ret := func(a1 int, a2 int) (int, int, int) {
+		assert.True(t, a1 == 1 && a2 == 2)
+		return 1, 2, 3
+	}
+
+	Partial2Arg0Ret(fn2Arg0Ret, 1)(2)
+	r1 := Partial2Arg1Ret(fn2Arg1Ret, 1)(2)
+	assert.True(t, r1 == 1)
+	r1, r2 := Partial2Arg2Ret(fn2Arg2Ret, 1)(2)
+	assert.True(t, r1 == 1 && r2 == 2)
+	r1, r2, r3 := Partial2Arg3Ret(fn2Arg3Ret, 1)(2)
+	assert.True(t, r1 == 1 && r2 == 2 && r3 == 3)
+}
+
+func Test_Partial3Arg(t *testing.T) {
+	fn3Arg0Ret := func(a1 int, a2 int, a3 int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3)
+	}
+	fn3Arg1Ret := func(a1 int, a2 int, a3 int) int {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3)
+		return 1
+	}
+	fn3Arg2Ret := func(a1 int, a2 int, a3 int) (int, int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3)
+		return 1, 2
+	}
+	fn3Arg3Ret := func(a1 int, a2 int, a3 int) (int, int, int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3)
+		return 1, 2, 3
+	}
+
+	Partial3Arg0Ret(fn3Arg0Ret, 1)(2, 3)
+	r1 := Partial3Arg1Ret(fn3Arg1Ret, 1)(2, 3)
+	assert.True(t, r1 == 1)
+	r1, r2 := Partial3Arg2Ret(fn3Arg2Ret, 1)(2, 3)
+	assert.True(t, r1 == 1 && r2 == 2)
+	r1, r2, r3 := Partial3Arg3Ret(fn3Arg3Ret, 1)(2, 3)
+	assert.True(t, r1 == 1 && r2 == 2 && r3 == 3)
+}
+
+func Test_Partial4Arg(t *testing.T) {
+	fn4Arg0Ret := func(a1 int, a2 int, a3 int, a4 int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3 && a4 == 4)
+	}
+	fn4Arg1Ret := func(a1 int, a2 int, a3 int, a4 int) int {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3 && a4 == 4)
+		return 1
+	}
+	fn4Arg2Ret := func(a1 int, a2 int, a3 int, a4 int) (int, int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3 && a4 == 4)
+		return 1, 2
+	}
+	fn4Arg3Ret := func(a1 int, a2 int, a3 int, a4 int) (int, int, int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3 && a4 == 4)
+		return 1, 2, 3
+	}
+
+	Partial4Arg0Ret(fn4Arg0Ret, 1)(2, 3, 4)
+	r1 := Partial4Arg1Ret(fn4Arg1Ret, 1)(2, 3, 4)
+	assert.True(t, r1 == 1)
+	r1, r2 := Partial4Arg2Ret(fn4Arg2Ret, 1)(2, 3, 4)
+	assert.True(t, r1 == 1 && r2 == 2)
+	r1, r2, r3 := Partial4Arg3Ret(fn4Arg3Ret, 1)(2, 3, 4)
+	assert.True(t, r1 == 1 && r2 == 2 && r3 == 3)
+}
+
+func Test_Partial5Arg(t *testing.T) {
+	fn5Arg0Ret := func(a1 int, a2 int, a3 int, a4 int, a5 int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3 && a4 == 4 && a5 == 5)
+	}
+	fn5Arg1Ret := func(a1 int, a2 int, a3 int, a4 int, a5 int) int {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3 && a4 == 4 && a5 == 5)
+		return 1
+	}
+	fn5Arg2Ret := func(a1 int, a2 int, a3 int, a4 int, a5 int) (int, int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3 && a4 == 4 && a5 == 5)
+		return 1, 2
+	}
+	fn5Arg3Ret := func(a1 int, a2 int, a3 int, a4 int, a5 int) (int, int, int) {
+		assert.True(t, a1 == 1 && a2 == 2 && a3 == 3 && a4 == 4 && a5 == 5)
+		return 1, 2, 3
+	}
+
+	Partial5Arg0Ret(fn5Arg0Ret, 1)(2, 3, 4, 5)
+	r1 := Partial5Arg1Ret(fn5Arg1Ret, 1)(2, 3, 4, 5)
+	assert.True(t, r1 == 1)
+	r1, r2 := Partial5Arg2Ret(fn5Arg2Ret, 1)(2, 3, 4, 5)
+	assert.True(t, r1 == 1 && r2 == 2)
+	r1, r2, r3 := Partial5Arg3Ret(fn5Arg3Ret, 1)(2, 3, 4, 5)
+	assert.True(t, r1 == 1 && r2 == 2 && r3 == 3)
+}
