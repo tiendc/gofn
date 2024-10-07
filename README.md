@@ -292,6 +292,12 @@ ReplaceAll([]int{1, 2, 1, 3, 1}, 1, 11)  // []int{11, 2, 11, 3, 11}
 
 Removes a portion of the given slice and inserts elements of another slice into that position.
 
+Usage: `Splice(s []T, start int, deleteCount int, insertingElements ...T)`.
+If `start < -len(s)`, `0` is used.
+If `-len(s) <= start < 0`, `start + len(s)` is used.
+If `start >= len(s)`, no element will be deleted, but the new elements are still added to the end.
+If `deleteCount <= 0`, no elements will be removed.
+
 ```go
 s := Splice([]int{1, 2, 3}, 1, 1, 100)         // s == []int{1, 100, 3}
 s := Splice([]int{1, 2, 3}, 1, 0, 100)         // s == []int{1, 100, 2, 3}
