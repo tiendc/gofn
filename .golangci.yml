@@ -56,3 +56,17 @@ linters:
     - unused
     - whitespace
     - wrapcheck
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - funlen
+        - contextcheck
+        - staticcheck
+        - gocyclo
+        - gocognit
+        - err113
+        - forcetypeassert
+        - wrapcheck
+        - mnd
