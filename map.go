@@ -59,6 +59,15 @@ func MapContainValues[K comparable, V comparable, M ~map[K]V](m M, values ...V) 
 	return true
 }
 
+// MapIter iterates over entries of multiple maps
+func MapIter[K comparable, V any, M ~map[K]V](iterFunc func(K, V), mapSlice ...M) {
+	for _, m := range mapSlice {
+		for k, v := range m {
+			iterFunc(k, v)
+		}
+	}
+}
+
 // MapKeys gets map keys as slice
 func MapKeys[K comparable, V any, M ~map[K]V](m M) []K {
 	keys := make([]K, len(m))

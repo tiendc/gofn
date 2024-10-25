@@ -48,7 +48,7 @@ func Iter[T any, S ~[]T](iterFunc func(index int, v T) bool, slices ...S) {
 }
 
 // IterPtr iterates over pointers to items from multiple slices with ability to stop.
-// When the `iterFunc` function returns false, the iteration stops.
+// When the `iterFunc` function returns false, the iterating stops.
 func IterPtr[T any, S ~[]T](iterFunc func(index int, v *T) bool, slices ...S) {
 	global := 0
 	for _, s := range slices {
