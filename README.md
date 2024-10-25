@@ -105,6 +105,7 @@ go get github.com/tiendc/gofn
   - [MapEqual / MapEqualBy](#mapequal--mapequalby)
   - [MapContainKeys](#mapcontainkeys)
   - [MapContainValues](#mapcontainvalues)
+  - [MapIter](#mapiter)
   - [MapKeys](#mapkeys)
   - [MapValues](#mapvalues)
   - [MapEntries](#mapentries)
@@ -871,6 +872,14 @@ Returns true if a map contains all given values.
 MapContainValues(map[int]int{1: 11, 2: 22}, 11)     // true
 MapContainValues(map[int]int{1: 11, 2: 22}, 11, 22) // true
 MapContainValues(map[int]int{1: 11, 2: 22}, 11, 33) // false
+```
+
+#### MapIter
+
+Iterates over the entries of one or multiple maps.
+
+```go
+MapIter(func(k int, v string) { ... }, map[int]string{1: "11", 2: "22"}, map[int]string{3: "33", 4: "44"})
 ```
 
 #### MapKeys

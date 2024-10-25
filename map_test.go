@@ -98,6 +98,29 @@ func Test_MapContainValues(t *testing.T) {
 	assert.False(t, MapContainValues(map[int]st{1: {1, "1"}, 2: {2, "2"}}, st{1, "1"}, st{2, "2"}, st{}))
 }
 
+func Test_MapIter(t *testing.T) {
+	// No input map
+	copy1 := map[int]int{}
+	MapIter[int, int, map[int]int](func(k int, v int) { copy1[k] = v })
+	assert.Equal(t, map[int]int{}, copy1)
+
+	// Empty input map
+	copy2 := map[int]int{}
+	MapIter(func(k int, v int) { copy2[k] = v }, map[int]int{})
+	assert.Equal(t, map[int]int{}, copy2)
+
+	// Single map input
+	copy3 := map[int]int{}
+	MapIter(func(k int, v int) { copy3[k] = v }, map[int]int{1: 11, 2: 22, 3: 33})
+	assert.Equal(t, map[int]int{1: 11, 2: 22, 3: 33}, copy3)
+
+	// Multiple maps input
+	copy4 := map[int]int{}
+	MapIter(func(k int, v int) { copy4[k] = v },
+		map[int]int{1: 11, 2: 22, 3: 33}, map[int]int{4: 44, 5: 55})
+	assert.Equal(t, map[int]int{1: 11, 2: 22, 3: 33, 4: 44, 5: 55}, copy4)
+}
+
 func Test_MapKeys(t *testing.T) {
 	assert.Equal(t, []int{}, MapKeys[int, bool, map[int]bool](nil))
 	assert.Equal(t, []int{}, MapKeys(map[int]bool{}))
