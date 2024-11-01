@@ -8,10 +8,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type wrappedErrs struct { //nolint:errname
+	errs []error
+}
+
+func (we *wrappedErrs) Error() string {
+	return ""
+}
+
+func (we *wrappedErrs) Unwrap() []error {
+	return we.errs
+}
+
 func Test_ErrUnwrap(t *testing.T) {
 	e1 := errors.New("e1")
 	e2 := fmt.Errorf("e2: %w", e1)
-	e3 := fmt.Errorf("e3: %w - %w", e1, e2) // NOTE: errors.Join() is unavailable in Go prior to 1.20
+	e3 := &wrappedErrs{errs: []error{e1, e2}}
 
 	assert.Equal(t, []error(nil), ErrUnwrap(nil))
 	assert.Equal(t, []error(nil), ErrUnwrap(e1))
