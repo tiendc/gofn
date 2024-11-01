@@ -162,6 +162,11 @@ go get github.com/tiendc/gofn
   - [RandChoice](#randchoice)
   - [RandChoiceMaker](#randchoicemaker)
 
+**Error handling**
+  - [ErrWrap / ErrWrapL](#errwrap--errwrapl)
+  - [ErrUnwrap](#errunwrap)
+  - [ErrUnwrapToRoot](#errunwraptoroot)
+
 **Utility**
   - [FirstNonEmpty](#firstnonempty)
   - [Coalesce](#coalesce)
@@ -1247,6 +1252,50 @@ for {
         break
     }
 }
+```
+
+### Error handling
+---
+
+#### ErrWrap / ErrWrapL
+
+Convenient functions to wrap a single error with a single message.
+
+```go
+// shortcut call of fmt.Errorf("%w: %s")
+e := ErrWrap(err, "failed to do something")
+
+// shortcut call of fmt.Errorf("%s: %w")
+e := ErrWrapL("failed to do something", err)
+```
+
+#### ErrUnWrap
+
+Unwraps an error into a slice of errors. This function can unwrap an error created by `errors.Join()` and
+`fmt.Errorf(<one or multiple errors passed here>)`.
+
+```go
+e1 := errors.New("e1")
+e2 := errors.New("e2")
+e3 := errors.Join(e1, e2)
+e4 := fmt.Errorf("%w, %w", e1, e2)
+
+errs := ErrUnwrap(e1) // errs == []error{e1}
+errs := ErrUnwrap(e3) // errs == []error{e1,e2}
+errs := ErrUnwrap(e4) // errs == []error{e1,e2}
+```
+
+#### ErrUnwrapToRoot
+
+Unwraps an error until the deepest one.
+
+```go
+e1 := errors.New("e1")
+e2 := fmt.Errorf("e2: %w", e1)
+e3 := fmt.Errorf("e3: %w", e2)
+
+e := ErrUnwrapToRoot(e3) // e == e1
+e := ErrUnwrapToRoot(e2) // e == e1
 ```
 
 ### Time
