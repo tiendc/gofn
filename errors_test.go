@@ -8,6 +8,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test_ErrWrap(t *testing.T) {
+	e := errors.New("err")
+	assert.Equal(t, "err: msg", ErrWrap(e, "msg").Error())
+	assert.Equal(t, "msg: err", ErrWrapL("msg", e).Error())
+}
+
 type wrappedErrs struct { //nolint:errname
 	errs []error
 }
