@@ -461,6 +461,45 @@ func Test_FindPredPtr_Deprecated(t *testing.T) {
 	assert.Equal(t, 2, v2)
 }
 
+func Test_FindEx(t *testing.T) {
+	_, found := FindEx([]any{}, func(i any) (any, bool) { return i, i == 1 })
+	assert.False(t, found)
+	_, found = FindEx([]any{"one"}, func(i any) (any, bool) { return i, i == "One" })
+	assert.False(t, found)
+	_, found = FindEx([]any{"one", "two"}, func(i any) (any, bool) { return i, i == "" })
+	assert.False(t, found)
+	_, found = FindEx([]any{1, 2, 3}, func(i any) (any, bool) { return i, i == 4 })
+	assert.False(t, found)
+	_, found = FindEx([]any{1.1, 2.2, 3.3}, func(i any) (any, bool) { return i, i == 3.35 })
+	assert.False(t, found)
+
+	type St struct {
+		Key string
+		Val int
+	}
+	_, found = FindEx([]St{{"k1", 11}, {"k2", 22}, {"k3", 33}},
+		func(i St) (int, bool) { return i.Val, i.Key == "k4" })
+	assert.False(t, found)
+
+	v1, found := FindEx([]any{1}, func(i any) (any, bool) { return i, i == 1 })
+	assert.True(t, found)
+	assert.Equal(t, 1, v1)
+	v2, found := FindEx([]any{1, 2, 3, 1, 2, 3}, func(i any) (any, bool) { return i, i == 2 })
+	assert.True(t, found)
+	assert.Equal(t, 2, v2)
+	v3, found := FindEx([]any{"one", "two"}, func(i any) (any, bool) { return i, i == "two" })
+	assert.True(t, found)
+	assert.Equal(t, "two", v3)
+	v4, found := FindEx([]any{St{"k1", 11}, St{"k2", 22}, St{"k3", 33}},
+		func(i any) (int, bool) { ii := i.(St); return ii.Val, ii.Key == "k3" })
+	assert.True(t, found)
+	assert.Equal(t, 33, v4)
+	v5, found := FindEx([]St{{"k1", 11}, {"k2", 22}, {"k2", 33}},
+		func(i St) (int, bool) { return i.Val, i.Key == "k2" })
+	assert.True(t, found)
+	assert.Equal(t, 22, v5)
+}
+
 func Test_FindLast(t *testing.T) {
 	_, found := FindLast([]any{}, func(i any) bool { return i == 1 })
 	assert.False(t, found)
@@ -559,6 +598,47 @@ func Test_FindLastPredPtr(t *testing.T) {
 	v2, found := FindLastPredPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
 	assert.True(t, found)
 	assert.Equal(t, 2, v2)
+}
+
+func Test_FindLastEx(t *testing.T) {
+	_, found := FindLastEx([]any{}, func(i any) (any, bool) { return i, i == 1 })
+	assert.False(t, found)
+	_, found = FindLastEx([]any{"one"}, func(i any) (any, bool) { return i, i == "One" })
+	assert.False(t, found)
+	_, found = FindLastEx([]any{"one", "two"}, func(i any) (any, bool) { return i, i == "" })
+	assert.False(t, found)
+	_, found = FindLastEx([]any{1, 2, 3}, func(i any) (any, bool) { return i, i == 4 })
+	assert.False(t, found)
+	_, found = FindLastEx([]any{1.1, 2.2, 3.3}, func(i any) (any, bool) { return i, i == 3.35 })
+	assert.False(t, found)
+
+	type St struct {
+		Key string
+		Val int
+	}
+	_, found = FindLastEx([]St{{"k1", 11}, {"k2", 22}, {"k3", 33}},
+		func(i St) (int, bool) { return i.Val, i.Key == "k4" })
+	assert.False(t, found)
+
+	v1, found := FindLastEx([]any{1}, func(i any) (any, bool) { return i, i == 1 })
+	assert.True(t, found)
+	assert.Equal(t, 1, v1)
+	v2, found := FindLastEx([]any{1, 2, 3, 1, 2, 3}, func(i any) (any, bool) { return i, i == 2 })
+	assert.True(t, found)
+	assert.Equal(t, 2, v2)
+	v3, found := FindLastEx([]any{"one", "two"}, func(i any) (any, bool) { return i, i == "two" })
+	assert.True(t, found)
+	assert.Equal(t, "two", v3)
+	v4, found := FindLastEx([]any{"one", "", "two", ""}, func(i any) (any, bool) { return i, i == "" })
+	assert.True(t, found)
+	assert.Equal(t, "", v4)
+	v5, found := FindLastEx([]any{1.1, 1.1, 2.2, 3.3}, func(i any) (any, bool) { return i, i == 1.1 })
+	assert.True(t, found)
+	assert.Equal(t, 1.1, v5)
+	v6, found := FindLastEx([]St{{"k1", 11}, {"k2", 22}, {"k2", 33}},
+		func(i St) (int, bool) { return i.Val, i.Key == "k2" })
+	assert.True(t, found)
+	assert.Equal(t, 33, v6)
 }
 
 func Test_IndexOf(t *testing.T) {
