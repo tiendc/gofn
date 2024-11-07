@@ -43,8 +43,8 @@ go get github.com/tiendc/gofn
   - [Contain](#contain--containby)
   - [ContainAll](#containall)
   - [ContainAny](#containany)
-  - [Find](#find)
-  - [FindLast](#findlast)
+  - [Find / FindEx](#find--findex)
+  - [FindLast / FindLastEx](#findlast--findlastex)
   - [IndexOf / IndexOfBy](#indexof--indexofby)
   - [LastIndexOf / LastIndexOfBy](#lastindexof--lastindexofby)
   - [CountValue / CountValueBy](#countvalue--countvalueby)
@@ -408,7 +408,7 @@ ContainAny([]int{1, 2, 3, 4, 5}, 2, 4, 7) // true
 ContainAny([]int{1, 2, 3, 4, 5}, 7, 8, 9) // false
 ```
  
-#### Find
+#### Find / FindEx
 
 Finds a value in a slice.
 
@@ -416,9 +416,19 @@ Finds a value in a slice.
 v, found := Find([]string{"one", "TWO"}, func(elem string) bool {
     return strings.ToLower(elem) == "two"
 }) // v == "TWO", found == true
+
+// FindEx lets the given function decide which value to return
+type Person struct {
+    Name string
+    Age  int
+}
+// Finds age of person having name "Tim"
+ageOfTim, found := FindEx([]Person{{"John", 40}, {"Tim", 50}}, func(p Person) (int, bool) {
+    return p.Age, p.Name == "Tim"
+}) // ageOfTim == 50, found == true
 ```
 
-#### FindLast
+#### FindLast / FindLastEx
 
 Finds a value in a slice from the end.
 
@@ -426,6 +436,16 @@ Finds a value in a slice from the end.
 v, found := FindLast([]string{"one", "TWO", "ONe"}, func(elem string) bool {
     return strings.ToLower(elem) == "one"
 }) // v == "ONe", found == true
+
+// FindLastEx lets the given function decide which value to return
+type Person struct {
+    Name string
+    Age  int
+}
+// Finds age of the last person having name "tim"
+ageOfTim, found := FindLastEx([]Person{{"John", 40}, {"Tim", 50}, {"TIM", 60}}, func(p Person) (int, bool) {
+    return p.Age, strings.ToLower(p.Name) == "tim"
+}) // ageOfTim == 60, found == true
 ```
 
 #### IndexOf / IndexOfBy

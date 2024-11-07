@@ -290,6 +290,16 @@ func FindPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 	return FindPtr(a, pred)
 }
 
+// FindEx finds value in slice with returning value decided by the given function
+func FindEx[T any, V any, S ~[]T](a S, pred func(t T) (V, bool)) (v V, found bool) {
+	for i := range a {
+		if v, ok := pred(a[i]); ok {
+			return v, true
+		}
+	}
+	return v, false
+}
+
 // FindLast finds value in slice from the end by predicate
 func FindLast[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
 	for i := len(a) - 1; i >= 0; i-- {
@@ -318,6 +328,16 @@ func FindLastPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 // Deprecated: use FindLastPtr instead
 func FindLastPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 	return FindLastPtr(a, pred)
+}
+
+// FindLastEx finds value in slice from the end with returning value decided by the given function
+func FindLastEx[T any, V any, S ~[]T](a S, pred func(t T) (V, bool)) (v V, found bool) {
+	for i := len(a) - 1; i >= 0; i-- {
+		if v, ok := pred(a[i]); ok {
+			return v, true
+		}
+	}
+	return v, false
 }
 
 // IndexOf gets index of item in slice.
