@@ -10,8 +10,12 @@ import (
 var (
 	StrLowerAlpha   = []rune("abcdefghijklmnopqrstuvwxyz")
 	StrUpperAlpha   = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	StrAlpha        = Concat(StrLowerAlpha, StrUpperAlpha)
 	StrDigits       = []rune("0123456789")
-	StrDefaultChars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+	StrAlphaNumeric = Concat(StrAlpha, StrDigits)
+	StrSpecialChars = []rune("~!@#$%^&*()-_+`'\";:,.<>/?{[}]\\|")
+	StrAllChars     = Concat(StrAlpha, StrDigits, StrSpecialChars)
+	StrDefaultChars = StrAlphaNumeric
 )
 
 // RandString generates a random string
