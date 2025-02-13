@@ -9,8 +9,11 @@ This is a collection of generics utility functions for Go 1.18+.
 
 `gofn` consists of useful and convenient functions for most common needs when working on slices, maps, structs, transformation, conversion, and so on.
 
-Try related libs:
-- [go-deepcopy](https://github.com/tiendc/go-deepcopy): true deep copy function
+Check out my other libs:
+- [go-deepcopy](https://github.com/tiendc/go-deepcopy): True deep copy function
+- [go-validator](https://github.com/tiendc/go-validator): Validation library
+- [go-apperrors](https://github.com/tiendc/go-apperrors): Manipulating application errors
+- [go-csvlib](https://github.com/tiendc/go-csvlib): High-level rich functionality CSV encoding and decoding library
 
 ## Installation
 
