@@ -65,16 +65,6 @@ func Test_MapEqualBy(t *testing.T) {
 		func(v1, v2 map[int]int) bool { return MapEqual(v1, v2) }))
 }
 
-// nolint: gocritic
-func Test_MapEqualPred_Deprecated(t *testing.T) {
-	assert.True(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 1},
-		func(v1, v2 int) bool { return v1 == v2 }))
-	assert.False(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 1, 3: 3},
-		func(v1, v2 int) bool { return v1 == v2 }))
-	assert.False(t, MapEqualPred(map[int]int{1: 1, 2: 2}, map[int]int{2: 2, 1: 11},
-		func(v1, v2 int) bool { return v1 == v2 }))
-}
-
 func Test_MapContainKeys(t *testing.T) {
 	assert.False(t, MapContainKeys(map[bool]int{}, false, true))
 
@@ -304,11 +294,6 @@ func Test_MapOmitCopy(t *testing.T) {
 
 	assert.True(t, MapEqual(map[int]int{1: 11, 2: 22}, MapOmitCopy(map[int]int{1: 11, 2: 22})))
 	assert.True(t, MapEqual(map[int]int{1: 11}, MapOmitCopy(map[int]int{1: 11, 2: 22}, 2, 3, 2)))
-}
-
-func Test_MapCopyExcludeKeys(t *testing.T) {
-	m := MapCopyExcludeKeys(map[int]int{1: 11, 2: 22}, 2, 3)
-	assert.True(t, MapEqual(map[int]int{1: 11}, m))
 }
 
 func Test_MapReverse(t *testing.T) {

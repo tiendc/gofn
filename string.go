@@ -68,11 +68,6 @@ func StringJoinBy[T any, S ~[]T](s S, sep string, fmtFunc func(v T) string) stri
 	return sb.String()
 }
 
-// Deprecated: use StringJoinBy instead
-func StringJoinPred[T any, S ~[]T](s S, sep string, fmtFunc func(v T) string) string {
-	return StringJoinBy(s, sep, fmtFunc)
-}
-
 func stringFormat(format string, v any) string {
 	if v == nil {
 		return "null"

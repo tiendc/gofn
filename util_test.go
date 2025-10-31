@@ -65,28 +65,15 @@ func Test_Coalesce(t *testing.T) {
 	assert.Equal(t, "f", Coalesce("", "f", ""))
 
 	// Pointer to primitive types
-	assert.Equal(t, (*int)(nil), Or[*int](nil, nil))
+	assert.Equal(t, (*int)(nil), Coalesce[*int](nil, nil))
 	f1, f2 := float32(0), float32(1)
-	assert.Equal(t, &f1, Or(nil, &f1, &f2, nil))
+	assert.Equal(t, &f1, Coalesce(nil, &f1, &f2, nil))
 	s1, s2 := "", "1"
-	assert.Equal(t, &s1, Or(nil, &s1, &s2, nil))
+	assert.Equal(t, &s1, Coalesce(nil, &s1, &s2, nil))
 
 	// Derived type
 	type X string
-	assert.Equal(t, X("f"), Or[X]("", "f", "g"))
-}
-
-func Test_Or_Deprecated(t *testing.T) {
-	assert.Equal(t, false, Or(false, false))
-	assert.Equal(t, true, Or(false, true, false))
-	assert.Equal(t, 1, Or(1))
-	assert.Equal(t, 1, Or(1, 0, 2))
-	assert.Equal(t, -1.5, Or[float64](0, -1.5))
-	assert.Equal(t, float32(0), Or[float32](0, 0.0, 0))
-	assert.Equal(t, int64(-2), Or[int64](0, 0, -2, 0))
-	assert.Equal(t, byte(1), Or[byte](1, 0, 2, 0))
-	assert.Equal(t, "", Or("", ""))
-	assert.Equal(t, "f", Or("", "f", ""))
+	assert.Equal(t, X("f"), Coalesce[X]("", "f", "g"))
 }
 
 // nolint: goerr113, forcetypeassert
@@ -177,11 +164,6 @@ func Test_Must6(t *testing.T) {
 func Test_ToPtr(t *testing.T) {
 	assert.Equal(t, 3, *ToPtr(3))
 	assert.Equal(t, "abc", *ToPtr("abc"))
-}
-
-func Test_New_Deprecated(t *testing.T) {
-	assert.Equal(t, 3, *New(3))
-	assert.Equal(t, "abc", *New("abc"))
 }
 
 func Test_Head(t *testing.T) {

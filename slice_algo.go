@@ -245,11 +245,6 @@ func UnionBy[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
 	return result
 }
 
-// Deprecated: use UnionBy instead
-func UnionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
-	return UnionBy(a, b, keyFunc)
-}
-
 // Intersection returns all unique shared values from multiple slices
 func Intersection[T comparable, S ~[]T](a, b S) S {
 	lenA, lenB := len(a), len(b)
@@ -299,11 +294,6 @@ func IntersectionBy[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S 
 	}
 
 	return result
-}
-
-// Deprecated: use IntersectionBy instead
-func IntersectionPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) S {
-	return IntersectionBy(a, b, keyFunc)
 }
 
 // Difference calculates the differences between two slices.
@@ -363,11 +353,6 @@ func DifferenceBy[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) (S, 
 	}
 
 	return leftDiff, rightDiff
-}
-
-// Deprecated: use DifferenceBy instead
-func DifferencePred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) (S, S) {
-	return DifferenceBy(a, b, keyFunc)
 }
 
 // Flatten flattens 2-dimensional slices.

@@ -44,11 +44,6 @@ func isNonEmptyValue(v reflect.Value) bool {
 	return true
 }
 
-// Deprecated: use FirstNonEmpty instead
-func FirstTrue[T any](args ...T) T {
-	return FirstNonEmpty(args...)
-}
-
 // Coalesce returns the first non-zero value if found, otherwise returns zero.
 func Coalesce[T comparable](args ...T) (result T) {
 	for _, v := range args {
@@ -57,11 +52,6 @@ func Coalesce[T comparable](args ...T) (result T) {
 		}
 	}
 	return result
-}
-
-// Deprecated: use Coalesce instead
-func Or[T comparable](args ...T) (result T) {
-	return Coalesce(args...)
 }
 
 func Must1(e error) {
@@ -115,11 +105,6 @@ func Must6[T1, T2, T3, T4, T5 any](v1 T1, v2 T2, v3 T3, v4 T4, v5 T5, e error) (
 
 // ToPtr returns pointer to the address of the input
 func ToPtr[T any](t T) *T {
-	return &t
-}
-
-// Deprecated: Use ToPtr instead
-func New[T any](t T) *T {
 	return &t
 }
 

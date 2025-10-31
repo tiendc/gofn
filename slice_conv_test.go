@@ -14,11 +14,6 @@ func Test_ToIfaceSlice(t *testing.T) {
 	assert.Equal(t, []any{"one", 2, 3.3}, ToIfaceSlice([]any{"one", 2, 3.3}))
 }
 
-func Test_ToIntfSlice_Deprecated(t *testing.T) {
-	assert.Equal(t, []any{1, 2, 3}, ToIntfSlice([]int{1, 2, 3}))
-	assert.Equal(t, []any{"one", 2, 3.3}, ToIntfSlice([]any{"one", 2, 3.3}))
-}
-
 func Test_ToStringSlice(t *testing.T) {
 	type StrType string
 	assert.Equal(t, []string{}, ToStringSlice[string]([]StrType{}))

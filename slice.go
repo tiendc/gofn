@@ -26,11 +26,6 @@ func EqualBy[T any, S ~[]T](a, b S, equalCmp func(a, b T) bool) bool {
 	return true
 }
 
-// Deprecated: use EqualBy instead
-func EqualPred[T any, S ~[]T](a, b S, equalFunc func(a, b T) bool) bool {
-	return EqualBy(a, b, equalFunc)
-}
-
 // EqualByPtr compares 2 slices with preserving order
 func EqualByPtr[T any, S ~[]T](a, b S, equalCmp func(a, b *T) bool) bool {
 	if len(a) != len(b) {
@@ -42,11 +37,6 @@ func EqualByPtr[T any, S ~[]T](a, b S, equalCmp func(a, b *T) bool) bool {
 		}
 	}
 	return true
-}
-
-// Deprecated: use EqualByPtr instead
-func EqualPredPtr[T any, S ~[]T](a, b S, equalCmp func(a, b *T) bool) bool {
-	return EqualByPtr(a, b, equalCmp)
 }
 
 // ContentEqual compares 2 slices without caring about order.
@@ -146,11 +136,6 @@ func ContentEqualBy[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) bo
 	return len(mapA) == 0
 }
 
-// Deprecated: use ContentEqualBy instead
-func ContentEqualPred[T any, K comparable, S ~[]T](a, b S, keyFunc func(t T) K) bool {
-	return ContentEqualBy(a, b, keyFunc)
-}
-
 // Concat concatenates slices
 func Concat[T any, S ~[]T](slices ...S) S {
 	capacity := 0
@@ -184,11 +169,6 @@ func ContainBy[T any, S ~[]T](a S, pred func(t T) bool) bool {
 	return false
 }
 
-// Deprecated: use ContainBy instead
-func ContainPred[T any, S ~[]T](a S, pred func(t T) bool) bool {
-	return ContainBy(a, pred)
-}
-
 // ContainByPtr tests if a slice contains an item by predicate
 func ContainByPtr[T any, S ~[]T](a S, pred func(t *T) bool) bool {
 	for i := range a {
@@ -197,11 +177,6 @@ func ContainByPtr[T any, S ~[]T](a S, pred func(t *T) bool) bool {
 		}
 	}
 	return false
-}
-
-// Deprecated: use ContainByPtr instead
-func ContainPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) bool {
-	return ContainByPtr(a, pred)
 }
 
 // ContainAll tests if a slice contains all given values
@@ -270,11 +245,6 @@ func Find[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
 	return t, false
 }
 
-// Deprecated: use Find instead
-func FindPred[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
-	return Find(a, pred)
-}
-
 // FindPtr finds value in slice by predicate
 func FindPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 	for i := range a {
@@ -283,11 +253,6 @@ func FindPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 		}
 	}
 	return t, false
-}
-
-// Deprecated: use FindPtr instead
-func FindPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
-	return FindPtr(a, pred)
 }
 
 // FindEx finds value in slice with returning value decided by the given function
@@ -310,11 +275,6 @@ func FindLast[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
 	return t, false
 }
 
-// Deprecated: use FindLast instead
-func FindLastPred[T any, S ~[]T](a S, pred func(t T) bool) (t T, found bool) {
-	return FindLast(a, pred)
-}
-
 // FindLastPtr finds value in slice from the end by predicate
 func FindLastPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 	for i := len(a) - 1; i >= 0; i-- {
@@ -323,11 +283,6 @@ func FindLastPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
 		}
 	}
 	return t, false
-}
-
-// Deprecated: use FindLastPtr instead
-func FindLastPredPtr[T any, S ~[]T](a S, pred func(t *T) bool) (t T, found bool) {
-	return FindLastPtr(a, pred)
 }
 
 // FindLastEx finds value in slice from the end with returning value decided by the given function
@@ -362,11 +317,6 @@ func IndexOfBy[T any, S ~[]T](a S, pred func(t T) bool) int {
 	return -1
 }
 
-// Deprecated: use IndexOfBy instead
-func IndexOfPred[T any, S ~[]T](a S, pred func(t T) bool) int {
-	return IndexOfBy(a, pred)
-}
-
 // LastIndexOf gets index of item from the end in slice.
 // Returns -1 if not found.
 func LastIndexOf[T comparable, S ~[]T](a S, t T) int {
@@ -387,11 +337,6 @@ func LastIndexOfBy[T any, S ~[]T](a S, pred func(t T) bool) int {
 		}
 	}
 	return -1
-}
-
-// Deprecated: use LastIndexOfBy instead
-func LastIndexOfPred[T any, S ~[]T](a S, pred func(t T) bool) int {
-	return LastIndexOfBy(a, pred)
 }
 
 // RemoveAt removes element at the specified index
@@ -596,11 +541,6 @@ func CountValueBy[T any, S ~[]T](a S, pred func(t T) bool) int {
 	return count
 }
 
-// Deprecated: use CountValueBy instead
-func CountValuePred[T any, S ~[]T](a S, pred func(t T) bool) int {
-	return CountValueBy(a, pred)
-}
-
 // FirstOr gets the first item in slice.
 // Returns the default value if slice is empty.
 func FirstOr[T any, S ~[]T](s S, defaultVal T) T {
@@ -608,11 +548,6 @@ func FirstOr[T any, S ~[]T](s S, defaultVal T) T {
 		return s[0]
 	}
 	return defaultVal
-}
-
-// Deprecated: use FirstOr instead
-func GetFirst[T any, S ~[]T](s S, defaultVal T) T {
-	return FirstOr(s, defaultVal)
 }
 
 // First returns the first item in slice.
@@ -632,11 +567,6 @@ func LastOr[T any, S ~[]T](s S, defaultVal T) T {
 		return s[len(s)-1]
 	}
 	return defaultVal
-}
-
-// Deprecated: use LastOr instead
-func GetLast[T any, S ~[]T](s S, defaultVal T) T {
-	return LastOr(s, defaultVal)
 }
 
 // Last returns the last item in slice.

@@ -26,11 +26,6 @@ func MapEqualBy[K comparable, V any, M ~map[K]V](m1, m2 M, equalCmp func(v1, v2 
 	return true
 }
 
-// Deprecated: use MapEqualBy instead
-func MapEqualPred[K comparable, V any, M ~map[K]V](m1, m2 M, equalCmp func(v1, v2 V) bool) bool {
-	return MapEqualBy(m1, m2, equalCmp)
-}
-
 // MapContainKeys tests if a map contains one or more keys
 func MapContainKeys[K comparable, V any, M ~map[K]V](m M, keys ...K) bool {
 	for _, k := range keys {
@@ -244,12 +239,6 @@ func MapOmitCopy[K comparable, V any, M ~map[K]V](m M, keys ...K) M {
 		}
 	}
 	return ret
-}
-
-// MapCopyExcludeKeys returns a new map with omitting the specified keys.
-// Deprecated: Use MapOmit instead.
-func MapCopyExcludeKeys[K comparable, V any, M ~map[K]V](m M, keys ...K) M {
-	return MapOmitCopy(m, keys...)
 }
 
 // MapReverse reverses a map by exchanging its keys and values.

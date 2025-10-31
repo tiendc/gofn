@@ -9,11 +9,6 @@ func ToIfaceSlice[T any, S ~[]T](s S) []any {
 	return result
 }
 
-// Deprecated: use ToIfaceSlice instead
-func ToIntfSlice[T any, S ~[]T](s S) []any {
-	return ToIfaceSlice(s)
-}
-
 // ToStringSlice converts str-approximate slice to string slice
 func ToStringSlice[U, T ~string, S ~[]T](slice S) []U {
 	result := make([]U, len(slice))

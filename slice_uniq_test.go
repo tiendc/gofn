@@ -53,14 +53,6 @@ func Test_IsUniqueBy(t *testing.T) {
 	assert.False(t, IsUniqueBy([]st{{1, "one"}, {2, "two"}, {1, "one"}}, func(v st) int { return v.I }))
 }
 
-// nolint: forcetypeassert
-func Test_IsUniquePred_Deprecated(t *testing.T) {
-	assert.True(t, IsUniquePred([]any{1.1, 2.2, 3.3, 1.11},
-		func(v any) float64 { return v.(float64) }))
-	assert.False(t, IsUniquePred([]any{1, 2, 3, 1, 2},
-		func(v any) int { return v.(int) }))
-}
-
 func Test_FindUniques(t *testing.T) {
 	assert.Equal(t, []int{}, FindUniques([]int{}))
 	assert.Equal(t, []int{0}, FindUniques([]int{0}))
@@ -140,21 +132,6 @@ func Test_ToSetBy(t *testing.T) {
 }
 
 // nolint: forcetypeassert
-func Test_ToSetPred_Deprecated(t *testing.T) {
-	// Comparable types
-	assert.Equal(t, []int{1, 2, 3},
-		ToSetPred([]int{1, 2, 3, 1, 2}, func(t int) int { return t }))
-	assert.Equal(t, []float32{float32(1.1), float32(2.2), float32(3.3), float32(1.11)},
-		ToSetPred([]float32{1.1, 1.1, 2.2, 3.3, 1.11}, func(t float32) float32 { return t }))
-
-	// Incomparable types
-	assert.Equal(t, []any{1, 2, 3},
-		ToSetPred([]any{1, 2, 3, 1, 2}, func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{1.1, 2.2, 3.3, 1.11},
-		ToSetPred([]any{1.1, 1.1, 2.2, 3.3, 1.11}, func(t any) float64 { return t.(float64) }))
-}
-
-// nolint: forcetypeassert
 func Test_ToSetByReverse(t *testing.T) {
 	// Comparable types
 	assert.Equal(t, []int{},
@@ -179,19 +156,4 @@ func Test_ToSetByReverse(t *testing.T) {
 		ToSetByReverse([]any{1, 2, 3, 1, 2}, func(t any) int { return t.(int) }))
 	assert.Equal(t, []any{1.11, 3.3, 2.2, 1.1},
 		ToSetByReverse([]any{1.1, 1.1, 2.2, 3.3, 1.11}, func(t any) float64 { return t.(float64) }))
-}
-
-// nolint: forcetypeassert
-func Test_ToSetPredReverse_Deprecated(t *testing.T) {
-	// Comparable types
-	assert.Equal(t, []int{2, 1, 3},
-		ToSetPredReverse([]int{1, 2, 3, 1, 2}, func(t int) int { return t }))
-	assert.Equal(t, []float32{float32(1.1), float32(2.2), float32(3.3), float32(1.11)},
-		ToSetPredReverse([]float32{1.11, 3.3, 2.2, 1.1}, func(t float32) float32 { return t }))
-
-	// Incomparable types
-	assert.Equal(t, []any{2, 1, 3},
-		ToSetPredReverse([]any{1, 2, 3, 1, 2}, func(t any) int { return t.(int) }))
-	assert.Equal(t, []any{1.11, 3.3, 2.2, 1.1},
-		ToSetPredReverse([]any{1.1, 1.1, 2.2, 3.3, 1.11}, func(t any) float64 { return t.(float64) }))
 }

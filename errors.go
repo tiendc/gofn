@@ -12,11 +12,6 @@ var (
 	ErrPanic           = errors.New("panic occurred")
 )
 
-var (
-	// Deprecated: use ErrEmpty instead
-	ErrSliceEmpty = ErrEmpty
-)
-
 // ErrWrap wraps an error with a message placed in the right
 func ErrWrap(err error, msg string) error {
 	return fmt.Errorf("%w: %s", err, msg)

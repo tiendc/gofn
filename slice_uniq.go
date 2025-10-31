@@ -34,11 +34,6 @@ func IsUniqueBy[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
 	return true
 }
 
-// Deprecated: use IsUniqueBy instead
-func IsUniquePred[T any, U comparable, S ~[]T](s S, keyFunc func(t T) U) bool {
-	return IsUniqueBy(s, keyFunc)
-}
-
 // FindUniques finds all elements that are unique in the given slice.
 func FindUniques[T comparable, S ~[]T](s S) S {
 	return FindUniquesBy(s, func(t T) T { return t })
@@ -161,11 +156,6 @@ func ToSetBy[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	return result
 }
 
-// Deprecated: use ToSetBy instead
-func ToSetPred[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
-	return ToSetBy(s, keyFunc)
-}
-
 // ToSetByReverse calculates unique values of a slice with custom key function.
 // Unlike ToSetBy, this function iterates over the slice from the end.
 func ToSetByReverse[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
@@ -188,9 +178,4 @@ func ToSetByReverse[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
 	}
 
 	return result
-}
-
-// Deprecated: use ToSetByReverse instead
-func ToSetPredReverse[T any, K comparable, S ~[]T](s S, keyFunc func(t T) K) S {
-	return ToSetByReverse(s, keyFunc)
 }
