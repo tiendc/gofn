@@ -164,6 +164,7 @@ go get github.com/tiendc/gofn
 **Randomization**
   - [RandChoice](#randchoice)
   - [RandChoiceMaker](#randchoicemaker)
+  - [RandToken / RandTokenAsHex](#randtoken--randtokenashex)
 
 **Error handling**
   - [ErrWrap / ErrWrapL](#errwrap--errwrapl)
@@ -1288,6 +1289,16 @@ for {
         break
     }
 }
+```
+
+#### RandToken / RandTokenAsHex
+
+Generates random tokens using `crypto/rand` package. The output can be used for crypto purpose.
+These functions should not be called concurrently.
+
+```go
+RandToken(numBytes)      // returns []byte of size numBytes
+RandTokenAsHex(numBytes) // returns a string of size numBytes*2
 ```
 
 ### Error handling
