@@ -48,6 +48,11 @@ func FilterGTE[T NumberExt | StringExt, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t >= v })
 }
 
+// FilterRange returns all values which are in the specified range (lower and upper bound inclusive)
+func FilterRange[T NumberExt | StringExt, S ~[]T](s S, min, max T) S {
+	return Filter(s, func(t T) bool { return t >= min && t <= max })
+}
+
 // FilterNE returns all values which are not equal to the specified value
 func FilterNE[T comparable, S ~[]T](s S, v T) S {
 	return Filter(s, func(t T) bool { return t != v })

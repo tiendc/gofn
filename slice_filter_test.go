@@ -68,6 +68,15 @@ func Test_FilterGTE(t *testing.T) {
 	assert.Equal(t, []string{"cd", "a"}, FilterGTE([]string{"Ab", "cd", "a"}, "a"))
 }
 
+func Test_FilterRange(t *testing.T) {
+	// Nil/Empty slices
+	assert.Equal(t, []int{}, FilterRange[int]([]int(nil), 0, 0))
+	assert.Equal(t, []int{}, FilterRange([]int{}, 0, 0))
+
+	assert.Equal(t, []int{1, 2}, FilterRange([]int{0, -10, 1, 2, -3, 0, 7}, 1, 5))
+	assert.Equal(t, []string{"a", "b", "c"}, FilterRange([]string{"Ab", "cd", "a", "b", "", "c"}, "a", "c"))
+}
+
 func Test_FilterNE(t *testing.T) {
 	// Nil/Empty slices
 	assert.Equal(t, []int{}, FilterNE[int]([]int(nil), 0))
