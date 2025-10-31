@@ -53,3 +53,19 @@ func Test_RandChoiceMaker_Next(t *testing.T) {
 	Sort(v3)
 	assert.Equal(t, []string{"", "", "1", "2", "3"}, v3)
 }
+
+func Test_RandToken(t *testing.T) {
+	token1 := RandToken(7)
+	token2 := RandToken(7)
+	assert.Equal(t, 7, len(token1))
+	assert.Equal(t, 7, len(token2))
+	assert.NotEqual(t, token1, token2)
+}
+
+func Test_RandTokenAsHex(t *testing.T) {
+	token1 := RandTokenAsHex(16)
+	token2 := RandTokenAsHex(16)
+	assert.Equal(t, 32, len(token1))
+	assert.Equal(t, 32, len(token2))
+	assert.NotEqual(t, token1, token2)
+}

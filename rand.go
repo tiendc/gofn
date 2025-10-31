@@ -1,6 +1,10 @@
 package gofn
 
-import "math/rand"
+import (
+	cryptoRand "crypto/rand"
+	"fmt"
+	"math/rand"
+)
 
 // RandChoiceMaker a struct for picking up items randomly from a list of items
 type RandChoiceMaker[T any] struct {
@@ -55,4 +59,19 @@ func RandChoice[T any](s ...T) (T, bool) {
 		return defaultVal, false
 	}
 	return s[rand.Intn(len(s))], true //nolint:gosec
+}
+
+// RandToken generates a random token which can be used for crypto purpose
+func RandToken(length int) []byte {
+	b := make([]byte, length)
+	_, err := cryptoRand.Read(b) // NOTE: this Read() always returns nil error
+	if err != nil {
+		panic("crypto/rand Read() should never fail")
+	}
+	return b
+}
+
+// RandTokenAsHex generates a random token as hex string
+func RandTokenAsHex(length int) string {
+	return fmt.Sprintf("%x", RandToken(length))
 }
