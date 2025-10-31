@@ -63,10 +63,7 @@ func Chunk[T any, S ~[]T](s S, chunkSize int) []S {
 	}
 
 	chunks := make([]S, 0, len(s)/chunkSize+1)
-	for {
-		if len(s) == 0 {
-			break
-		}
+	for len(s) > 0 {
 		if len(s) < chunkSize {
 			chunkSize = len(s)
 		}

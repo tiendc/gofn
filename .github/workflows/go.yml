@@ -13,14 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: ["1.18.x", "1.22.x", "1.23.x"]
+        go: ["1.18.x", "1.23.x", "1.25.x"]
         include:
-          - go: 1.23.x
+          - go: 1.25.x
             latest: true
 
     steps:
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go }}
 
