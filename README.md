@@ -54,7 +54,6 @@ go get github.com/tiendc/gofn
   - [FilterNE](#filter)
   - [FilterLT / FilterLTE](#filter)
   - [FilterGT / FilterGTE](#filter)
-  - [FilterGT / FilterGTE](#filter)
   - [FilterIN / FilterNIN](#filter)
   - [FilterLIKE / FilterILIKE](#filter)
 
@@ -93,6 +92,7 @@ go get github.com/tiendc/gofn
   - [ToStringSlice](#tostringslice)
   - [ToNumberSlice](#tonumberslice)
   - [ToSlice](#toslice)
+  - [ToSliceSkippingNil / ToSliceSkippingZero](#tosliceskippingnil--tosliceskippingzero)
   - [ToPtrSlice](#toptrslice)
 
 **Slice subset**
@@ -815,6 +815,19 @@ Creates a slice for individual values.
 
 ```go
 ToSlice(1, 2, 3) // []int{1, 2, 3}
+```
+
+#### ToSliceSkippingNil / ToSliceSkippingZero
+
+Creates a slice for individual values with skipping nil or zero ones.
+
+```go
+v1 := 1
+v2 := 2
+ToSliceSkippingNil(nil, &v1, nil, &v2) // []*int{&v1, &v2}
+
+ToSliceSkippingZero(1, 2, 0, 3)        // []int{1, 2, 3}
+ToSliceSkippingZero("", "a", "")       // []string{"a"}
 ```
 
 #### ToPtrSlice
