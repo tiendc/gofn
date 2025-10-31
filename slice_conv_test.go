@@ -38,6 +38,23 @@ func Test_ToSlice(t *testing.T) {
 	assert.Equal(t, []string{"1", "2", "3"}, ToSlice("1", "2", "3"))
 }
 
+func Test_ToSliceSkippingNil(t *testing.T) {
+	assert.Equal(t, []*int{}, ToSliceSkippingNil[int]())
+	assert.Equal(t, []*int{ToPtr(1), ToPtr(0)},
+		ToSliceSkippingNil(nil, nil, ToPtr(1), nil, ToPtr(0)))
+	assert.Equal(t, []*float64{ToPtr(1.2)}, ToSliceSkippingNil(ToPtr(1.2)))
+	assert.Equal(t, []*string{ToPtr(""), ToPtr("a"), ToPtr("b")},
+		ToSliceSkippingNil(ToPtr(""), ToPtr("a"), nil, ToPtr("b")))
+}
+
+func Test_ToSliceSkippingZero(t *testing.T) {
+	assert.Equal(t, []int{}, ToSliceSkippingZero[int]())
+	assert.Equal(t, []int{1}, ToSliceSkippingZero(0, 0, 1, 0))
+	assert.Equal(t, []*int{ToPtr(1), ToPtr(0)},
+		ToSliceSkippingZero(nil, nil, ToPtr(1), nil, ToPtr(0)))
+	assert.Equal(t, []string{"a", "b"}, ToSliceSkippingZero("", "a", "", "b", ""))
+}
+
 func Test_ToPtrSlice(t *testing.T) {
 	assert.Equal(t, []*int{}, ToPtrSlice([]int(nil)))
 	s1 := []int{1, 2, 3}
