@@ -1,72 +1,87 @@
-linters-settings:
-  funlen:
-    lines: 160
-    statements: 72
-  gci:
-    sections:
-      - standard
-      - default
-      - prefix(github.com/tiendc/gofn)
-  gocyclo:
-    min-complexity: 30
-  goimports:
-    local-prefixes: github.com/golangci/golangci-lint
-  lll:
-    line-length: 120
-  misspell:
-    locale: US
-
+version: "2"
 linters:
   enable:
     - bodyclose
     - contextcheck
+    - copyloopvar
     - dogsled
-    - errcheck
+    - err113
     - errname
     - errorlint
     - exhaustive
-    - copyloopvar
     - forbidigo
     - forcetypeassert
     - funlen
-    - gci
     - gocognit
     - goconst
     - gocritic
     - gocyclo
-    - err113
-    - gofmt
-    - goimports
-    - mnd
     - gosec
-    - gosimple
-    - govet
-    - ineffassign
     - lll
     - misspell
+    - mnd
     - nakedret
     - nestif
     - nilerr
     - rowserrcheck
     - staticcheck
-    - stylecheck
-    - typecheck
     - unconvert
     - unparam
-    - unused
     - whitespace
     - wrapcheck
-
-issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - funlen
-        - contextcheck
-        - staticcheck
-        - gocyclo
-        - gocognit
-        - err113
-        - forcetypeassert
-        - wrapcheck
-        - mnd
+  settings:
+    funlen:
+      lines: 120
+      statements: 80
+    gocognit:
+      min-complexity: 20
+    gocyclo:
+      min-complexity: 20
+    lll:
+      line-length: 120
+    misspell:
+      locale: US
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - contextcheck
+          - err113
+          - forcetypeassert
+          - funlen
+          - gocognit
+          - gocyclo
+          - gosec
+          - mnd
+          - staticcheck
+          - wrapcheck
+        path: _test\.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/tiendc/gofn)
+    goimports:
+      local-prefixes:
+        - github.com/golangci/golangci-lint
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
