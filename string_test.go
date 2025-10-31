@@ -101,12 +101,14 @@ func Test_LinesTrimLeft(t *testing.T) {
 		  â  line-1
 		line-2 â`))
 	// Extra func test
+	// ascii cutset
 	assert.Equal(t, "\nê b â  line-1\nê line-2 â ê ", LinesTrimLeft(`
 		 a ê b â  line-1
-		  b aê line-2 â ê `, "a b\t")) // ascii cutset
+		  b aê line-2 â ê `, "a b\t"))
+	// unicode cutset
 	assert.Equal(t, "\nâ  line-1\nline-2 â ê", LinesTrimLeft(`
 		 ê â  line-1
-		 ê line-2 â ê`, "a b\tê")) // unicode cutset
+		 ê line-2 â ê`, "a b\tê"))
 }
 
 func Test_LinesTrimRight(t *testing.T) {
@@ -129,12 +131,14 @@ line-2`))
 â  line-1  â  
 line-2`))
 	// Extra func test
+	// ascii cutset
 	assert.Equal(t, "\nâ  line-1  â  ê\nline-2  ê", LinesTrimRight(`
 â  line-1  â  ê  
-line-2  ê  `, "a b\t")) // ascii cutset
+line-2  ê  `, "a b\t"))
+	// unicode cutset
 	assert.Equal(t, "\n â  line-1  â\nline-2", LinesTrimRight(`
  â  line-1  â  ê  
-line-2  ê  `, "a b\tê")) // unicode cutset
+line-2  ê  `, "a b\tê"))
 }
 
 func Test_LinesTrim(t *testing.T) {
@@ -182,4 +186,20 @@ func Test_StringUnwrap(t *testing.T) {
 	assert.Equal(t, "abc", StringUnwrapLR("'abc\"", "'", "\""))
 	assert.Equal(t, "abc", StringUnwrapLR("[abc]", "[", "]"))
 	assert.Equal(t, " [abc", StringUnwrapLR(" [abc]", "[", "]"))
+}
+
+func Test_StringToUpper1stLetter(t *testing.T) {
+	assert.Equal(t, "", StringToUpper1stLetter(""))
+	assert.Equal(t, " abc", StringToUpper1stLetter(" abc"))
+	assert.Equal(t, "Abc", StringToUpper1stLetter("Abc"))
+	assert.Equal(t, "Abc", StringToUpper1stLetter("abc"))
+	assert.Equal(t, "Ối", StringToUpper1stLetter("ối"))
+}
+
+func Test_StringToLower1stLetter(t *testing.T) {
+	assert.Equal(t, "", StringToLower1stLetter(""))
+	assert.Equal(t, " abc", StringToLower1stLetter(" abc"))
+	assert.Equal(t, "abc", StringToLower1stLetter("abc"))
+	assert.Equal(t, "abc", StringToLower1stLetter("Abc"))
+	assert.Equal(t, "ối", StringToLower1stLetter("Ối"))
 }

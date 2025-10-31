@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 )
 
@@ -200,4 +201,24 @@ func StringWrapLR(s string, tokenLeft, tokenRight string) string {
 // StringUnwrapLR unwraps a string wrapped with the given tokens
 func StringUnwrapLR(s string, tokenLeft, tokenRight string) string {
 	return strings.TrimSuffix(strings.TrimPrefix(s, tokenLeft), tokenRight)
+}
+
+// StringToUpper1stLetter uppercases the first letter of the input string
+func StringToUpper1stLetter(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+	runes := []rune(s)
+	runes[0] = unicode.ToUpper(runes[0])
+	return string(runes)
+}
+
+// StringToLower1stLetter lowercases the first letter of the input string
+func StringToLower1stLetter(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+	runes := []rune(s)
+	runes[0] = unicode.ToLower(runes[0])
+	return string(runes)
 }

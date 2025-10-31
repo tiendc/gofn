@@ -133,6 +133,7 @@ go get github.com/tiendc/gofn
   - [StringJoin / StringJoinEx / StringJoinBy](#stringjoin--stringjoinex--stringjoinby)
   - [StringLexJoin / StringLexJoinEx](#stringlexjoin--stringlexjoinex)
   - [StringWrap / StringUnwrap](#stringwrap--stringunwrap)
+  - [StringToUpper1stLetter / StringToLower1stLetter](#stringtoupper1stletter--stringtolower1stletter)
 
 **Number**
   - [ParseInt / ParseUint / ParseFloat](#parseint--parseuint--parsefloat)
@@ -1099,6 +1100,15 @@ StringWrapLR("abc", "[", "]")     // "[abc]"
 
 StringUnwrap("*abc*", "*")        // "abc"
 StringUnwrapLR("[abc]", "[", "]") // "abc"
+```
+
+#### StringToUpper1stLetter / StringToLower1stLetter
+
+Capitalizes the first letter of a string.
+
+```go
+StringToUpper1stLetter("abc")  // "Abc"
+StringToLower1stLetter("Abc")  // "abc"
 ```
 
 ### Number
