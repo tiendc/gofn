@@ -25,7 +25,7 @@ func Test_Tuple3_Unpack(t *testing.T) {
 	assert.Equal(t, "", elem2)
 	assert.Nil(t, elem3)
 
-	t2 := &Tuple3[int, string, *int]{Elem1: 1, Elem2: "a", Elem3: New(2)}
+	t2 := &Tuple3[int, string, *int]{Elem1: 1, Elem2: "a", Elem3: ToPtr(2)}
 	elem1, elem2, elem3 = t2.Unpack()
 	assert.Equal(t, 1, elem1)
 	assert.Equal(t, "a", elem2)
@@ -40,7 +40,7 @@ func Test_Tuple4_Unpack(t *testing.T) {
 	assert.Nil(t, elem3)
 	assert.False(t, elem4)
 
-	t2 := &Tuple4[int, string, *int, bool]{Elem1: 1, Elem2: "a", Elem3: New(2), Elem4: true}
+	t2 := &Tuple4[int, string, *int, bool]{Elem1: 1, Elem2: "a", Elem3: ToPtr(2), Elem4: true}
 	elem1, elem2, elem3, elem4 = t2.Unpack()
 	assert.Equal(t, 1, elem1)
 	assert.Equal(t, "a", elem2)
@@ -57,7 +57,7 @@ func Test_Tuple5_Unpack(t *testing.T) {
 	assert.False(t, elem4)
 	assert.Equal(t, nil, elem5)
 
-	t2 := &Tuple5[int, string, *int, bool, any]{Elem1: 1, Elem2: "a", Elem3: New(2), Elem4: true, Elem5: 123}
+	t2 := &Tuple5[int, string, *int, bool, any]{Elem1: 1, Elem2: "a", Elem3: ToPtr(2), Elem4: true, Elem5: 123}
 	elem1, elem2, elem3, elem4, elem5 = t2.Unpack()
 	assert.Equal(t, 1, elem1)
 	assert.Equal(t, "a", elem2)

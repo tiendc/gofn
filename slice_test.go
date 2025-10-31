@@ -73,14 +73,6 @@ func Test_EqualBy(t *testing.T) {
 		func(a, b any) bool { return a.(St) == b.(St) }))
 }
 
-// nolint: forcetypeassert
-func Test_EqualPred_Deprecated(t *testing.T) {
-	assert.True(t, EqualPred([]any{1, 2, 3}, []any{1, 2, 3},
-		func(a, b any) bool { return a.(int) == b.(int) }))
-	assert.False(t, EqualPred([]any{1, 2, 3}, []any{3, 2, 1},
-		func(a, b any) bool { return a.(int) == b.(int) }))
-}
-
 func Test_EqualByPtr(t *testing.T) {
 	assert.True(t, EqualByPtr([]int{}, []int{},
 		func(a, b *int) bool { return *a == *b }))
@@ -117,13 +109,6 @@ func Test_EqualByPtr(t *testing.T) {
 	assert.False(t, EqualByPtr(
 		[]St{{1, "1"}, {2, "2"}, {3, "3"}}, []St{{3, "3"}, {2, "2"}, {1, "1"}},
 		func(a, b *St) bool { return *a == *b }))
-}
-
-func Test_EqualPredPtr_Deprecated(t *testing.T) {
-	assert.True(t, EqualPredPtr([]int{1, 2, 3}, []int{1, 2, 3},
-		func(a, b *int) bool { return *a == *b }))
-	assert.False(t, EqualPredPtr([]int{1, 2, 3}, []int{3, 2, 1},
-		func(a, b *int) bool { return *a == *b }))
 }
 
 func Test_ContentEqual(t *testing.T) {
@@ -183,19 +168,11 @@ func Test_ContentEqualBy(t *testing.T) {
 		func(t any) St { return t.(St) }))
 }
 
-// nolint: forcetypeassert
-func Test_ContentEqualPred_Deprecated(t *testing.T) {
-	assert.True(t, ContentEqualPred([]any{1, 2, 3}, []any{1, 2, 3},
-		func(t any) int { return t.(int) }))
-	assert.False(t, ContentEqualPred([]any{1, 2, 3}, []any{1, 2, 3, 4},
-		func(t any) int { return t.(int) }))
-}
-
 func Test_ContentEqualPtr(t *testing.T) {
 	assert.True(t, ContentEqualPtr([]*int{}, []*int{}))
 	assert.True(t, ContentEqualPtr([]*int{}, nil))
 	assert.True(t, ContentEqualPtr(nil, []*int{}))
-	i1, i2, i3 := New(1), New(2), New(3)
+	i1, i2, i3 := ToPtr(1), ToPtr(2), ToPtr(3)
 	assert.True(t, ContentEqualPtr([]*int{i3, i1, i2}, []*int{i1, i2, i3}))
 	assert.True(t, ContentEqualPtr([]*int{i1, i2, i3, i2, i1}, []*int{i3, i1, i2, i1, i2}))
 
@@ -273,14 +250,6 @@ func Test_ContainBy(t *testing.T) {
 		func(i any) bool { return i == St{3, "3"} }))
 }
 
-// nolint: goconst, forcetypeassert
-func Test_ContainPred_Deprecated(t *testing.T) {
-	assert.False(t, ContainPred([]any{1, 2, 3},
-		func(i any) bool { return i == 4 }))
-	assert.True(t, ContainPred([]any{1, 2, 3, 1, 2, 3},
-		func(i any) bool { return i == 2 }))
-}
-
 func Test_ContainByPtr(t *testing.T) {
 	assert.False(t, ContainByPtr([]int{},
 		func(i *int) bool { return *i == 1 }))
@@ -312,13 +281,6 @@ func Test_ContainByPtr(t *testing.T) {
 		func(i *float32) bool { return *i == 2.2 }))
 	assert.True(t, ContainByPtr([]St{{1, "1"}, {2, "2"}, {3, "3"}},
 		func(i *St) bool { return *i == St{3, "3"} }))
-}
-
-func Test_ContainPredPtr_Deprecated(t *testing.T) {
-	assert.False(t, ContainPredPtr([]int{1, 2, 3},
-		func(i *int) bool { return *i == 4 }))
-	assert.True(t, ContainPredPtr([]int{1, 2, 3, 1, 2, 3},
-		func(i *int) bool { return *i == 2 }))
 }
 
 func Test_ContainAll(t *testing.T) {
@@ -404,15 +366,6 @@ func Test_Find(t *testing.T) {
 	assert.Equal(t, St{2, "2"}, v5)
 }
 
-func Test_FindPred_Deprecated(t *testing.T) {
-	_, found := FindPred([]any{1.1, 2.2, 3.3}, func(i any) bool { return i == 3.35 })
-	assert.False(t, found)
-
-	v2, found := FindPred([]any{1, 2, 3, 1, 2, 3}, func(i any) bool { return i == 2 })
-	assert.True(t, found)
-	assert.Equal(t, 2, v2)
-}
-
 func Test_FindPtr(t *testing.T) {
 	_, found := FindPtr([]any{}, func(i *any) bool { return *i == 1 })
 	assert.False(t, found)
@@ -450,15 +403,6 @@ func Test_FindPtr(t *testing.T) {
 		func(i *St) bool { return i.Int == 2 })
 	assert.True(t, found)
 	assert.Equal(t, St{2, "2"}, v5)
-}
-
-func Test_FindPredPtr_Deprecated(t *testing.T) {
-	_, found := FindPredPtr([]any{1.1, 2.2, 3.3}, func(i *any) bool { return *i == 3.35 })
-	assert.False(t, found)
-
-	v2, found := FindPredPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
-	assert.True(t, found)
-	assert.Equal(t, 2, v2)
 }
 
 func Test_FindEx(t *testing.T) {
@@ -541,15 +485,6 @@ func Test_FindLast(t *testing.T) {
 	assert.Equal(t, St{3, "3"}, v6)
 }
 
-func Test_FindLastPred_Deprecated(t *testing.T) {
-	_, found := FindLastPred([]any{1, 2, 3}, func(i any) bool { return i == 4 })
-	assert.False(t, found)
-
-	v2, found := FindLastPred([]any{1, 2, 3, 1, 2, 3}, func(i any) bool { return i == 2 })
-	assert.True(t, found)
-	assert.Equal(t, 2, v2)
-}
-
 func Test_FindLastPtr(t *testing.T) {
 	_, found := FindLastPtr([]any{}, func(i *any) bool { return *i == 1 })
 	assert.False(t, found)
@@ -589,15 +524,6 @@ func Test_FindLastPtr(t *testing.T) {
 		func(i *St) bool { return i.Int == 3 })
 	assert.True(t, found)
 	assert.Equal(t, St{3, "3"}, v6)
-}
-
-func Test_FindLastPredPtr(t *testing.T) {
-	_, found := FindLastPredPtr([]any{1.1, 2.2, 3.3}, func(i *any) bool { return *i == 3.35 })
-	assert.False(t, found)
-
-	v2, found := FindLastPredPtr([]any{1, 2, 3, 1, 2, 3}, func(i *any) bool { return *i == 2 })
-	assert.True(t, found)
-	assert.Equal(t, 2, v2)
 }
 
 func Test_FindLastEx(t *testing.T) {
@@ -695,13 +621,6 @@ func Test_IndexOfBy(t *testing.T) {
 		func(i any) bool { return i == St{3, "3"} }))
 }
 
-func Test_IndexOfPred_Deprecated(t *testing.T) {
-	assert.Equal(t, -1, IndexOfPred([]any{1, 2, 3},
-		func(i any) bool { return i == 4 }))
-	assert.Equal(t, 2, IndexOfPred([]any{1.1, 2.2, 3.3},
-		func(i any) bool { return i == 3.3 }))
-}
-
 func Test_LastIndexOf(t *testing.T) {
 	assert.Equal(t, -1, LastIndexOf([]int{}, 1))
 	assert.Equal(t, -1, LastIndexOf([]string{"one"}, "One"))
@@ -754,13 +673,6 @@ func Test_LastIndexOfBy(t *testing.T) {
 		func(i any) bool { return i == 1.1 }))
 	assert.Equal(t, 2, LastIndexOfBy([]any{St{1, "1"}, St{2, "2"}, St{3, "3"}},
 		func(i any) bool { return i == St{3, "3"} }))
-}
-
-func Test_LastIndexOfPred_Deprecated(t *testing.T) {
-	assert.Equal(t, -1, LastIndexOfPred([]any{1.1, 2.2, 3.3},
-		func(i any) bool { return i == 3.35 }))
-	assert.Equal(t, 1, LastIndexOfPred([]any{1.1, 1.1, 2.2, 3.3},
-		func(i any) bool { return i == 1.1 }))
 }
 
 func Test_RemoveAt(t *testing.T) {
@@ -1142,21 +1054,9 @@ func Test_CountValueBy(t *testing.T) {
 		func(t any) bool { return t == St{1, "2"} }))
 }
 
-func Test_CountValuePred_Deprecated(t *testing.T) {
-	assert.Equal(t, 2, CountValuePred([]any{1, 2, 3, 2},
-		func(t any) bool { return t == 2 }))
-	assert.Equal(t, 2, CountValuePred([]any{1.1, 2.2, 3.3, 1.100001, 1.1},
-		func(t any) bool { return t == 1.1 }))
-}
-
 func Test_FirstOr(t *testing.T) {
 	assert.Equal(t, 1, FirstOr([]int{1, 2, 3}, 4))
 	assert.Equal(t, 11, FirstOr([]int{}, 11))
-}
-
-func Test_GetFirst_Deprecated(t *testing.T) {
-	assert.Equal(t, 1, GetFirst([]int{1, 2, 3}, 4))
-	assert.Equal(t, 11, GetFirst([]int{}, 11))
 }
 
 func Test_First(t *testing.T) {
@@ -1171,11 +1071,6 @@ func Test_First(t *testing.T) {
 func Test_LastOr(t *testing.T) {
 	assert.Equal(t, 3, LastOr([]int{1, 2, 3}, 4))
 	assert.Equal(t, 11, LastOr([]int{}, 11))
-}
-
-func Test_GetLast_Deprecated(t *testing.T) {
-	assert.Equal(t, 3, GetLast([]int{1, 2, 3}, 4))
-	assert.Equal(t, 11, GetLast([]int{}, 11))
 }
 
 func Test_Last(t *testing.T) {

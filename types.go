@@ -71,18 +71,3 @@ type StringExt interface {
 type StringPtr interface {
 	*string
 }
-
-// Deprecated: Use IntExt
-type IntEx IntExt
-
-// Deprecated: Use UIntExt
-type UIntEx UIntExt
-
-// Deprecated: Use FloatExt
-type FloatEx FloatExt
-
-// Deprecated: Use NumberExt
-type NumberEx NumberExt
-
-// Deprecated: Use StringExt
-type StringEx StringExt

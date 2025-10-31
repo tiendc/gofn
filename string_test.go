@@ -71,15 +71,6 @@ func Test_StringJoinBy(t *testing.T) {
 	}))
 }
 
-func Test_StringJoinPred_Deprecated(t *testing.T) {
-	assert.Equal(t, "1", StringJoinPred[int]([]int{1}, ",", func(v int) string {
-		return fmt.Sprintf("%d", v)
-	}))
-	assert.Equal(t, "1,2,3", StringJoinPred[int64]([]int64{1, 2, 3}, ",", func(v int64) string {
-		return fmt.Sprintf("%d", v)
-	}))
-}
-
 func Test_StringLexJoin(t *testing.T) {
 	assert.Equal(t, "", StringLexJoin([]int{}, ", ", " and "))
 	assert.Equal(t, "123", StringLexJoin([]int32{123}, ", ", " and "))

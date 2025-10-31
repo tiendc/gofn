@@ -132,11 +132,6 @@ func MinInBy[T any, S ~[]T](s S, lessFunc func(a, b T) bool) (T, error) {
 	return min, nil
 }
 
-// Deprecated: use MinInBy
-func MinInPred[T any, S ~[]T](s S, lessFunc func(a, b T) bool) (T, error) {
-	return MinInBy(s, lessFunc)
-}
-
 // Max find the maximum value in the list
 func Max[T NumberExt | StringExt](v1 T, s ...T) T {
 	max := v1
@@ -177,11 +172,6 @@ func MaxInBy[T any, S ~[]T](s S, lessFunc func(a, b T) bool) (T, error) {
 		}
 	}
 	return max, nil
-}
-
-// Deprecated: use MaxInBy
-func MaxInPred[T any, S ~[]T](s S, lessFunc func(a, b T) bool) (T, error) {
-	return MaxInBy(s, lessFunc)
 }
 
 // MinMax finds the minimum and maximum values in the list

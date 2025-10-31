@@ -143,11 +143,6 @@ func Test_MinInBy(t *testing.T) {
 	assert.True(t, err == nil && m5 == st{0})
 }
 
-func Test_MinInPred_Deprecated(t *testing.T) {
-	m1, err := MinInPred([]int{0, 2, -10, -5, 3, 5}, func(v1, v2 int) bool { return v1 < v2 })
-	assert.True(t, err == nil && m1 == -10)
-}
-
 func Test_Max(t *testing.T) {
 	assert.Equal(t, 30, Max(0, 2, -10, -5, 30, 5, 30))
 	assert.Equal(t, 10.11, Max[float64](0.1, -0.2, 10.1, 0, -0.2, 10, 10.11))
@@ -202,11 +197,6 @@ func Test_MaxInBy(t *testing.T) {
 	}
 	m5, err := MaxInBy([]st{{0}, {1}, {10}, {20}, {10}}, func(v1, v2 st) bool { return v1.Int < v2.Int })
 	assert.True(t, err == nil && m5 == st{20})
-}
-
-func Test_MaxInPred_Deprecated(t *testing.T) {
-	m1, err := MaxInPred([]int{0, 2, -10, -5, 30, 5, 30}, func(v1, v2 int) bool { return v1 < v2 })
-	assert.True(t, err == nil && m1 == 30)
 }
 
 func Test_MinMax(t *testing.T) {
