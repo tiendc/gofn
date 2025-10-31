@@ -57,6 +57,7 @@ go get github.com/tiendc/gofn
   - [FilterNE](#filter)
   - [FilterLT / FilterLTE](#filter)
   - [FilterGT / FilterGTE](#filter)
+  - [FilterRange](#filter)
   - [FilterIN / FilterNIN](#filter)
   - [FilterLIKE / FilterILIKE](#filter)
 
@@ -500,13 +501,14 @@ FilterLT([]int{1, 2, 3, 4}, 3)        // []int{1, 2}
 FilterLTE([]int{1, 2, 3, 4}, 3)       // []int{1, 2, 3}
 FilterGT([]int{1, 2, 3, 4}, 3)        // []int{4}
 FilterGTE([]int{1, 2, 3, 4}, 3)       // []int{3, 4}
+FilterRange([]int{1, 2, -2, 4}, 0, 3) // []int{1, 2}
 FilterNE([]int{1, 2, 3, 4}, 3)        // []int{1, 2, 4}
 FilterIN([]int{1, 2, 3, 4}, 3, 2, 7)  // []int{2, 3}
 FilterNIN([]int{1, 2, 3, 4}, 3, 2, 7) // []int{1, 4}
 FilterLIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "Abc")  // []string{"*Abc*"}
 FilterILIKE([]string{"*Abc*", "*abc*", "abc*", "*abc"}, "Abc") // []string{"*Abc*", "*abc*", "abc*", "*abc"}
 ```
- 
+
 ### Slice iteration
 ---
 
