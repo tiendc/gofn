@@ -223,13 +223,20 @@ func StringToLower1stLetter(s string) string {
 	return string(runes)
 }
 
-// StringSplitEx splits a string with handling quotes.
+// StringSplit splits a string with handling quotes.
 // `quote` param can be a single char (`"`, `'`...) if opening and closing tokens are the same,
 // or a space-delimited string (`{ }`, `[ ]`, `{{ }}`...) if the tokens are different.
-func StringSplitEx(s string, sep, quote string) (res []string) {
+func StringSplit(s string, sep, quote string) (res []string) {
+	return StringSplitN(s, sep, quote, -1)
+}
+
+// StringSplitN splits a string with handling quotes.
+// `quote` param can be a single char (`"`, `'`...) if opening and closing tokens are the same,
+// or a space-delimited string (`{ }`, `[ ]`, `{{ }}`...) if the tokens are different.
+func StringSplitN(s string, sep, quote string, n int) (res []string) {
 	quoteParts := strings.Split(quote, " ")
-	if s == "" || sep == "" || quote == "" || len(quoteParts) > 2 {
-		return strings.Split(s, sep)
+	if s == "" || sep == "" || quote == "" || len(quoteParts) > 2 || n == 0 || n == 1 {
+		return strings.SplitN(s, sep, n)
 	}
 
 	runes, sepRunes := []rune(s), []rune(sep)
@@ -254,6 +261,10 @@ func StringSplitEx(s string, sep, quote string) (res []string) {
 		}
 		if j, match := stringSubMatch(runes, i, sepRunes); match {
 			res = append(res, string(currPart))
+			if n > 0 && len(res) == n-1 {
+				res = append(res, string(runes[j:]))
+				return res
+			}
 			currPart = make([]rune, 0, 10) //nolint:mnd
 			i = j
 			continue
