@@ -204,28 +204,58 @@ func Test_StringToLower1stLetter(t *testing.T) {
 	assert.Equal(t, "ối", StringToLower1stLetter("Ối"))
 }
 
-func Test_StringSplitEx(t *testing.T) {
-	assert.Equal(t, []string{""}, StringSplitEx("", " ", "\""))
-	assert.Equal(t, []string{"", ""}, StringSplitEx(" ", " ", "\""))
-	assert.Equal(t, []string{"", "", ""}, StringSplitEx(",,", ",", "`"))
+func Test_StringSplit(t *testing.T) {
+	// NOTE: most cases are tested by Test_StringSplitN
+	assert.Equal(t, []string{""}, StringSplit("", " ", "\""))
+	assert.Equal(t, []string{"", ""}, StringSplit(" ", " ", "\""))
+	assert.Equal(t, []string{"", "", ""}, StringSplit(",,", ",", "`"))
 
-	assert.Equal(t, []string{"abc"}, StringSplitEx("abc", " ", "\""))
+	assert.Equal(t, []string{"abc"}, StringSplit("abc", " ", "\""))
 	assert.Equal(t, []string{"", "ab", "", "cd", "12", "", "", "34", ""},
-		StringSplitEx(" ab  cd 12   34 ", " ", "\""))
+		StringSplit(" ab  cd 12   34 ", " ", "\""))
 	assert.Equal(t, []string{"ab", "xy", "\"12 34 \"56"},
-		StringSplitEx("ab xy \"12 34 \"56", " ", "\""))
+		StringSplit("ab xy \"12 34 \"56", " ", "\""))
 	assert.Equal(t, []string{"ab", "xy", "''12", "34", "'56", ""},
-		StringSplitEx("ab xy ''12 34 '56 ", " ", "'"))
+		StringSplit("ab xy ''12 34 '56 ", " ", "'"))
+}
+
+func Test_StringSplitN(t *testing.T) {
+	assert.Equal(t, []string{""}, StringSplitN("", " ", "\"", -1))
+	assert.Equal(t, []string{"", ""}, StringSplitN(" ", " ", "\"", -1))
+	assert.Equal(t, []string{"", "", ""}, StringSplitN(",,", ",", "`", -1))
+
+	assert.Equal(t, []string{"abc"}, StringSplitN("abc", " ", "\"", -1))
+	assert.Equal(t, []string{"", "ab", "", "cd", "12", "", "", "34", ""},
+		StringSplitN(" ab  cd 12   34 ", " ", "\"", -1))
+	assert.Equal(t, []string{"ab", "xy", "\"12 34 \"56"},
+		StringSplitN("ab xy \"12 34 \"56", " ", "\"", -1))
+	assert.Equal(t, []string{"ab", "xy", "''12", "34", "'56", ""},
+		StringSplitN("ab xy ''12 34 '56 ", " ", "'", -1))
 
 	assert.Equal(t, []string{"", "ab", "", "cd", "[12  34][ 56 ]", ""},
-		StringSplitEx(" ab  cd [12  34][ 56 ] ", " ", "[ ]"))
+		StringSplitN(" ab  cd [12  34][ 56 ] ", " ", "[ ]", -1))
 	assert.Equal(t, []string{"", "ab", "", "cd", "[12  34]", "[ 56 ]", ""},
-		StringSplitEx(" ab  cd [12  34] [ 56 ] ", " ", "[ ]"))
+		StringSplitN(" ab  cd [12  34] [ 56 ] ", " ", "[ ]", -1))
 	assert.Equal(t, []string{"", "ab", "", "cd", "[[12  34]", "56", ""},
-		StringSplitEx(" ab  cd [[12  34] 56 ", " ", "[ ]"))
+		StringSplitN(" ab  cd [[12  34] 56 ", " ", "[ ]", -1))
 	assert.Equal(t, []string{"", "ab", "", "cd", "[[[12  34]", "56", ""},
-		StringSplitEx(" ab  cd [[[12  34] 56 ", " ", "[ ]"))
+		StringSplitN(" ab  cd [[[12  34] 56 ", " ", "[ ]", -1))
 
 	assert.Equal(t, []string{"", "ab", "", "cd", "{{12  34}}", "{56", "78}", ""},
-		StringSplitEx(" ab  cd {{12  34}} {56 78} ", " ", "{{ }}"))
+		StringSplitN(" ab  cd {{12  34}} {56 78} ", " ", "{{ }}", -1))
+
+	// When n is not -1
+	assert.Equal(t, []string(nil), StringSplitN("", " ", "\"", 0))
+	assert.Equal(t, []string(nil), StringSplitN("abc", " ", "\"", 0))
+	assert.Equal(t, []string{""}, StringSplitN("", " ", "\"", 1))
+	assert.Equal(t, []string{"abc"}, StringSplitN("abc", " ", "\"", 1))
+
+	assert.Equal(t, []string{"", "ab  cd [12  34][ 56 ] "},
+		StringSplitN(" ab  cd [12  34][ 56 ] ", " ", "[ ]", 2))
+	assert.Equal(t, []string{"ab", " cd [12  34][ 56 ] "},
+		StringSplitN("ab  cd [12  34][ 56 ] ", " ", "[ ]", 2))
+	assert.Equal(t, []string{"ab", "", "cd [12  34][ 56 ] "},
+		StringSplitN("ab  cd [12  34][ 56 ] ", " ", "[ ]", 3))
+	assert.Equal(t, []string{"ab", "cd", "[12  34][ 56 ]", ""},
+		StringSplitN("ab cd [12  34][ 56 ] ", " ", "[ ]", 4))
 }
