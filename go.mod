@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/stretchr/testify v1.11.1
 	github.com/tiendc/go-rflutil v0.0.0-20240919184510-8a396d31868e
+	golang.org/x/text v0.22.0
 )
 
 require (
