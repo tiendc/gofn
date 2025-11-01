@@ -222,3 +222,80 @@ func StringToLower1stLetter(s string) string {
 	runes[0] = unicode.ToLower(runes[0])
 	return string(runes)
 }
+
+// StringSplitEx splits a string with handling quotes.
+// `quote` param can be a single char (`"`, `'`...) if opening and closing tokens are the same,
+// or a space-delimited string (`{ }`, `[ ]`, `{{ }}`...) if the tokens are different.
+func StringSplitEx(s string, sep, quote string) (res []string) {
+	quoteParts := strings.Split(quote, " ")
+	if s == "" || sep == "" || quote == "" || len(quoteParts) > 2 {
+		return strings.Split(s, sep)
+	}
+
+	runes, sepRunes := []rune(s), []rune(sep)
+	quoteOpenRunes := []rune(quoteParts[0])
+	quoteCloseRunes := quoteOpenRunes
+	if len(quoteParts) > 1 {
+		quoteCloseRunes = []rune(quoteParts[1])
+	}
+
+	currPart := make([]rune, 0, 10) //nolint:mnd
+	i := 0
+	for i < len(runes) {
+		if j, match := stringSubMatch(runes, i, quoteOpenRunes); match {
+			if k := stringFindQuote(runes, j, quoteOpenRunes, quoteCloseRunes); k > j {
+				currPart = append(currPart, runes[i:k]...)
+				i = k
+			} else {
+				currPart = append(currPart, runes[i:j]...)
+				i = j
+			}
+			continue
+		}
+		if j, match := stringSubMatch(runes, i, sepRunes); match {
+			res = append(res, string(currPart))
+			currPart = make([]rune, 0, 10) //nolint:mnd
+			i = j
+			continue
+		}
+		currPart = append(currPart, runes[i])
+		i++
+	}
+	res = append(res, string(currPart))
+	return res
+}
+
+// stringFindQuote finds end index of a quote
+func stringFindQuote(s []rune, start int, quoteOpenRunes, quoteCloseRunes []rune) int {
+	i := start
+	var j, k int
+	var match bool
+	for i < len(s) {
+		if j, match = stringSubMatch(s, i, quoteCloseRunes); match {
+			return j
+		}
+		// Encounters another quote opening token
+		if j, match = stringSubMatch(s, i, quoteOpenRunes); match {
+			if k = stringFindQuote(s, j, quoteOpenRunes, quoteCloseRunes); k > j {
+				i = k
+				continue
+			} else {
+				break
+			}
+		}
+		i++
+	}
+	return start
+}
+
+// stringSubMatch checks if a string matches a sub-string at the index
+func stringSubMatch(s []rune, start int, sub []rune) (int, bool) {
+	i := start
+	for _, ch := range sub {
+		if i >= len(s) || s[i] != ch {
+			return start, false
+		}
+		i++
+	}
+	return i, true
+}

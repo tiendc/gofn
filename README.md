@@ -130,6 +130,7 @@ go get github.com/tiendc/gofn
 **String**
   - [RuneLength](#runelength)
   - [RandString / RandStringEx](#randstring--randstringex)
+  - [StringSplitEx](#stringsplitex)
   - [StringJoin / StringJoinEx / StringJoinBy](#stringjoin--stringjoinex--stringjoinby)
   - [StringLexJoin / StringLexJoinEx](#stringlexjoin--stringlexjoinex)
   - [StringWrap / StringUnwrap](#stringwrap--stringunwrap)
@@ -1061,6 +1062,15 @@ Generates a random string.
 ```go
 RandString(10)                         // Generates a string of 10 characters from alphabets and digits
 RandStringEx(10, []rune("0123456789")) // Generates a string of 10 characters from the specified ones
+```
+
+#### StringSplitEx
+
+Splits a string with handling quotes by ignoring any separator within the quotes.
+
+```go
+StringSplitEx("ab cd \"12 34\"", " ", "\"") // "[]string{"ab", "cd", "\"12 34\""}
+StringSplitEx("ab cd {12 34}", " ", "{ }")  // "[]string{"ab", "cd", "{12 34}"}
 ```
 
 #### StringJoin / StringJoinEx / StringJoinBy
