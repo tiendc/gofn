@@ -5,9 +5,8 @@ import "reflect"
 // If returns the 2nd arg if the condition is true, 3rd arg otherwise.
 // This is similar to C-language ternary operation (cond ? val1 : val2).
 //
-// Deprecated: this function may cause unexpected behavior upon misuses.
-//
-//	For example: gofn.If(len(slice) > 0, slice[0], defaultVal) will crash if slice is empty
+// NOTE: this function may cause unexpected behavior upon misuses.
+// For example: gofn.If(len(slice) > 0, slice[0], defaultVal) will crash if slice is empty
 func If[C bool, T any](cond C, v1 T, v2 T) T {
 	if cond {
 		return v1
@@ -107,6 +106,14 @@ func Must6[T1, T2, T3, T4, T5 any](v1 T1, v2 T2, v3 T3, v4 T4, v5 T5, e error) (
 // ToPtr returns pointer to the address of the input
 func ToPtr[T any](t T) *T {
 	return &t
+}
+
+// PtrValueOrEmpty returns the value of the pointer var, if it's nil returns empty value
+func PtrValueOrEmpty[T any](t *T) (val T) {
+	if t == nil {
+		return val
+	}
+	return *t
 }
 
 // Head returns the first argument

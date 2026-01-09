@@ -180,6 +180,7 @@ go get github.com/tiendc/gofn
   - [If](#if)
   - [Must\<N\>](#mustn)
   - [ToPtr](#toptr)
+  - [PtrValueOrEmpty](#ptrvalueorempty)
   - [Head](#head)
   - [Tail](#tail)
 
@@ -1525,7 +1526,7 @@ Coalesce[*int](ptr1, ptr2) // the first non-nil pointer
 
 A convenient function works like C ternary operator.
 
-**NOTE**: This function is deprecated as it may cause the program to crash on misuses due to both passing
+**WARNING**: This function may cause the program to crash on misuses due to both passing
 expressions are evaluated regardless of the condition.
 For example: `firstItem := If(len(slice) > 0, slice[0], defaultVal)` will crash if `slice` is empty as
 the expression `slice[0]` is always evaluated. Use it at your own risk.
@@ -1556,6 +1557,16 @@ func aFunc(ptr *int) {}
 
 // Use ToPtr to pass a value inline
 aFunc(ToPtr(10))
+```
+
+#### PtrValueOrEmpty
+
+Returns the value pointed by a pointer or an empty value if it's nil.
+
+```go
+PtrValueOrEmpty(ToPtr(3))   // 3
+PtrValueOrEmpty[int](nil)   // 0
+PtrValueOrEmpty[*int](nil)  // nil
 ```
 
 #### Head

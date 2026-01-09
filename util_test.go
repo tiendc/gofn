@@ -166,6 +166,13 @@ func Test_ToPtr(t *testing.T) {
 	assert.Equal(t, "abc", *ToPtr("abc"))
 }
 
+func Test_PtrValueOrEmpty(t *testing.T) {
+	assert.Equal(t, 0, PtrValueOrEmpty[int](nil))
+	assert.Nil(t, PtrValueOrEmpty[*int](nil))
+	assert.Equal(t, 3, PtrValueOrEmpty(ToPtr(3)))
+	assert.Equal(t, "abc", PtrValueOrEmpty(ToPtr("abc")))
+}
+
 func Test_Head(t *testing.T) {
 	assert.Equal(t, 1, Head(1))
 	assert.Equal(t, 1, Head(1, 2.0, "3", 1))
