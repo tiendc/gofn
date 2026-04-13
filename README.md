@@ -164,6 +164,10 @@ go get github.com/tiendc/gofn
   - [Bind\<N\>Arg\<M\>Ret ](#bindnargmret)
   - [Partial\<N\>Arg\<M\>Ret ](#partialnargmret)
 
+**Execute Retry**
+- [ExecRetry / ExecRetryN](#execretry--execretryn)
+- [ExecRetryCtx / ExecRetryCtxN](#execretryctx--execretryctxn)
+
 **Randomization**
   - [RandChoice](#randchoice)
   - [RandChoiceMaker](#randchoicemaker)
@@ -1323,6 +1327,48 @@ These functions should not be called concurrently.
 ```go
 RandToken(numBytes)      // returns []byte of size numBytes
 RandTokenAsHex(numBytes) // returns a string of size numBytes*2
+```
+
+### Execute Retry
+---
+
+#### ExecRetry / ExecRetryN
+
+Executes a function multiple times until it succeeds or reaches the designated limits. Delays are paused between attempts. Supports up to 5 generic return values.
+
+```go
+// Delay 1 second between retries, maximum 3 retries (4 executions total)
+err := ExecRetry(func() error {
+    return doSomething()
+}, 3, time.Second)
+
+// Advanced usage: Exponential backoff with jitter
+err = ExecRetry(func() error {
+    return doSomething()
+}, 3, 100*time.Millisecond, ExecRetryDelayExpoBackoff(10*time.Millisecond))
+
+// Returning values alongside errors
+v, err := ExecRetry2(func() (int, error) {
+    return getID()
+}, 3, time.Second)
+```
+
+#### ExecRetryCtx / ExecRetryCtxN
+
+Context-aware variadic retry execution. Operates exactly like standard variants but safely yields on `context.Done()` to cancel in-flight waiting intervals instantly.
+
+```go
+ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+defer cancel()
+
+// Retries will safely abort if `ctx` is canceled/expires
+err := ExecRetryCtx(ctx, func() error {
+    return doSomething()
+}, 3, time.Second)
+
+v1, v2, err := ExecRetryCtx3(ctx, func() (int, string, error) {
+    return getValues()
+}, 3, time.Second)
 ```
 
 ### Error handling
