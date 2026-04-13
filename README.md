@@ -3,7 +3,7 @@
 
 # gofn - Utility functions for Go 1.18+
 
-This is a collection of generics utility functions for Go 1.18+.
+This is a collection of generics utility functions for Go 1.20+.
 
 ## Functionalities
 
