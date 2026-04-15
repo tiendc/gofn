@@ -1,7 +1,7 @@
 
 [![Go Version][gover-img]][gover] [![GoDoc][doc-img]][doc] [![Build Status][ci-img]][ci] [![Coverage Status][cov-img]][cov] [![GoReport][rpt-img]][rpt]
 
-# gofn - Utility functions for Go 1.18+
+# gofn - Utility functions for Go
 
 This is a collection of generics utility functions for Go 1.20+.
 
@@ -1346,6 +1346,11 @@ err := ExecRetry(func() error {
 err = ExecRetry(func() error {
     return doSomething()
 }, 3, 100*time.Millisecond, ExecRetryDelayExpoBackoff(10*time.Millisecond))
+
+// Advanced usage: Custom retryable check
+err = ExecRetry(func() error {
+return doSomething()
+}, 3, 100*time.Millisecond, ExecRetryIfErrorIs(<ErrConflict>, <ErrAlreadyExist>))
 
 // Returning values alongside errors
 v, err := ExecRetry2(func() (int, error) {
