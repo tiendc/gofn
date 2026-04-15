@@ -1,6 +1,7 @@
 package gofn
 
 import (
+	"errors"
 	"math"
 	"math/rand"
 	"time"
@@ -20,6 +21,7 @@ type ExecRetryConfig struct {
 	maxDelay         time.Duration
 	incremental      time.Duration
 	expBackoffJitter time.Duration
+	shouldRetry      func(error) bool
 }
 
 func (cfg *ExecRetryConfig) nextDelay(retry int) time.Duration {
@@ -77,6 +79,38 @@ func ExecRetryDelayExpoBackoff(jitter time.Duration) ExecRetryOption {
 	}
 }
 
+func ExecRetryCheck(checkFunc func(error) bool) ExecRetryOption {
+	return func(config *ExecRetryConfig) {
+		config.shouldRetry = checkFunc
+	}
+}
+
+func ExecRetryIfErrorIs(errs ...error) ExecRetryOption {
+	return func(config *ExecRetryConfig) {
+		config.shouldRetry = func(err error) bool {
+			for _, e := range errs {
+				if errors.Is(err, e) {
+					return true
+				}
+			}
+			return false
+		}
+	}
+}
+
+func ExecRetryIfErrorIsNot(errs ...error) ExecRetryOption {
+	return func(config *ExecRetryConfig) {
+		config.shouldRetry = func(err error) bool {
+			for _, e := range errs {
+				if errors.Is(err, e) {
+					return false
+				}
+			}
+			return true
+		}
+	}
+}
+
 func ExecRetry(
 	fn func() error,
 	maxRetries int,
@@ -99,6 +133,9 @@ func ExecRetry(
 			return nil
 		}
 		if maxRetries >= 0 && retry >= maxRetries {
+			return err
+		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
 			return err
 		}
 		time.Sleep(nextDelay)
@@ -131,6 +168,9 @@ func ExecRetry2[T any](
 		if maxRetries >= 0 && retry >= maxRetries {
 			return v, err
 		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
+			return v, err
+		}
 		time.Sleep(nextDelay)
 		retry++
 		nextDelay = cfg.nextDelay(retry)
@@ -159,6 +199,9 @@ func ExecRetry3[T1, T2 any](
 			return v1, v2, nil
 		}
 		if maxRetries >= 0 && retry >= maxRetries {
+			return v1, v2, err
+		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
 			return v1, v2, err
 		}
 		time.Sleep(nextDelay)
@@ -191,6 +234,9 @@ func ExecRetry4[T1, T2, T3 any](
 		if maxRetries >= 0 && retry >= maxRetries {
 			return v1, v2, v3, err
 		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
+			return v1, v2, v3, err
+		}
 		time.Sleep(nextDelay)
 		retry++
 		nextDelay = cfg.nextDelay(retry)
@@ -219,6 +265,9 @@ func ExecRetry5[T1, T2, T3, T4 any](
 			return v1, v2, v3, v4, nil
 		}
 		if maxRetries >= 0 && retry >= maxRetries {
+			return v1, v2, v3, v4, err
+		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
 			return v1, v2, v3, v4, err
 		}
 		time.Sleep(nextDelay)

@@ -30,6 +30,9 @@ func ExecRetryCtx(
 		if maxRetries >= 0 && retry >= maxRetries {
 			return err
 		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
+			return err
+		}
 		select {
 		case <-ctx.Done():
 			return ctx.Err() // nolint: wrapcheck
@@ -63,6 +66,9 @@ func ExecRetryCtx2[T any](
 			return v, nil
 		}
 		if maxRetries >= 0 && retry >= maxRetries {
+			return v, err
+		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
 			return v, err
 		}
 		select {
@@ -100,6 +106,9 @@ func ExecRetryCtx3[T1, T2 any](
 		if maxRetries >= 0 && retry >= maxRetries {
 			return v1, v2, err
 		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
+			return v1, v2, err
+		}
 		select {
 		case <-ctx.Done():
 			return v1, v2, ctx.Err() // nolint: wrapcheck
@@ -135,6 +144,9 @@ func ExecRetryCtx4[T1, T2, T3 any](
 		if maxRetries >= 0 && retry >= maxRetries {
 			return v1, v2, v3, err
 		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
+			return v1, v2, v3, err
+		}
 		select {
 		case <-ctx.Done():
 			return v1, v2, v3, ctx.Err() // nolint: wrapcheck
@@ -168,6 +180,9 @@ func ExecRetryCtx5[T1, T2, T3, T4 any](
 			return v1, v2, v3, v4, nil
 		}
 		if maxRetries >= 0 && retry >= maxRetries {
+			return v1, v2, v3, v4, err
+		}
+		if cfg.shouldRetry != nil && !cfg.shouldRetry(err) {
 			return v1, v2, v3, v4, err
 		}
 		select {
