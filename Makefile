@@ -14,6 +14,7 @@ cover:
 	@go tool cover -html=coverage.txt -o coverage.html
 
 lint:
+	go mod tidy
 	golangci-lint --timeout=5m0s run -v ./...
 
 bench:
